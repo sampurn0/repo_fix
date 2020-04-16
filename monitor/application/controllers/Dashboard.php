@@ -67,7 +67,8 @@ class Dashboard extends CI_Controller {
 		$jml_client = 0;
 		$jml_client = intval($row_client_atm->jml_client) + intval($row_client_cit->jml_client);
 		
-		$sql_runsheet = "SELECT COUNT(cashtransit_detail.id) AS jml_runsheet FROM cashtransit_detail 
+		$sql_runsheet = "SELECT COUNT(cashtransit_detail.id) AS jml_runsheet 
+							FROM (SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail 
 							LEFT JOIN runsheet_cashprocessing ON (cashtransit_detail.id=runsheet_cashprocessing.id) 
 								WHERE cashtransit_detail.id IN (SELECT id FROM runsheet_cashprocessing)";
         $row_runsheet = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$sql_runsheet), array(CURLOPT_BUFFERSIZE => 10)));
@@ -88,7 +89,7 @@ class Dashboard extends CI_Controller {
 			// // $key++;
 		// // }
 		
-		$sql_statusflm = "SELECT *, flm_trouble_ticket.status as status_ticket FROM flm_trouble_ticket LEFT JOIN client 					ON(flm_trouble_ticket.id_bank=client.id) WHERE id_ticket NOT IN (SELECT id_ticket FROM slm_trouble_ticket)";
+		$sql_statusflm = "SELECT *, flm_trouble_ticket.status as status_ticket FROM (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket LEFT JOIN client 					ON(flm_trouble_ticket.id_bank=client.id) WHERE id_ticket NOT IN (SELECT id_ticket FROM slm_trouble_ticket)";
         $row_statusflm = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql_statusflm), array(CURLOPT_BUFFERSIZE => 10)));
 		
 		$this->data['statusflm'] = $row_statusflm;
@@ -110,7 +111,7 @@ class Dashboard extends CI_Controller {
 		
 		$this->data['id_ticket'] = $id;
 		
-		$sql_ticket = "SELECT * FROM flm_trouble_ticket WHERE id_ticket='$id'";
+		$sql_ticket = "SELECT * FROM (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket WHERE id_ticket='$id'";
         $row_ticket = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql_ticket), array(CURLOPT_BUFFERSIZE => 10)));
 		
 		$this->data['data_ticket'] = $row_ticket;

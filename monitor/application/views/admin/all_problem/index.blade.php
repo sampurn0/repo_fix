@@ -129,7 +129,9 @@
 					<h6><?=ucwords(str_replace("_", " ", $active_menu))?> Data</h6>
 				</div>
 				<div class="widget_content" id="content_table">
-					
+					<div>
+						
+					</div>
 				</div>
 			</div>
 		</section>
@@ -196,5 +198,19 @@
 				}
 			});		
 		}
+		
+		jq341('.datepicker_search').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			dateFormat: 'yy-mm-dd',
+			onClose: function(dateText, inst) { 
+				jq341.get("<?=base_url()?>all_problem/show_table?date="+dateText, function(response){
+					console.log(response);
+					jq341('#content_table div').remove();
+					jq341('#content_table').html(response);
+				});
+			}
+		});  
 	</script>
 @endsection

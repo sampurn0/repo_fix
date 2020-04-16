@@ -21,70 +21,6 @@ class All_problem extends CI_Controller {
     public function index() {    
 		$this->data['active_menu'] = "all_problem";
 		
-		$array = array(
-			array(
-				"nama" => "tes1",
-				"time" => date("Y-m-d")." 17:56:00",
-			),
-			array(
-				"nama" => "tes2",
-				"time" => date("Y-m-d")." 17:00:00",
-			),
-			array(
-				"nama" => "tes3",
-				"time" => date("Y-m-d")." 16:00:00",
-			)
-		);
-		
-		$sql_statusflm = "
-			SELECT 
-				*, 
-				flm_trouble_ticket.status as status_ticket,
-				flm_trouble_ticket.id as id,
-				id_ticket,
-				bank,
-				data_solve,
-				entry_date,
-				accept_time,
-				end_apply,
-				problem_type
-			FROM flm_trouble_ticket 
-			LEFT JOIN client ON(flm_trouble_ticket.id_bank=client.id) 
-			WHERE id_ticket NOT IN (SELECT id_ticket FROM slm_trouble_ticket)";
-        $row_statusflm = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql_statusflm), array(CURLOPT_BUFFERSIZE => 10)));
-		
-		
-		
-		$list = array();
-		$i = 0;
-		foreach($row_statusflm as $r) {
-			
-			$ary = array();
-			foreach(json_decode($r->problem_type) as $arr) {
-				// $ary[] = $db->query('SELECT nama_kategori FROM kategori WHERE id_kategori="'.$arr.'"')->row()->nama_kategori;
-				$ary[] = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>'
-					SELECT nama_sub_kategori FROM sub_kategori WHERE id_sub_kategori="'.$arr.'"
-				'), array(CURLOPT_BUFFERSIZE => 10)))->nama_sub_kategori;
-			}
-			
-			$list[$i]['id'] = $r->id;
-			$list[$i]['id_ticket'] = $r->id_ticket;
-			$list[$i]['status_ticket'] = $r->status_ticket;
-			$list[$i]['bank'] = $r->bank;
-			$list[$i]['data_solve'] = $r->data_solve;
-			$list[$i]['entry_date'] = $r->entry_date;
-			$list[$i]['selisih1'] = $this->diff($r->entry_date, $r->accept_time);
-			$list[$i]['accept_time'] = $r->accept_time;
-			$list[$i]['selisih2'] = $this->diff($r->accept_time, $r->end_apply);
-			$list[$i]['end_apply'] = $r->end_apply;
-			$list[$i]['problem'] = implode(", ",$ary);
-			$i++;
-		}
-		
-		// echo "<pre>";
-		// print_r($row_statusflm);
-		
-		$this->data['demo'] = $list;
 		
 		return view('admin/all_problem/index', $this->data);
     }
@@ -121,8 +57,8 @@ class All_problem extends CI_Controller {
 	}
 	
 	function show_table() {
-		$date = date("Y-m-d");
-		$date = "";
+		$date = (isset($_GET['date']) ? $_GET['date'] : date("Y-m-d"));
+		// $date = (isset($_GET['date']) ? $_GET['date'] : "2020-04-09");
 		$sql_statusflm = "
 			SELECT 
 				*, 
@@ -137,19 +73,29 @@ class All_problem extends CI_Controller {
 				problem_type,
 				(SELECT id_karyawan FROM karyawan LEFT JOIN teknisi ON(teknisi.nik=karyawan.nik) WHERE teknisi.id_teknisi=flm_trouble_ticket.teknisi_1) as id_karyawan,
 				(SELECT nama FROM karyawan LEFT JOIN teknisi ON(teknisi.nik=karyawan.nik) WHERE teknisi.id_teknisi=flm_trouble_ticket.teknisi_1) as custody
-			FROM flm_trouble_ticket 
+			FROM (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, data_solve, status, req_combi, updated  FROM flm_trouble_ticket) AS flm_trouble_ticket 
 			LEFT JOIN client ON(flm_trouble_ticket.id_bank=client.id) 
-			WHERE 
-				id_ticket NOT IN (SELECT id_ticket FROM slm_trouble_ticket)
-				AND entry_date LIKE '%".$date."%'";
+			WHERE id_ticket NOT IN (SELECT id_ticket FROM slm_trouble_ticket)
+			AND entry_date LIKE '%".$date."%'
+			";
         $row_statusflm = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql_statusflm), array(CURLOPT_BUFFERSIZE => 10)));
 		
 		// echo "<pre>";
+		// print_r($sql_statusflm);
 		// print_r($row_statusflm);
+		
 		
 		$list = array();
 		$i = 0;
 		foreach($row_statusflm as $r) {
+			
+			$ary = array();
+			foreach(json_decode($r->problem_type) as $arr) {
+				// $ary[] = $db->query('SELECT nama_kategori FROM kategori WHERE id_kategori="'.$arr.'"')->row()->nama_kategori;
+				$ary[] = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>'
+					SELECT nama_sub_kategori FROM sub_kategori WHERE id_sub_kategori="'.$arr.'"
+				'), array(CURLOPT_BUFFERSIZE => 10)))->nama_sub_kategori;
+			}
 			
 			$list[$i]['id'] = $r->id;
 			$list[$i]['id_ticket'] = $r->id_ticket;
@@ -161,7 +107,7 @@ class All_problem extends CI_Controller {
 			$list[$i]['accept_time'] = $r->accept_time;
 			$list[$i]['selisih2'] = $this->diff($r->accept_time, $r->end_apply);
 			$list[$i]['end_apply'] = $r->end_apply;
-			$list[$i]['problem'] = $r->problem_type;
+			$list[$i]['problem'] = implode(", ",$ary);
 			$list[$i]['wsid'] = $r->wsid;
 			$list[$i]['team'] = "(".$r->id_karyawan.") ".$r->custody;
 			$i++;
@@ -188,6 +134,20 @@ class All_problem extends CI_Controller {
 				}
 			}
 			
+			// $table_ctnt .= '
+				// <tr>
+					// <td>'.$no.'</td>
+					// <td>'.$d['id_ticket'].'</td>
+					// <td>CIMB NIAGA'.$d['bank'].'</td>
+					// <td>'.$d['problem'].'</td>
+					// <td>'.date("d-m-Y H:i:s", strtotime($d['entry_date'])).'</td>
+					// <td><span id="demo1'.$d['id'].'">'.$d['selisih1'].'</span></td>
+					// <td>'.date("d-m-Y H:i:s", strtotime($d['accept_time'])).'</td>
+					// <td><span id="demo2'.$d['id'].'">'.$d['selisih2'].'</span></td>
+					// <td>'.$table_status.'</td>
+				// </tr>
+			// ';
+			
 			$table_ctnt .= '
 				<tr>
 					<td>'.$no.'</td>
@@ -211,7 +171,7 @@ class All_problem extends CI_Controller {
 							<tr>
 								<td>Problem</td>
 								<td> : </td>
-								<td>'.implode(",<br>", explode(", ", $d['problem'])).'</td>
+								<td>'.$d['problem'].'</td>
 							</tr>
 						</table>
 					</td>
@@ -276,6 +236,7 @@ class All_problem extends CI_Controller {
 		
 		$table .= '
 			<div>
+				<h1 style="margin-bottom: -2px">PROBLEM TANGGAL : '.date("d-m-Y", strtotime($date)).'</h1>
 				<div class="view" style="margin-bottom: 20px">
 					<div class="wrapper" style="margin-top: 0px">
 						<table class="table" style="width: 100%">

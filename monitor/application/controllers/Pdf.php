@@ -292,6 +292,93 @@ class Pdf extends CI_Controller {
 		}
 	}
 	
+	public function qrcode_gen2() { 
+		$id = $this->uri->segment(3);
+		
+		$qrCode = new QrCode($id);
+		$qrCode->setSize(300);
+		
+		$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$id.'.png');
+		
+		// echo realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$id.'.png';
+		
+		// $template_content = '
+			// <div class="">
+				// <div class="">
+					
+					// <center>
+						// <img style="margin-top: 18px" src="'.realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$id.'.png" width="80" height="80"></img>
+					// </center>
+					// <center style="margin-top: 1px; font-size: 12px; font-weight: bold">
+						// <span>'.$id.'</span>
+					// </center>
+				// </div>
+			// </div>
+		// ';
+		
+		if(!isset($html)) {
+			$template_content = '
+				<div class="">
+					<div class="">
+						
+						<center>
+							<img style="margin-top: 18px" src="'.realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$id.'.png" width="80" height="80"></img>
+						</center>
+						<center style="margin-top: 1px; font-size: 12px; font-weight: bold">
+							<span>'.$id.'</span>
+						</center>
+					</div>
+				</div>
+			';
+		} else {
+			$template_content = '
+				<div class="">
+					<div class="">
+						
+						<center>
+							<img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$id.'.png" width="80" height="80"></img>
+						</center>
+						<center style="margin-top: 1px; font-size: 12px; font-weight: bold">
+							<span>'.$id.'</span>
+						</center>
+					</div>
+				</div>
+			';
+		}
+		
+		$template_html = '
+			<html>
+				<head>
+					<style>
+						
+						@page { margin: 0px; size: 6cm 4cm portrait; }
+					
+					
+						body {
+							margin: 1px 1px 1px 1px; 
+							font-family: Calibri;            
+						}
+					</style>
+				</head>
+
+				<body>
+					'.$template_content.'
+		';
+		
+		// if(!isset($html)) {
+			// $dompdf = new DOMPDF();
+			// $dompdf->loadHtml($template_html);
+			// $dompdf->set_paper(array(0, 0, 227, 151), "portrait");
+			// $dompdf->render();
+
+			// $dompdf->stream('document.pdf', array("Attachment" => false));
+		// } else {
+			// echo $template_html;
+		// }
+		
+		echo base_url().'upload/qrcode_bag/'.$id.'.png';
+	}
+	
 	public function qrcode_bag() { 
 		$id = $this->uri->segment(3);
 		

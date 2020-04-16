@@ -30,16 +30,97 @@ class Jurnal extends CI_Controller {
 		$this->data['active_menu'] = "jurnal";
 		
 		$query = "SELECT 
-						*, jurnal.keterangan as keterangan_jurnal
+						client.wsid,
+						jurnal.id_detail,
+						jurnal.tanggal,
+						jurnal.debit_100,
+						jurnal.kredit_100,
+						jurnal.debit_50,
+						jurnal.kredit_50,
+						jurnal.debit_20,
+						jurnal.kredit_20,
+						jurnal.keterangan as keterangan_jurnal
 					FROM jurnal 
 					LEFT JOIN cashtransit_detail ON(cashtransit_detail.id=jurnal.id_detail)
 					LEFT JOIN client ON(client.id=cashtransit_detail.id_bank)
-					#WHERE cashtransit_detail.cpc_process != ''
-					ORDER BY jurnal.tanggal, jurnal.id_detail, client.wsid ASC";
+					ORDER BY jurnal.id_detail, client.wsid, jurnal.id ASC";
 		$this->data['data_record'] = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
 		
 		return view('admin/jurnal/index', $this->data);
     }
+	
+	function fck() {
+		$summary = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"
+			SELECT * FROM jurnal_sync ORDER BY id DESC LIMIT 0,1
+		"), array(CURLOPT_BUFFERSIZE => 10)));
+		
+		print_r($summary);
+	}
+	
+	function json() {
+		$query = "
+			SELECT jurnal_sync.* FROM jurnal_sync
+		";
+		
+		$param['query'] = $query; //nama tabel dari database
+		$param['column_order'] = array('id'); //field yang ada di table user
+		$param['column_search'] = array('wsid'); //field yang diizin untuk pencarian 
+		$param['order'] = array(array('id' => 'ASC'));
+		// $param['group'] = array('action_date');
+		
+		$data['param'] = json_encode($param);
+		$data['post'] = $_REQUEST;
+		
+		// echo ;
+		$data = $this->curl->simple_get(rest_api().'/datatables', array('data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
+		$r = json_decode($data, true);
+		
+		$summary = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"
+			SELECT * FROM jurnal_sync ORDER BY id DESC LIMIT 0,1
+		"), array(CURLOPT_BUFFERSIZE => 10)));
+		
+		$out = array();
+		$out['draw'] = $r['draw'];
+		$out['recordsTotal'] = $r['recordsTotal'];
+		$out['recordsFiltered'] = $r['recordsFiltered'];
+		$out['saldo_100'] = number_format($summary->saldo_100, 0, ",", ",");
+		$out['saldo_50'] = number_format($summary->saldo_50, 0, ",", ",");
+		$out['saldo_20'] = number_format($summary->saldo_20, 0, ",", ",");
+		$out['sum_saldo'] = number_format($summary->sum_saldo, 0, ",", ",");
+		$datas = array();
+		$i = 0;
+		$no = $_REQUEST['start'];
+		foreach($r['data'] as $row) {
+			$no++;
+			
+			$datas[$i]['no'] 			= $no; 			 
+			$datas[$i]['id'] 			= $row['id']; 			 
+			$datas[$i]['id_detail'] 	= $row['id_detail']; 
+			$datas[$i]['wsid'] 			= $row['wsid']; 		 
+			$datas[$i]['tanggal'] 		= $row['tanggal']; 		 
+			$datas[$i]['catatan'] 		= $row['catatan']; 		 
+			$datas[$i]['keterangan'] 	= $row['keterangan']; 
+			$datas[$i]['posisi'] 		= $row['posisi']; 		 
+			$datas[$i]['debit_100'] 	= ($row['debit_100']==0 ? 0 : number_format($row['debit_100'], 0, ",", ",")); 
+			$datas[$i]['debit_50'] 		= ($row['debit_50']==0 ? 0 : number_format($row['debit_50'], 0, ",", ",")); 
+			$datas[$i]['debit_20'] 		= ($row['debit_20']==0 ? 0 : number_format($row['debit_20'], 0, ",", ",")); 
+			$datas[$i]['kredit_100'] 	= ($row['kredit_100']==0 ? 0 : number_format($row['kredit_100'], 0, ",", ","));  
+			$datas[$i]['kredit_50'] 	= ($row['kredit_50']==0 ? 0 : number_format($row['kredit_50'], 0, ",", ",")); 
+			$datas[$i]['kredit_20'] 	= ($row['kredit_20']==0 ? 0 : number_format($row['kredit_20'], 0, ",", ",")); 
+			$datas[$i]['saldo_100'] 	= ($row['saldo_100']==0 ? 0 : number_format($row['saldo_100'], 0, ",", ",")); 
+			$datas[$i]['saldo_50'] 		= ($row['saldo_50']==0 ? 0 : number_format($row['saldo_50'], 0, ",", ",")); 
+			$datas[$i]['saldo_20'] 		= ($row['saldo_20']==0 ? 0 : number_format($row['saldo_20'], 0, ",", ",")); 
+			$datas[$i]['sum_saldo'] 	= ($row['sum_saldo']==0 ? 0 : number_format($row['sum_saldo'], 0, ",", ",")); 
+
+			$i++;
+		}
+		// $out['data'] = $r['data'];
+		$out['data'] = $datas;
+		// $out['total_jurnal'] = "200000";
+		
+		// print_r($out);
+		echo json_encode($out);
+	}
 	
 	public function detail() {
 		$this->data['active_menu'] = "jurnal";
@@ -335,10 +416,22 @@ class Jurnal extends CI_Controller {
 	}
 	
 	public function export() {
-		$data_record = $this->get_data_jurnal();
-		// echo $htmlString;
+		$query = "SELECT COUNT(*) as cnt
+					FROM jurnal 
+					LEFT JOIN cashtransit_detail ON(cashtransit_detail.id=jurnal.id_detail)
+					LEFT JOIN client ON(client.id=cashtransit_detail.id_bank)
+					ORDER BY jurnal.id_detail, client.wsid ASC";
+		$cnt = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)))->cnt;
 		
-		// print_r($data);
+		// echo $cnt;
+		
+		$halaman = 10;
+		$page = 1;
+		$mulai = ($page>1) ? ($page * $halaman) - $halaman : 0;
+		$total = $cnt;
+		$pages = ceil($total/$halaman); 
+		
+		
 		$no = 0;
 		$prev_debit_100 = 0;
 		$prev_kredit_100 = 0;
@@ -353,63 +446,157 @@ class Jurnal extends CI_Controller {
 		$saldo = 0;
 		$prev_ket = "";
 		$html_content = "";
-		foreach($data_record as $r) {
-			$no++;
-			if($r->kredit_100==0) {
-				$saldo_100 = $prev_saldo_100 + $r->debit_100;
-			} else {
-				$saldo_100 = $prev_saldo_100 - $r->kredit_100;
+		for($page=1; $page<=$pages; $page++) {
+			$mulai = ($page>1) ? ($page * $halaman) - $halaman : 0;
+			$query = "SELECT 
+						client.wsid,
+						jurnal.tanggal,
+						jurnal.debit_100,
+						jurnal.kredit_100,
+						jurnal.debit_50,
+						jurnal.kredit_50,
+						jurnal.debit_20,
+						jurnal.kredit_20,
+						jurnal.keterangan as keterangan_jurnal
+					FROM jurnal 
+					LEFT JOIN cashtransit_detail ON(cashtransit_detail.id=jurnal.id_detail)
+					LEFT JOIN client ON(client.id=cashtransit_detail.id_bank) ORDER BY jurnal.id_detail, client.wsid ASC LIMIT $mulai, $halaman";
+					
+					
+			// echo $query."<br>";
+			$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+			
+			
+			// print_r($query);
+			// echo  "<br>";
+			
+			foreach($result as $r) {
+				$no++;
+				if($r->kredit_100==0) {
+					$saldo_100 = $prev_saldo_100 + $r->debit_100;
+				} else {
+					$saldo_100 = $prev_saldo_100 - $r->kredit_100;
+				}
+				
+				if($r->kredit_50==0) {
+					$saldo_50 = $prev_saldo_50 + $r->debit_50;
+				} else {
+					$saldo_50 = $prev_saldo_50 - $r->kredit_50;
+				}
+				
+				if($r->kredit_20==0) {
+					$saldo_20 = $prev_saldo_20 + $r->debit_20;
+				} else {
+					$saldo_20 = $prev_saldo_20 - $r->kredit_20;
+				}
+				
+				$saldo = $saldo_100 + $saldo_50;
+				
+				$html_content .= '
+					<tr>
+						<td>'.$no.' '.$r->id_detail.'</td>
+						<td style="text-align: center">'.($r->tanggal=="0000-00-00" ? "" : date("d-m-Y", strtotime($r->tanggal))).'</td>
+						<td style="text-align: center">'.$r->wsid.'</td>
+						<td style="text-align: left">'.strtoupper(str_replace("_", " ", $r->keterangan_jurnal)).'</td>
+						<td style="text-align: right">'.($r->debit_100==0 ? 0 : number_format($r->debit_100, 0, ",", ",")).'</td>
+						<td style="text-align: right">'.($r->kredit_100==0 ? 0 : number_format($r->kredit_100, 0, ",", ",")).'</td>
+						<td style="background-color: #b3c984; text-align: right">'.($saldo_100==0 ? 0 : number_format($saldo_100, 0, ",", ",")).'</td>
+						<td style="text-align: right">'.($r->debit_50==0 ? 0 : number_format($r->debit_50, 0, ",", ",")).'</td>
+						<td style="text-align: right">'.($r->kredit_50==0 ? 0 : number_format($r->kredit_50, 0, ",", ",")).'</td>
+						<td style="background-color: #b3c984; text-align: right">'.($saldo_50==0 ? 0 : number_format($saldo_50, 0, ",", ",")).'</td>
+						<td style="text-align: right">'.($r->debit_20==0 ? 0 : number_format($r->debit_20, 0, ",", ",")).'</td>
+						<td style="text-align: right">'.($r->kredit_20==0 ? 0 : number_format($r->kredit_20, 0, ",", ",")).'</td>
+						<td style="background-color: #b3c984; text-align: right">'.($saldo_50==0 ? 0 : number_format($saldo_20, 0, ",", ",")).'</td>
+						<td style="text-align: right">'.($saldo==0 ? 0 : number_format($saldo, 0, ",", ",")).'</td>
+					</tr>
+				';
+				
+				$prev_debit_100 = $r->debit_100;
+				$prev_kredit_100 = $r->kredit_100;
+				$prev_debit_50= $r->debit_50;
+				$prev_kredit_50 = $r->kredit_50;
+				
+				$prev_saldo_100 = $saldo_100;
+				$prev_saldo_50 = $saldo_50;
+				$prev_ket = $r->keterangan;
 			}
-			
-			if($r->kredit_50==0) {
-				$saldo_50 = $prev_saldo_50 + $r->debit_50;
-			} else {
-				$saldo_50 = $prev_saldo_50 - $r->kredit_50;
-			}
-			
-			if($r->kredit_20==0) {
-				$saldo_20 = $prev_saldo_20 + $r->debit_20;
-			} else {
-				$saldo_20 = $prev_saldo_20 - $r->kredit_20;
-			}
-			
-			$saldo = $saldo_100 + $saldo_50;
-			
-			$html_content .= '
-				<tr>
-					<td>'.$no.'</td>
-					<td style="text-align: center">'.($r->tanggal=="0000-00-00" ? "" : date("d-m-Y", strtotime($r->tanggal))).'</td>
-					<td style="text-align: center">'.$r->wsid.'</td>
-					<td style="text-align: left">'.strtoupper(str_replace("_", " ", $r->keterangan_jurnal)).'</td>
-					<td style="text-align: right">'.($r->debit_100==0 ? 0 : number_format($r->debit_100, 0, ",", ",")).'</td>
-					<td style="text-align: right">'.($r->kredit_100==0 ? 0 : number_format($r->kredit_100, 0, ",", ",")).'</td>
-					<td style="background-color: #b3c984; text-align: right">'.($saldo_100==0 ? 0 : number_format($saldo_100, 0, ",", ",")).'</td>
-					<td style="text-align: right">'.($r->debit_50==0 ? 0 : number_format($r->debit_50, 0, ",", ",")).'</td>
-					<td style="text-align: right">'.($r->kredit_50==0 ? 0 : number_format($r->kredit_50, 0, ",", ",")).'</td>
-					<td style="background-color: #b3c984; text-align: right">'.($saldo_50==0 ? 0 : number_format($saldo_50, 0, ",", ",")).'</td>
-					<td style="text-align: right">'.($r->debit_20==0 ? 0 : number_format($r->debit_20, 0, ",", ",")).'</td>
-					<td style="text-align: right">'.($r->kredit_20==0 ? 0 : number_format($r->kredit_20, 0, ",", ",")).'</td>
-					<td style="background-color: #b3c984; text-align: right">'.($saldo_50==0 ? 0 : number_format($saldo_20, 0, ",", ",")).'</td>
-					<td style="text-align: right">'.($saldo==0 ? 0 : number_format($saldo, 0, ",", ",")).'</td>
-				</tr>
-			';
-			
-			$prev_debit_100 = $r->debit_100;
-			$prev_kredit_100 = $r->kredit_100;
-			$prev_debit_50= $r->debit_50;
-			$prev_kredit_50 = $r->kredit_50;
-			
-			$prev_saldo_100 = $saldo_100;
-			$prev_saldo_50 = $saldo_50;
-			$prev_ket = $r->keterangan;
 		}
+		
+		// $data_record = $this->get_data_jurnal();
+		// // echo $htmlString;
+		
+		// print_r($data_record);
+		// $no = 0;
+		// $prev_debit_100 = 0;
+		// $prev_kredit_100 = 0;
+		// $prev_debit_50 = 0;
+		// $prev_kredit_50 = 0;
+		// $prev_saldo_100 = 0;
+		// $prev_saldo_50 = 0;
+		// $prev_saldo_20 = 0;
+		// $prev_saldo = 0;
+		// $saldo_100 = 0;
+		// $saldo_50 = 0;
+		// $saldo = 0;
+		// $prev_ket = "";
+		// $html_content = "";
+		// foreach($data_record as $r) {
+			// $no++;
+			// if($r->kredit_100==0) {
+				// $saldo_100 = $prev_saldo_100 + $r->debit_100;
+			// } else {
+				// $saldo_100 = $prev_saldo_100 - $r->kredit_100;
+			// }
+			
+			// if($r->kredit_50==0) {
+				// $saldo_50 = $prev_saldo_50 + $r->debit_50;
+			// } else {
+				// $saldo_50 = $prev_saldo_50 - $r->kredit_50;
+			// }
+			
+			// if($r->kredit_20==0) {
+				// $saldo_20 = $prev_saldo_20 + $r->debit_20;
+			// } else {
+				// $saldo_20 = $prev_saldo_20 - $r->kredit_20;
+			// }
+			
+			// $saldo = $saldo_100 + $saldo_50;
+			
+			// $html_content .= '
+				// <tr>
+					// <td>'.$no.'</td>
+					// <td style="text-align: center">'.($r->tanggal=="0000-00-00" ? "" : date("d-m-Y", strtotime($r->tanggal))).'</td>
+					// <td style="text-align: center">'.$r->wsid.'</td>
+					// <td style="text-align: left">'.strtoupper(str_replace("_", " ", $r->keterangan_jurnal)).'</td>
+					// <td style="text-align: right">'.($r->debit_100==0 ? 0 : number_format($r->debit_100, 0, ",", ",")).'</td>
+					// <td style="text-align: right">'.($r->kredit_100==0 ? 0 : number_format($r->kredit_100, 0, ",", ",")).'</td>
+					// <td style="background-color: #b3c984; text-align: right">'.($saldo_100==0 ? 0 : number_format($saldo_100, 0, ",", ",")).'</td>
+					// <td style="text-align: right">'.($r->debit_50==0 ? 0 : number_format($r->debit_50, 0, ",", ",")).'</td>
+					// <td style="text-align: right">'.($r->kredit_50==0 ? 0 : number_format($r->kredit_50, 0, ",", ",")).'</td>
+					// <td style="background-color: #b3c984; text-align: right">'.($saldo_50==0 ? 0 : number_format($saldo_50, 0, ",", ",")).'</td>
+					// <td style="text-align: right">'.($r->debit_20==0 ? 0 : number_format($r->debit_20, 0, ",", ",")).'</td>
+					// <td style="text-align: right">'.($r->kredit_20==0 ? 0 : number_format($r->kredit_20, 0, ",", ",")).'</td>
+					// <td style="background-color: #b3c984; text-align: right">'.($saldo_50==0 ? 0 : number_format($saldo_20, 0, ",", ",")).'</td>
+					// <td style="text-align: right">'.($saldo==0 ? 0 : number_format($saldo, 0, ",", ",")).'</td>
+				// </tr>
+			// ';
+			
+			// $prev_debit_100 = $r->debit_100;
+			// $prev_kredit_100 = $r->kredit_100;
+			// $prev_debit_50= $r->debit_50;
+			// $prev_kredit_50 = $r->kredit_50;
+			
+			// $prev_saldo_100 = $saldo_100;
+			// $prev_saldo_50 = $saldo_50;
+			// $prev_ket = $r->keterangan;
+		// }
 		
 		
 		$htmlString = '
-			<table id="view_data">
+			<table id="view_data" width="100%">
 				<thead>
 					<tr>
-						<th style="text-align:center; vertical-align: center; width: 5px;" rowspan=2>
+						<th style="text-align:center; vertical-align: center; width: 80px;" rowspan=2>
 							No.
 						</th>
 						<th style="text-align:center; vertical-align: center; width: 12px;" rowspan=2>

@@ -1,494 +1,508 @@
 @extends('layouts.master')
 
 @section('content')
-<style>
-	#preview {
-		float: right; 
-		height: 803px; 
-		width: 100%; 
-		border: 1px solid #666; 
-		-moz-box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
-		-webkit-box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
-		box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
-	}
+	<script src="<?=base_url()?>constellation/assets/equipment/jquery-3.4.1.min.js"></script>
+	<link href="<?=base_url()?>constellation/assets/equipment/select2.min.css" rel="stylesheet" />
+	<script src="<?=base_url()?>constellation/assets/equipment/select2.min.js"></script>
+
 	
-	.ui-datepicker {
-		width: 17.8em !important;
-	}
-	#my_tables td {
-		border: 0px solid white !important;
-	}
-</style>
-
-<script>
-	function openFilter() {
-		$("#html_content").toggle('slow');	
-	}
-</script>
-	<!-- Content -->
-<div id="content">
-		<div class="grid_container">
-			<div class="grid_14">
-				
-				<div id="html_content" hidden>
-					<form class="form mysets-area">
-						<table id="my_tables">
-							<tr>
-								<td>
-									<p>
-										<label for="simple-calendar">Branch</label>
-									</p>
-								</td>
-								<td>
-									<p>
-										<select>
-											<option> -Pilih Branch- </option>
-											<option> CIMB JAKARTA </option>
-										</select>
-									</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<p>
-										<label for="simple-calendar">Bank</label>
-									</p>
-								</td>
-								<td>
-									<p>
-										<select>
-											<option> -Pilih Bank- </option>
-											<option> CIMB NIAGA </option>
-										</select>
-									</p>
-								</td>
-							</tr>
-						</table>
-					</form>
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>depend/jquery-confirm/css/jquery-confirm.css"/>
+	<script type="text/javascript" src="<?=base_url()?>depend/jquery-confirm/js/jquery-confirm.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/datatables/datatables.min.css"/>
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/datatables/fixedColumns.dataTables.min.css"/>
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/datatables/scroller.dataTables.min.css"/>
+ 
+	<script type="text/javascript" src="<?=base_url()?>/assets/datatables/datatables.min.js"></script>
+	
+	<script type="text/javascript" src="<?=base_url()?>assets/jquery.scannerdetection.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/notify.min.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/jquery.inputmask.js"></script>
+	
+	<script type="text/javascript" src="<?=base_url()?>/assets/datatables/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>/assets/datatables/dataTables.scroller.min.js"></script>
+	
+	<article class="container_12">
+		
+		<section class="grid_12">
+			<div class="preview_pdf" hidden>
+				<button style="margin-top: 5px; float: right" class="btn btn-primary pull-right" id='close_preview' type="button">Close</button>
+				<iframe id="preview" name="preview" src="about:blank" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+			</div>
+			<div style="float: right">
+				<label for="search">Search by Date : </label>
+				<input type="text" name="simple-calendar" id="search" class="datepicker_search">
+			</div>
+			<div class="widget_wrap preview_table">
+				<div class="widget_top">
+					<span class="h_icon blocks_images"></span>
+					<h6><?=ucwords(str_replace("_", " ", $active_menu))?> Data</h6>
 				</div>
-			
-				<div class="preview_pdf" hidden>
-					<button style="margin-top: 5px; float: right" class="btn btn-primary pull-right" id='close_preview' type="button">Close</button>
-					<iframe id="preview" name="preview" src="about:blank" frameborder="0" marginheight="0" marginwidth="0"></iframe>
-				</div>
-			
-				<div class="widget_wrap preview_table">
-					<div class="widget_top">
-						<span class="h_icon list"></span>
-					</div>
-					<div class="widget_content">
-						<div class=" page_content">
-							<div class="invoice_container">
-								
-								<div class="grid_12 invoice_title">
-									<center><img src="<?=base_url()?>constellation/assets/images/bijak.png" width="50" height="50">
-								</center>
-								<p align="center"><b>PT. BINTANG JASA ARTHA KELOLA</b><br>[ JOURNAL REPORT ]</p>
-								</div>
-								<div class="invoice_action_bar">
-									<div class="btn_30_light">
-										<a href="#" onclick="openFilter()" title="Filter Data"><span class="icon search_co"></span><span class="btn_link">Filter</span></a>
-									</div>
-									<div class="btn_30_light">
-										<a href="<?=base_url()?>jurnal/add" title="Add Data"><span class="icon add_co"></span><span class="btn_link">Tambah</span></a>
-									</div>
-									<div class="btn_30_light">
-										<a href="<?=base_url()?>jurnal/export" title="Export Data"><span class="icon page_excel_co"></span><span class="btn_link">Export</span></a>
-									</div>
-								</div>
-								<span class="clear"></span>
-								<div class="grid_12 invoice_details">
-									<div class="invoice_tbl">
-										<style>
-											#view_data tr td {
-												border: 1px solid white;
-											}
-											
-											#view_data th, td {
-												border-bottom: 1px solid #ddd;
-												text-align: left;
-											}
-											
-											#view_data th {
-												vertical-align: middle;
-												text-align: center;
-											}
-											
-											#view_data th {
-												background: #e7e7e7;
-												background-color: #ebebeb;
-											}
-											div.scrollmenu {
-												height: 220px;
-												background-color: #333;
-												overflow: auto;
-												white-space: nowrap;
-											}
-											
-											
-											
-											.table-scroll {
-												position: relative;
-												width: 100%;
-												z-index: 1;
-												margin: auto;
-												overflow: auto;
-												height: 400px;
-											}
-
-											.table-scroll table {
-												width: 100%;
-												min-width: 1680px;
-												margin: auto;
-												border-collapse: separate;
-												border-spacing: 0;
-											}
-
-											.table-wrap {
-												position: relative;
-											}
-
-											.table-scroll th,
-											.table-scroll td {
-												padding: 5px 10px;
-												border: 1px solid #000;
-												background: #fff;
-												vertical-align: middle;
-											}
-											
-											/* safari and ios need the tfoot itself to be position:sticky also */
-											.table-scroll tfoot,
-											.table-scroll tfoot th,
-											.table-scroll tfoot td {
-												position: -webkit-sticky;
-												position: sticky;
-												bottom: 0;
-												background: #666;
-												color: #fff;
-												z-index: 0;
-											}
-											
-											
-											.table-scroll tfoot .xxx,
-											.table-scroll tfoot .xxx2,
-											.table-scroll tfoot .xxx3 {
-												z-index: 15;
-											}
-											
-											.zui-sticky-col {
-												width: 200px;
-												position: -webkit-sticky;
-												position: sticky;
-												top: 0;
-											}
-											
-											.zui-sticky-col2 {
-												width: 200px;
-												position: sticky;
-												top: 36px;
-											}
-
-											a:focus {
-												background: red;
-											}
-
-											/* testing links*/
-
-											.xxx {
-												position: -webkit-sticky;
-												position: sticky;
-												left: 0;
-												z-index: 2;
-												background: #ccc;
-											}
-
-											.xxx2 {
-												position: -webkit-sticky;
-												position: sticky;
-												left: 81px;
-												z-index: 4;
-												background: #ccc;
-											}
-
-											.xxx3 {
-												position: -webkit-sticky;
-												position: sticky;
-												left: 186px;
-												z-index: 6;
-												background: #ccc;
-											}
-
-											thead .xxx,
-											thead .xxx2,
-											thead .xxx3,
-											tfoot th:first-child {
-												z-index: 8;
-											}
-										</style>
-										
-										<div id="table-scroll" class="table-scroll">
-											<table id="main-table" class="main-table">
-												<thead>
-													<tr>
-														<th rowspan=2 class="zui-sticky-col xxx">
-															No.
-														</th>
-														<th rowspan=2 class="zui-sticky-col xxx2">
-															Tanggal
-														</th>
-														<th rowspan=2 class="zui-sticky-col xxx3">
-															ID ATM
-														</th>
-														<th rowspan=2 class="zui-sticky-col">
-															Keterangan
-														</th>
-														<th colspan=2 class="zui-sticky-col">
-															DENOM 100 	
-														</th>
-														<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
-															SALDO 100
-														</th>
-														<th colspan=2 class="zui-sticky-col">
-															DENOM 50 	
-														</th>
-														<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
-															SALDO 50
-														</th>
-														<th colspan=2 class="zui-sticky-col">
-															DENOM 20 	
-														</th>
-														<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
-															SALDO 20
-														</th>
-														<th rowspan=2 class="zui-sticky-col">
-															SALDO
-														</th>
-													</tr>
-													<tr>
-														<th class="zui-sticky-col2">
-															DEBET 100 
-														</th>
-														<th class="zui-sticky-col2">
-															KREDIT 100 
-														</th>
-														<th class="zui-sticky-col2">
-															DEBET 50 
-														</th>
-														<th class="zui-sticky-col2">
-															KREDIT 50 
-														</th>
-														<th class="zui-sticky-col2">
-															DEBET 20 
-														</th>
-														<th class="zui-sticky-col2">
-															KREDIT 20 
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php 
-														$no = 0;
-														$prev_debit_100 = 0;
-														$prev_kredit_100 = 0;
-														$prev_debit_50 = 0;
-														$prev_kredit_50 = 0;
-														$prev_saldo_100 = 0;
-														$prev_saldo_50 = 0;
-														$prev_saldo = 0;
-														$saldo_100 = 0;
-														$saldo_50 = 0;
-														$saldo = 0;
-														$prev_ket = "";
-														foreach($data_record as $r) {
-															$no++;
-															if($r->kredit_100==0) {
-																$saldo_100 = $prev_saldo_100 + $r->debit_100;
-															} else {
-																$saldo_100 = $prev_saldo_100 - $r->kredit_100;
-															}
-															
-															if($r->kredit_50==0) {
-																$saldo_50 = $prev_saldo_50 + $r->debit_50;
-															} else {
-																$saldo_50 = $prev_saldo_50 - $r->kredit_50;
-															}
-															
-															$saldo = $saldo_100 + $saldo_50;
-															
-													?>
-															<tr>
-																<th class="xxx"><?=$no?></th>
-																<td style="text-align: left" class="xxx2"><?=($r->tanggal=="0000-00-00" ? "" : date("d-m-Y", strtotime($r->tanggal)))?></td>
-																<td class="xxx3"><?=$r->wsid?></td>
-																<td style="text-align: left"><?=strtoupper(str_replace("_", " ", $r->keterangan_jurnal))?></td>
-																<td style="text-align: right"><?=($r->debit_100==0 ? 0 : number_format($r->debit_100, 0, ",", ","))?></td>
-																<td style="text-align: right"><?=($r->kredit_100==0 ? 0 : number_format($r->kredit_100, 0, ",", ","))?></td>
-																<td style="background-color: #b3c984; text-align: right"><?=($saldo_100==0 ? 0 : number_format($saldo_100, 0, ",", ","))?></td>
-																<td style="text-align: right"><?=($r->debit_50==0 ? 0 : number_format($r->debit_50, 0, ",", ","))?></td>
-																<td style="text-align: right"><?=($r->kredit_50==0 ? 0 : number_format($r->kredit_50, 0, ",", ","))?></td>
-																<td style="background-color: #b3c984; text-align: right"><?=($saldo_50==0 ? 0 : number_format($saldo_50, 0, ",", ","))?></td>
-																<td style="text-align: right"><?=($r->debit_20==0 ? 0 : number_format($r->debit_20, 0, ",", ","))?></td>
-																<td style="text-align: right"><?=($r->kredit_20==0 ? 0 : number_format($r->kredit_20, 0, ",", ","))?></td>
-																<td style="background-color: #b3c984; text-align: right"><?=($saldo_20==0 ? 0 : number_format($saldo_20, 0, ",", ","))?></td>
-																<td style="text-align: right"><?=($saldo==0 ? 0 : number_format($saldo, 0, ",", ","))?></td>
-															</tr>
-													<?php 
-															
-															$prev_debit_100 = $r->debit_100;
-															$prev_kredit_100 = $r->kredit_100;
-															$prev_debit_50= $r->debit_50;
-															$prev_kredit_50 = $r->kredit_50;
-															
-															$prev_saldo_100 = $saldo_100;
-															$prev_saldo_50 = $saldo_50;
-															$prev_ket = $r->keterangan;
-														}
-													?>
-												</tbody>
-												<tfoot>
-													<tr>
-														<th colspan="" class="xxx"></th>
-														<th colspan="" class="xxx2"></th>
-														<th colspan="" class="xxx3"></th>
-														<th colspan=""></th>
-														<th colspan=""></th>
-														<th colspan=""></th>
-														<th style="text-align: right"><?=($saldo_100==0 ? 0 : number_format($saldo_100, 0, ",", ","))?></th>
-														<th colspan="2"></th>
-														<th style="text-align: right"><?=($saldo_50==0 ? 0 : number_format($saldo_50, 0, ",", ","))?></th>
-														<th colspan="2"></th>
-														<th style="text-align: right"><?=($saldo_50==0 ? 0 : number_format($saldo_20, 0, ",", ","))?></th>
-														<th style="text-align: right"><?=($saldo==0 ? 0 : number_format($saldo, 0, ",", ","))?></th>
-													</tr>
-												</tfoot>
-											</table>
-										</div>
-										<!--<table id="">
-										<thead>
-										<tr class=" gray_sai">
-											<th>
-												No.
-											</th>
-											<th>
-												No Bukti
-											</th>
-											<th>
-												Date
-											</th>
-											<th colspan="2">
-												Details
-											</th>
-											<th>
-												Debet
-											</th>
-											<th>
-												Kredit
-											</th>
-										</tr>
-										</thead>
-										<tbody>
-										<tr>
-											<td>
-												1
-											</td>
-											<td class="left_align">
-												BKM01
-											</td>
-											<td class="left_align">
-												2019-06-01
-											</td>
-											<td colspan="2" class="left_align" style="font-weight: bold">
-												Setoran Modal Tuan Kaler
-											</td>
-											<td align="center">&nbsp;</td>
-											<td align="center">&nbsp;</td>
-										</tr>
-										
-										<tr>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td class="left_align">11001-Kas</td>
-										  <td style="text-align: right">0</td>
-										  <td style="text-align: right">0</td>
-										</tr>
-										<tr>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td class="left_align">31001-Modal Tn. Kaler</td>
-										  <td style="text-align: right">0</td>
-										  <td style="text-align: right">0</td>
-										</tr>
-										<tr>
-											<td>
-												2
-											</td>
-											<td class="left_align">
-												BKM02
-											</td>
-											<td class="left_align">
-												2019-06-02
-											</td>
-											<td colspan="2" class="left_align" style="font-weight: bold">
-												Pembelian Peralatan Perusahaan
-											</td>
-											<td align="center">&nbsp;</td>
-											<td align="center">&nbsp;</td>
-										</tr>
-										
-										<tr>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td class="left_align">12001-Peralatan Usaha</td>
-										  <td style="text-align: right">0</td>
-										  <td style="text-align: right">0</td>
-										</tr>
-										<tr>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td>&nbsp;</td>
-										  <td class="left_align">11001-Kas</td>
-										  <td style="text-align: right">0</td>
-										  <td style="text-align: right">0</td>
-										</tr>
-										</tbody>
-										</table>-->
-									</div>
-								</div>
-								<span class="clear"></span>
-							</div>
+				<div class="widget_content" id="content_table">
+					<div>
+						<style>
+							div.dataTables_wrapper {
+								width: 100%;
+								margin: 0 auto;
+							}
+							th, td { white-space: nowrap; background: #fff; }
+							th { white-space: nowrap; background: #fff; vertical-align: middle }
+							div.dataTables_wrapper {
+								width: 100%;
+								margin: 0 auto;
+								display: block;
+							}
+							
+							// .dataTables_scrollHead thead {
+								// visibility: collapse;   
+							// }
+							// .dataTables_scrollBody thead {
+								// visibility: collapse;   
+							// }
+							
+							.text-total {
+								background-color: rgb(179, 201, 132);
+								text-align: right;
+							}
+							th.text-total2 {
+								background: #666;
+								text-align: center;
+								vertical-align: middle;
+								color: white;
+								font-weight: bold;
+							}
+							td.text-total2 {
+								background: #666;
+								text-align: right;
+								vertical-align: middle;
+								color: white;
+								font-weight: bold;
+							}
+							.text-number {
+								text-align: right;
+							}
+						</style>
+						<!--<table id="examplex" class="display nowrap" style="width:100%">
+							<thead>
+								<tr>
+									<th rowspan=2 class="zui-sticky-col ">
+										No.
+									</th>
+									<th rowspan=2 class="zui-sticky-col ">
+										Tanggal
+									</th>
+									<th rowspan=2 class="zui-sticky-col ">
+										ID ATM
+									</th>
+									<th rowspan=2 class="zui-sticky-col">
+										Keterangan
+									</th>
+									<th colspan=2 class="zui-sticky-col">
+										DENOM 100 	
+									</th>
+									<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
+										SALDO 100
+									</th>
+									<th colspan=2 class="zui-sticky-col">
+										DENOM 50 	
+									</th>
+									<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
+										SALDO 50
+									</th>
+									<th colspan=2 class="zui-sticky-col">
+										DENOM 20 	
+									</th>
+									<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
+										SALDO 20
+									</th>
+									<th rowspan=2 class="zui-sticky-col">
+										SALDO
+									</th>
+								</tr>
+								<tr>
+									<th class="zui-sticky-col2">
+										DEBET 100 
+									</th>
+									<th class="zui-sticky-col2">
+										KREDIT 100 
+									</th>
+									<th class="zui-sticky-col2">
+										DEBET 50 
+									</th>
+									<th class="zui-sticky-col2">
+										KREDIT 50 
+									</th>
+									<th class="zui-sticky-col2">
+										DEBET 20 
+									</th>
+									<th class="zui-sticky-col2">
+										KREDIT 20 
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Tiger Nixon</td>
+									<td>System Architect</td>
+									<td>$320,800</td>
+									<td>Edinburgh</td>
+									<td>5421</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td>Tiger Nixon</td>
+									<td>System Architect</td>
+									<td>$320,800</td>
+									<td>Edinburgh</td>
+									<td>5421</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+									<td>t.nixon@datatables.net</td>
+								</tr>
+							</tfoot>
+						</table>-->
+						
+						
+						<div style="float: left;z-index: 90000;">
+							<table>
+								<tr>
+									<td><button class="small button green" onclick="execute()">Refresh Jurnal</button> </td>
+									<td width="10px"></td>
+									<td><span id="result"></span></td>
+								</tr>
+							</table>
 						</div>
+						<table id="example" class="display nowrap cell-border" style="width:100%">
+							<thead>
+								<tr>
+									<th rowspan=2 class="zui-sticky-col ">
+										No.
+									</th>
+									<th rowspan=2 class="zui-sticky-col ">
+										Tanggal
+									</th>
+									<th rowspan=2 class="zui-sticky-col ">
+										ID ATM
+									</th>
+									<th rowspan=2 class="zui-sticky-col">
+										Keterangan
+									</th>
+									<th colspan=2 class="zui-sticky-col">
+										DENOM 100 	
+									</th>
+									<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
+										SALDO 100
+									</th>
+									<th colspan=2 class="zui-sticky-col">
+										DENOM 50 	
+									</th>
+									<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
+										SALDO 50
+									</th>
+									<th colspan=2 class="zui-sticky-col">
+										DENOM 20 	
+									</th>
+									<th rowspan=2 style="background-color: #b3c984" class="zui-sticky-col">
+										SALDO 20
+									</th>
+									<th rowspan=2 class="zui-sticky-col">
+										SALDO
+									</th>
+								</tr>
+								<tr>
+									<th class="zui-sticky-col2">
+										DEBET 100 
+									</th>
+									<th class="zui-sticky-col2">
+										KREDIT 100 
+									</th>
+									<th class="zui-sticky-col2">
+										DEBET 50 
+									</th>
+									<th class="zui-sticky-col2">
+										KREDIT 50 
+									</th>
+									<th class="zui-sticky-col2">
+										DEBET 20 
+									</th>
+									<th class="zui-sticky-col2">
+										KREDIT 20 
+									</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<td class="text-total2"></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"><span id="saldo100_value"></span></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"><span id="saldo50_value"></span></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"></td>
+									<td class="text-total2"><span id="saldo20_value"></span></td>
+									<td class="text-total2"><span id="saldo_value"></span></td>
+								</tr>
+							</tfoot>
+						</table>
 					</div>
 				</div>
 			</div>
-		</div>
-		<span class="clear"></span>
-	</div>
-		
-	<div class="clear"></div>
+		</section>
+	
+		<div class="clear"></div>
+	</article>
+	
+	
+	<script src="<?=base_url()?>depend/js/jquery-1.7.1.min.js"></script>
+	<script src="<?=base_url()?>depend/js/jquery-ui-1.8.18.custom.min.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>depend/jquery-confirm/js/jquery-confirm.js"></script>
+	<script src="<?=base_url()?>depend/js/full-calendar.jquery.js"></script>
+	
+	
 	<script>
-		$(document).on('click', '.detail_preview', function(){ 
-			$(".preview_pdf").show();
-			$(".preview_table").hide();
+		var tabless;
+		jq341 = jQuery.noConflict(true);
+		jq3412 = jQuery.noConflict(true);
+		
+		console.log(jq341().jquery);
+		console.log(jq3412().jquery);
+		
+		jq3412(document).ready(function() {
+			jq3412('#examplex').DataTable({
+				scrollY:        "300px",
+				scrollX:        true,
+				scrollCollapse: true,
+				paging:         false,
+				fixedColumns:   {
+					leftColumns: 1,
+					leftColumns: 2,
+					leftColumns: 3
+				}
+			});
 			
-			document.getElementById("preview").src = "";
-			var id = $(this).closest('td').find('#id').text();
-			// alert(id);
-			setTimeout(function() {
-			var websel = "<?=base_url()?>pdf/generate/"+id;
-				document.getElementById("preview").src = websel;
-			}, 100);
+			tabless = jq3412('#example').DataTable({
+				serverSide: true,
+				ordering: false,
+				searching: true,
+				// ajax: function (data, callback, settings) {
+					// var out = [];
+					// for (var i=data.start, ien=data.start+data.length ; i<ien ; i++ ) {
+						// out.push([ i+'-1', i+'-2', i+'-3', i+'-4', i+'-5', i+'-5', i+'-5', i+'-5', i+'-5', i+'-5', i+'-5', i+'-5', i+'-5', i+'-5' ]);
+					// }
+					// setTimeout(function () {
+						// callback( {
+							// draw: data.draw,
+							// data: out,
+							// recordsTotal: 5000000,
+							// recordsFiltered: 5000000
+						// });
+					// }, 50);
+				// },
+				ajax: {
+					url: '<?=base_url()?>jurnal/json',
+					dataFilter: function(data){
+						console.log(data);
+						var json = jQuery.parseJSON(data);
+						json.recordsTotal = json.recordsTotal;
+						json.recordsFiltered = json.recordsFiltered;
+						json.data = json.data;
+						
+						$("#saldo100_value").html(json.saldo_100);
+						$("#saldo50_value").html(json.saldo_50);
+						$("#saldo20_value").html(json.saldo_20);
+						$("#saldo_value").html(json.sum_saldo);
+
+						return JSON.stringify( json ); // return JSON string
+					}
+				},
+				scrollY: 350,
+				scroller: {
+					loadingIndicator: true
+				},
+				scrollX:        true,
+				scrollCollapse: true,
+				fixedColumns:   {
+					leftColumns: 3,
+					rightColumns: 1
+				},
+				"columnDefs": [
+					{
+						"render": function ( data, type, row ) {
+							return  data;
+						},
+						"className": "text-center",
+						"targets": 0,
+						"searchable": false
+					},
+					{
+						"render": function ( data, type, row ) {
+							return  formatDate(data);
+						},
+						"targets": 1,
+						"searchable": false
+					},
+					{
+						"targets": 2,
+						"searchable": true
+					},
+					{
+						"render": function ( data, type, row ) {
+							return  data.replace("_", " ").toUpperCase();
+						},
+						"targets": 3,
+						"searchable": false
+					},
+					{
+						"className": "text-number",
+						"targets": 4,
+						"searchable": false
+					},
+					{
+						"className": "text-number",
+						"targets": 5,
+						"searchable": false
+					},
+					{
+						"className": "text-total",
+						"targets": 6,
+						"searchable": false
+					},
+					{
+						"className": "text-number",
+						"targets": 7,
+						"searchable": false
+					},
+					{
+						"className": "text-number",
+						"targets": 8,
+						"searchable": false
+					},
+					{
+						"className": "text-total",
+						"targets": 9,
+						"searchable": false
+					},
+					{
+						"className": "text-number",
+						"targets": 10,
+						"searchable": false
+					},
+					{
+						"className": "text-number",
+						"targets": 11,
+						"searchable": false
+					},
+					{
+						"className": "text-total",
+						"targets": 12,
+						"searchable": false
+					},
+					{
+						"className": "text-total2",
+						"targets": 13,
+						"searchable": false
+					}
+				],
+				"columns": [
+					{"data": "no"},
+					{"data": "tanggal"},
+					{"data": "wsid"},
+					{"data": "keterangan"},
+					{"data": "debit_100"},
+					{"data": "kredit_100"},
+					{"data": "saldo_100"},
+					{"data": "debit_50"},
+					{"data": "kredit_50"},
+					{"data": "saldo_50"},
+					{"data": "debit_20"},
+					{"data": "kredit_20"},
+					{"data": "saldo_20"},
+					{"data": "sum_saldo"},
+				]
+			});
 		});
 		
-		$(document).on('click', '#close_preview', function(){ 
-			$(".preview_pdf").hide();
-			$(".preview_table").show();
-		});
+		function formatDate (input) {
+			var datePart = input.match(/\d+/g),
+			year = datePart[0], // get only two digits
+			month = datePart[1], day = datePart[2];
+
+			return day+'-'+month+'-'+year;
+		}
+		
+		var total = 0;
+		
+		function execute() {
+			setTimeout("delete_sync()",500);
+			setTimeout("proses()",2000);
+		}
+	
+		function proses(page=1) {
+			tabless.draw();
+			$.ajax({
+				url: '<?=rest_api()?>/table/index2?page='+page,
+				dataType: 'html',
+				type: 'GET',
+				data: {},
+				success: function(data) {
+					res = JSON.parse(data);
+					console.log(res);
+					
+					if(total==0) {
+						total = res.total;
+					}
+					console.log(total);
+					if(res.total!==res.page && res.page!=="done") {
+						setTimeout("proses('"+page+"')",10);
+					}
+					percen = (((res.total*-1)+total)/total)*100;
+					// document.getElementById("result").innerHTML = percen.toFixed(2)+"%";
+					percen = isNaN(percen) ? 100 : percen.toFixed(2);
+					document.getElementById("result").innerHTML = "Progress : "+percen+"%";
+					
+					if(percen==100) {
+						// tabless.draw();
+						window.location.reload();
+					}
+				}
+			});
+		}
+		
+		function delete_sync() {
+			document.getElementById("result").innerHTML = "Initializing...";
+			$.ajax({
+				url: '<?=rest_api()?>/table/delete_sync',
+				dataType: 'html',
+				type: 'GET',
+				data: {},
+				success: function(data) {
+					total = 0;
+					console.clear();
+					console.log("DONE");
+					document.getElementById("result").innerHTML = "Please wait...";
+				}
+			});
+		}
 	</script>
 @endsection

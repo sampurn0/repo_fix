@@ -22,7 +22,7 @@
     <link href="<?=base_url()?>depend/css/gradient.css" rel="stylesheet" type="text/css">
 	<link href="<?=base_url()?>assets/constellation/assets/css/mini3537.css?files=reset,common,form,standard,960.gs.fluid,simple-lists,block-lists,planning,table,calendars,wizard,gallery" rel="stylesheet" type="text/css">
 
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAb7d-G5Ea9j3X_haj37bSPJkSN7PpAp7I&libraries=places"></script>
+	<!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAb7d-G5Ea9j3X_haj37bSPJkSN7PpAp7I&libraries=places"></script>-->
 	<script type="text/javascript" src="<?=base_url()?>assets/constellation/assets/js/ContextMenu.js"></script>
 	
 	<style>
@@ -535,6 +535,7 @@
 					<li <?php if($active_menu=="barcode_batch" 
 								|| $active_menu=="barcode_generates"
 								|| $active_menu=="inventory"
+								|| $active_menu=="logistic_in_use"
 								|| $active_menu=="merk_mesin"
 								|| $active_menu=="seal"
 								|| $active_menu=="bag"
@@ -549,6 +550,11 @@
 							<li>
 								<a class="<?=($active_menu == "inventory" ? 'active' : '')?>" href="<?=base_url()?>inventory">
 									<span class="list-icon">&nbsp;</span>Supplies & Sparepart
+								</a>
+							</li>
+							<li>
+								<a class="<?=($active_menu == "logistic_in_use" ? 'active' : '')?>" href="<?=base_url()?>logistic_in_use/show">
+									<span class="list-icon">&nbsp;</span>Seal In Use
 								</a>
 							</li>
 							<li>

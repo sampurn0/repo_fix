@@ -33,8 +33,8 @@
 			                    <li><a onclick="function_map1()" href="#tab4"><img style="float: left; margin: 10px 3px 0px -10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/loc.png" width="20" height="20">Maps Global Tracking</a></li>
 			                    <li><a onclick="function_map2()" href="#tab5"><img style="float: left; margin: 10px 3px 0px -10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/loc.png" width="20" height="20">Maps CIT & CR</a></li>
 			                    <li><a onclick="function_map3()" href="#tab6"><img style="float: left; margin: 10px 3px 0px -10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/loc.png" width="20" height="20">Maps FLM & SLM</a></li>
-			                    <li><a href="#tab2"><img style="float: left; margin: 10px 3px 0px -10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/Pie-Chart.png" width="20" height="20">Recent Runsheets</a></li>
-			                    <li><a href="#tab3"><img style="float: left; margin: 10px 3px 0px -10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/document-bookmark.png" width="20" height="20">Trouble Tickets</a></li>
+			                    <!--<li hidden><a href="#tab2"><img style="float: left; margin: 10px 3px 0px -10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/Pie-Chart.png" width="20" height="20">Recent Runsheets</a></li>
+			                    <li hidden><a href="#tab3"><img style="float: left; margin: 10px 3px 0px -10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/document-bookmark.png" width="20" height="20">Trouble Tickets</a></li>-->
 
 			                </ul>
 			            </div>
@@ -112,6 +112,7 @@
 			                </div>
 			            </div>
 
+						<!--
 			            <div id="tab2">
 			                <div class="stat_block black_rev">
 
@@ -185,14 +186,6 @@
 															?>
 
 			                                                <br>
-
-			                                                <!--<span class="badge_style b_low">Pending A</span>
-															<span class="badge_style b_medium">Pending B</span>
-															<span class="badge_style b_high">Pending C</span>
-															
-															<span class="badge_style b_done">Pending D</span>
-															<span class="badge_style b_away">Pending E</span>
-															<span class="badge_style b_suspend">Pending F</span>-->
 			                                            </td>
 			                                        </tr>
 			                                        <?php 
@@ -278,14 +271,6 @@
 									?>
 
 			                                                <br>
-
-			                                                <!--<span class="badge_style b_low">Pending A</span>
-									<span class="badge_style b_medium">Pending B</span>
-									<span class="badge_style b_high">Pending C</span>
-									
-									<span class="badge_style b_done">Pending D</span>
-									<span class="badge_style b_away">Pending E</span>
-									<span class="badge_style b_suspend">Pending F</span>-->
 			                                            </td>
 			                                        </tr>
 			                                        <?php 
@@ -299,7 +284,7 @@
 			                    <span class="clear"></span>
 			                </div>
 			            </div>
-
+						-->
 			            <div id="tab4">
 			                <div class="stat_block black_rev">
 			                    <div class="grid_12">

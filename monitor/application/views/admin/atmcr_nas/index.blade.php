@@ -233,7 +233,11 @@
 			"columnDefs": [
 				{
 					"render": function ( data, type, row ) {
-						return  formatDate(data);
+						if(data=="0000-00-00") {
+							return  "(Data Lama) "+formatDate(row['updated_date']);
+						} else {
+							return  formatDate(data);
+						}
 					},
 					"className": "text-center",
 					"targets": 0,

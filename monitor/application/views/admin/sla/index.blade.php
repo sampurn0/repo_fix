@@ -1,258 +1,192 @@
 @extends('layouts.master')
 
 @section('content')
-    <!DOCTYPE html>
-    <html lang="en">
+	<script src="<?=base_url()?>constellation/assets/equipment/jquery-3.4.1.min.js"></script>
+	<link href="<?=base_url()?>constellation/assets/equipment/select2.min.css" rel="stylesheet" />
+	<script src="<?=base_url()?>constellation/assets/equipment/select2.min.js"></script>
 
-        <head>
-            <style>
-				* {
-					box-sizing: border-box;
-				}
-
-				html {
-					font-family: helvetica;
-				}
-
-				html,
-				body {
-					max-width: 100vw;
-					
-				}
-
-				table {
-					margin: auto;
-					border-collapse: collapse;
-					overflow-x: auto;
-					display: block;
-					width: fit-content;
-					max-width: 100%;
-					box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
-					
-				}
-
-				td,
-				th {
-					border: solid rgb(200, 200, 200) 1px;
-					padding: .5rem;
-					font-size: 12px;
-					
-				}
-
-				th {
-					text-align: left;
-					background-color: rgb(190, 220, 250);
-					text-transform: uppercase;
-					border: rgb(50, 50, 100) solid 1px;
-					border-top: none;
-					text-align: center;
-				}
-
-				td {
-					white-space: nowrap;
-					border-bottom: none;
-					color: rgb(20, 20, 20);
-					border: rgb(50, 50, 100) solid 1px;
-				}
-
-				td:first-of-type,
-				th:first-of-type {
-					border-left: none;
-				}
-
-				td:last-of-type,
-				th:last-of-type {
-					border-right: none;
-				}
-				
-				table tfoot td {
-					border: rgb(50, 50, 100) solid 2px;
-				}
-			</style>
-        </head>
-
-        <body class='default'>
-
-            <div class="grid_14">
-                <div class="widget_wrap">
-                    <div class="widget_top">
-                        <span class="h_icon list_images"></span>
-                        <h6>REPORT SERVICE LEVEL AGREEMENT (SLA - FLM NASIONAL)</h6>
-                    </div>
-                    <div class="widget_content">
-                        <div id="jqxgrid"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="grid_14">
-                <div class="block-border">
-                    <!-- <div style="overflow-x:auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="vertical-align: middle" rowspan="4">NO</th>
-                                    <th style="vertical-align: middle" rowspan="4">ATM ID</th>
-                                    <th style="vertical-align: middle" rowspan="4">Lokasi</th>
-                                    <th style="vertical-align: middle" rowspan="4">ATM/CRM</th>
-                                    <th style="vertical-align: middle" colspan="28">REKONSILIASI</th>
-                                    <th style="vertical-align: middle" rowspan="4">Counter (khusus CRM) (x1000)</th>
-                                    <th style="vertical-align: middle" rowspan="2">Selisih</th>
-                                    <th style="vertical-align: middle" rowspan="4">Time</th>
-                                    <th style="vertical-align: middle" colspan="4">PENGISIAN BERIKUTNYA</th>
-                                    <th style="vertical-align: middle" rowspan="4" width="10%">KET <br>NAIK/TURUN LIMIT</th>
-                                </tr>
-                                <tr>
-                                    <th style="vertical-align: middle" colspan="6">PENGISIAN SEBELUMNYA</th>
-                                    <th style="vertical-align: middle" colspan="11">PERHITUNGAN FISIK UANG</th>
-                                    <th style="vertical-align: middle" colspan="11">PERHITUNGAN DISPENSED COUNTER</th>
-                                    <th style="vertical-align: middle" rowspan="3">Jml Csst</th>
-                                    <th style="vertical-align: middle" rowspan="2" colspan="2">Jml Isi</th>
-                                    <th style="vertical-align: middle" rowspan="3">Total</th>
-                                </tr>
-                                <tr>
-                                    <th style="vertical-align: middle"rowspan="2">TANGGAL</th>
-                                    <th style="vertical-align: middle"rowspan="2">JML CSST</th>
-                                    <th style="vertical-align: middle"width="200px" colspan="4">JML ISI</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 1</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 2</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 3</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 4</th>
-                                    <th style="vertical-align: middle"colspan="2">RJT.</th>
-                                    <th style="vertical-align: middle">TOTAL RP</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 1</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 2</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 3</th>
-                                    <th style="vertical-align: middle"colspan="2">CSST 4</th>
-                                    <th style="vertical-align: middle"colspan="2">RJT.</th>
-                                    <th style="vertical-align: middle">TOTAL RP</th>
-                                    <th style="vertical-align: middle">TOTAL RP</th>
-                                </tr>
-                                <tr>
-                                    <th style="vertical-align: middle" colspan="2">50</th>
-                                    <th style="vertical-align: middle" colspan="2">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">(x1,000)</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                    <th style="vertical-align: middle">(x1,000)</th>
-                                    <th style="vertical-align: middle">(x1,000)</th>
-                                    <th style="vertical-align: middle">50</th>
-                                    <th style="vertical-align: middle">100</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
-                            </tbody>
-                            <tfoot>
-                                
-                            </tfoot>
-                        </table>
-                    </div> -->
-					
-                    <div style="overflow-x:auto;">
-                        <table>
-                            <thead>
-                                <tr>
+	
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>depend/jquery-confirm/css/jquery-confirm.css"/>
+	<script type="text/javascript" src="<?=base_url()?>depend/jquery-confirm/js/jquery-confirm.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/datatables/datatables.min.css"/>
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/datatables/fixedColumns.dataTables.min.css"/>
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/datatables/scroller.dataTables.min.css"/>
+ 
+	<script type="text/javascript" src="<?=base_url()?>/assets/datatables/datatables.min.js"></script>
+	
+	<script type="text/javascript" src="<?=base_url()?>assets/jquery.scannerdetection.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/notify.min.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>assets/jquery.inputmask.js"></script>
+	
+	<script type="text/javascript" src="<?=base_url()?>/assets/datatables/dataTables.fixedColumns.min.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>/assets/datatables/dataTables.scroller.min.js"></script>
+	
+	<article class="container_12">
+		
+		<section class="grid_12">
+			<div class="preview_pdf" hidden>
+				<button style="margin-top: 5px; float: right" class="btn btn-primary pull-right" id='close_preview' type="button">Close</button>
+				<iframe id="preview" name="preview" src="about:blank" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+			</div>
+			<div class="widget_wrap preview_table">
+				<div class="widget_top">
+					<span class="h_icon list_images"></span>
+					<h6>REPORT SERVICE LEVEL AGREEMENT (SLA - FLM NASIONAL)</h6>
+				</div>
+				<div class="widget_content" id="content_table">
+					<div>
+						<style>
+							div.dataTables_wrapper {
+								width: 100%;
+								margin: 0 auto;
+							}
+							th, td { white-space: nowrap; background: #fff; }
+							th { white-space: nowrap; background: #fff; vertical-align: middle }
+							div.dataTables_wrapper {
+								width: 100%;
+								margin: 0 auto;
+								display: block;
+							}
+							
+							// .dataTables_scrollHead thead {
+								// visibility: collapse;   
+							// }
+							// .dataTables_scrollBody thead {
+								// visibility: collapse;   
+							// }
+							
+							.text-total {
+								background-color: rgb(179, 201, 132);
+								text-align: right;
+							}
+							th.text-total2 {
+								background: #666;
+								text-align: center;
+								vertical-align: middle;
+								color: white;
+								font-weight: bold;
+							}
+							td.text-total2 {
+								background: #666;
+								text-align: right;
+								vertical-align: middle;
+								color: white;
+								font-weight: bold;
+							}
+							.text-number {
+								text-align: right;
+							}
+						</style>
+						<table id="example" class="display nowrap cell-border" style="width:100%">
+							<thead>
+								<tr>
                                     <th>No</th>
-                                    <th>ID</th>
-                                    <th>Lokasi</th>
-                                    <th>Area</th>
-                                    <th>Jam Operasional</th>
+                                    <th>WSID / Lokasi</th>
                                     <th>Custody</th>
                                     <th>Guard</th>
                                     <th>No. Ticket (BIJAK)</th>
                                     <th>No. Ticket (CLIENT)</th>
-                                    <th>Problem</th>
+									<th>Problem</th>
                                     <th>Action Taken</th>
-                                    <th>Email Date</th>
-                                    <th>Call In / Email Time</th>
-                                    <th>Entry Date</th>
-                                    <th>Entry Time</th>
+                                    <th>Email Date / Time</th>
+                                    <th>Entry Date / Time</th>
                                     <th>Accept Time</th>
-                                    <th>Arrival Date</th>
-                                    <th>Arrive Time</th>
-                                    <th>Start Date</th>
-                                    <th>Start Time</th>
-                                    <th>Close Date</th>
-                                    <th>Close Time</th>
-                                    <th style="background-color: #ebebeb">Response Time Duty</th>
+                                    <th>Arrival Date / Time</th>
+                                    <th>Start Date / Time</th>
+                                    <th>Close Date / Time</th>
+									<th style="background-color: #ebebeb">Response Time Duty</th>
                                     <th style="background-color: #ebebeb">Response Time Flm</th>
-                                    <th style="background-color: #ebebeb; display: none">Minute</th>
                                     <th style="background-color: #ebebeb">Repair Time</th>
-                                    <th style="background-color: #ebebeb; display: none">Minute</th>
                                     <th style="background-color: #ebebeb">Resolution Time</th>
-                                    <th style="background-color: #ebebeb; display: none">Minute</th>
-                                    <th style="background-color: #ebebeb">DT (%)</th>
-                                    <th style="background-color: #ebebeb">Up Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    $no = 0;
-                                    foreach($data_sla as $r) {
-                                        $no++;
-                                        echo "<tr>";
-                                        echo "<td>$no.</td>";
-                                        echo "<td>".$r['wsid']."</td>";
-                                        echo "<td>".$r['lokasi']."</td>";
-                                        echo "<td>AREA</td>";
-                                        echo "<td>JAM OPERASIONAL</td>";
-                                        echo "<td>".$r['nama_teknisi']."</td>";
-                                        echo "<td>".$r['nama_guard']."</td>";
-                                        echo "<td>".$r['ticket']."</td>";
-                                        echo "<td>".$r['ticket_client']."</td>";
-                                        echo "<td>".$r['problem_type']."</td>";
-                                        echo "<td>".trim($r['keterangan'])."</td>";
-                                        echo "<td>".$r['email_date']."</td>";
-                                        echo "<td>".$r['email_time']."</td>";
-                                        echo "<td>".$r['entry_date']."</td>";
-                                        echo "<td>".$r['entry_time']."</td>";
-                                        echo "<td>".$r['accept_time']."</td>";
-                                        echo "<td>".$r['arrival_date']."</td>";
-                                        echo "<td>".$r['arrival_time']."</td>";
-                                        echo "<td>".$r['start_date']."</td>";
-                                        echo "<td>".$r['start_time']."</td>";
-                                        echo "<td>".$r['close_date']."</td>";
-                                        echo "<td>".$r['close_time']."</td>";
-                                        echo "<td>".$r['response_duty']."</td>";
-                                        echo "<td>".$r['response_flm']."</td>";
-                                        echo "<td>".$r['repair_time']."</td>";
-                                        echo "<td>".$r['resolution_time']."</td>";
-                                        echo "<td>".$r['down_time']."</td>";
-                                        echo "<td>".$r['up_time']."</td>";
-                                        echo "</tr>";
-                                    }
-                                ?>
-                            </tbody>
-                            <tfoot>
-                                
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <br>
+                                    <th style="background-color: #ebebeb">DT (%) / Up Time</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+	
+		<div class="clear"></div>
+	</article>
+	
+	
+	<script src="<?=base_url()?>depend/js/jquery-1.7.1.min.js"></script>
+	<script src="<?=base_url()?>depend/js/jquery-ui-1.8.18.custom.min.js"></script>
+	<script type="text/javascript" src="<?=base_url()?>depend/jquery-confirm/js/jquery-confirm.js"></script>
+	<script src="<?=base_url()?>depend/js/full-calendar.jquery.js"></script>
+	
+	
+	<script>
+		var tabless;
+		jq341 = jQuery.noConflict(true);
+		jq3412 = jQuery.noConflict(true);
+		
+		console.log(jq341().jquery);
+		console.log(jq3412().jquery);
+		
+		jq3412(document).ready(function() {
+			tabless = jq3412('#example').DataTable({
+				serverSide: true,
+				ordering: false,
+				searching: false,
+				lengthChange: false,
+				ajax: {
+					url: '<?=base_url()?>sla/json',
+					data: function(data) {
+						// Read values
+						var values = jq341('.datepicker_search').val();
+						// alert(values);
 
-            </div>
-        </body>
+						// Append to data
+						if(values=="") {
+							// data.search.value = "<?=date('Y-m-d')?>";
+						} else {
+							data.search.value = values;
+						}
+					},
+					dataFilter: function(data){
+						// console.log(data);
+						var json = jQuery.parseJSON( data );
+						json.recordsTotal = json.recordsTotal;
+						json.recordsFiltered = json.recordsFiltered;
+						json.data = json.data;
 
-    </html>
+						return JSON.stringify( json ); // return JSON string
+					}
+				},
+				scrollX:        true,
+				"columns": [
+					{"data": "no"},
+					{"data": "lokasi"},
+					{"data": "nama_teknisi"},
+					{"data": "nama_guard"},
+					{"data": "ticket"},
+					{"data": "ticket_client"},
+					{"data": "problem_type"},
+					{"data": "keterangan"},
+					{"data": "email_date"},
+					{"data": "entry_date"},
+					{"data": "accept_time"},
+					{"data": "arrival_date"},
+					{"data": "start_date"},
+					{"data": "close_date"},
+					{"data": "response_duty"},
+					{"data": "response_flm"},
+					{"data": "repair_time"},
+					{"data": "resolution_time"},
+					{"data": "down_time"},
+				],
+			});
+		});
+		
+		function formatDate (input) {
+			var datePart = input.match(/\d+/g),
+			year = datePart[0], // get only two digits
+			month = datePart[1], day = datePart[2];
 
+			return day+'-'+month+'-'+year;
+		}
+	</script>
 @endsection

@@ -141,7 +141,7 @@ class Datatables extends REST_Controller {
 	
 	
 	function show_get() {
-		$this->o($_REQUEST);
+		// $this->o($_REQUEST);
 		$request = $this->input->get('data')['post'];
 		$columns = $this->input->get('data')['post']['columns'];
 		$param = json_decode($this->input->get('data')['param'], true); 
@@ -200,22 +200,24 @@ class Datatables extends REST_Controller {
 			foreach($param['order'] as $k => $r) {
 				$orderBy[] = ''.key($r).' '.$r[key($r)];
 			}
-        } else {
-			if ( isset($request['order']) && count($request['order']) ) {
-				$orderBy = array();
+        } 
+		
+		if ( isset($request['order']) && count($request['order']) ) {
+			$orderBy = array();
 
-				for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
-					// Convert the column index into the column data property
-					$columnIdx = intval($request['order'][$i]['column']);
-					$requestColumn = $request['columns'][$columnIdx];
+			for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
+				
+				// print_r($request['order'][$i]['column']);
+				// Convert the column index into the column data property
+				$columnIdx = intval($request['order'][$i]['column']);
+				$requestColumn = $request['columns'][$columnIdx];
 
-					if ( $requestColumn['orderable'] == '' ) {
-						$dir = $request['order'][$i]['dir'] === 'asc' ?
-							'ASC' :
-							'DESC';
+				if ( $requestColumn['orderable'] == 'true' ) {
+					$dir = $request['order'][$i]['dir'] === 'asc' ?
+						'ASC' :
+						'DESC';
 
-						$orderBy[] = ''.$requestColumn['data'].' '.$dir;
-					}
+					$orderBy[] = ''.$requestColumn['data'].' '.$dir;
 				}
 			}
 		}
@@ -255,7 +257,12 @@ class Datatables extends REST_Controller {
 					$parsed = self::get_string_between($fullstring, '[', ']');	
 					$parsed2 = self::get_string_between2($fullstring, '[', ']');	
 					$str = "'".$requestColumn[key($requestColumn)]."'";
-					$columnWhere[] = "".$parsed2." ".$parsed."= ".$str;
+					
+					if($requestColumn[key($requestColumn)]==null) {
+						$columnWhere[] = "".$parsed2." IS NOT NULL";
+					} else {
+						$columnWhere[] = "".$parsed2." ".$parsed."= ".$str;						
+					}
 					// echo $parsed;
 					// $binding = "'%".$str."%'";
 				} else {

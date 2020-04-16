@@ -15,8 +15,8 @@
 						<li><a href="#tab-op" title="Operational Procedures & Manual Instruction"><img src="<?=base_url()?>constellation/assets/images/icons/web-app/48/Save.png" width="24" height="24"></a></li>
 						<li><a href="#tab-faq" title="Frequently Asked Question (FAQ)"><img src="<?=base_url()?>constellation/assets/images/icons/web-app/48/Comment.png" width="24" height="24"></a></li>
 						<li><a href="#tab-hds" title="Users"><img src="<?=base_url()?>constellation/assets/images/icons/web-app/48/Pie-Chart.png" width="24" height="24"></a></li>
-						<li><a href="#tab-dla" title="Informations"><img src="<?=base_url()?>constellation/assets/images/icons/web-app/48/Line-Chart.png" width="24" height="24"></a></li>
-						<li><a href="#tab-sl" title="Informations"><img src="<?=base_url()?>constellation/assets/images/icons/web-app/48/Info.png" width="24" height="24"></a></li>
+						<li hidden><a href="#tab-dla" title="Informations"><img src="<?=base_url()?>constellation/assets/images/icons/web-app/48/Line-Chart.png" width="24" height="24"></a></li>
+						<li hidden><a href="#tab-sl" title="Informations"><img src="<?=base_url()?>constellation/assets/images/icons/web-app/48/Info.png" width="24" height="24"></a></li>
 					</ul>
 					
 				</div>

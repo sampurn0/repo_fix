@@ -226,7 +226,7 @@
 				},
 				{
 					"render": function ( data, type, row ) {
-						return '<button type="button" class="button green" style="font-size: 12px" onClick="window.location.href=\'<?=base_url()?>runsheet/detail_runsheet/'+row['id_ct']+'\'" title=""><span class="">View Detail Data</span></button>';
+						return '<button type="button" class="button green" style="font-size: 12px" onClick="window.location.href=\'<?=base_url()?>cashprocessing_return/edit/'+row['id_ct']+'\'" title=""><span class="">View Detail Data</span></button>';
 					},
 					"className": "text-center",
 					"targets": 4,

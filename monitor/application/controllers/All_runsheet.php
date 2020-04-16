@@ -60,7 +60,7 @@ class All_runsheet extends CI_Controller {
 						LEFT JOIN
 							runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
 						LEFT JOIN 
-							vehicle ON(runsheet_security.police_number=vehicle.police_number) 
+							(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle   ON(runsheet_security.police_number=vehicle.police_number) 
 				WHERE cashtransit.action_date LIKE '%".$date."%'
 				GROUP BY cashtransit_detail.id_cashtransit
 		";
@@ -99,7 +99,7 @@ class All_runsheet extends CI_Controller {
 							LEFT JOIN
 								runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
 							LEFT JOIN 
-								vehicle ON(runsheet_security.police_number=vehicle.police_number) 
+								(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle ON(runsheet_security.police_number=vehicle.police_number) 
 					WHERE cashtransit.action_date LIKE '%".$date."%' AND cashtransit_detail.id_cashtransit='".$val."'
 			";
 			
@@ -302,7 +302,7 @@ class All_runsheet extends CI_Controller {
 						LEFT JOIN
 							runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
 						LEFT JOIN 
-							vehicle ON(runsheet_security.police_number=vehicle.police_number) 
+							(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle ON(runsheet_security.police_number=vehicle.police_number) 
 				WHERE cashtransit.action_date LIKE '%".$date."%'
 				GROUP BY cashtransit_detail.id_cashtransit
 		";
@@ -340,7 +340,7 @@ class All_runsheet extends CI_Controller {
 							LEFT JOIN
 								runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
 							LEFT JOIN 
-								vehicle ON(runsheet_security.police_number=vehicle.police_number) 
+								(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle ON(runsheet_security.police_number=vehicle.police_number) 
 					WHERE cashtransit.action_date LIKE '%".$date."%' AND cashtransit_detail.id_cashtransit='".$val."'
 			";
 			
@@ -358,7 +358,7 @@ class All_runsheet extends CI_Controller {
 			echo '		<th hidden>ACTION DATE</th>';
 			echo '		<th>RUN NUMBER</th>';
 			echo '		<th>NOMOR POLISI</th>';
-			echo '		<th>CUSTODY</th>';
+			echo '		<th>CUSTODY STAFF</th>';
 			echo '		<th>GUARD</th>';
 			echo '	</tr>';
 			echo '	<tr>';
@@ -393,7 +393,7 @@ class All_runsheet extends CI_Controller {
 				echo '<tr>';
 				echo '	<td class="sticky-col first-col">'.$no.'</td>';
 				echo '	<td>'.($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH").'</td>';
-				echo '	<td>'.$r->wsid.''.$r->no_boc.'</td>';
+				echo '	<td style="text-align: center">'.($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")").'</td>';
 				echo '	<td>'.$r->lokasi_client.'</td>';
 				echo '	<td>'.$r->nama_client.'</td>';
 				echo '	<td>'.number_format($r->denom, 0, ',', '.').'</td>';

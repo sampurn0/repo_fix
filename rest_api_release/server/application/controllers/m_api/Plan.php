@@ -64,7 +64,8 @@ class Plan extends REST_Controller {
 										(runsheet_cashprocessing.id_runsheet_cashprocessing = cashtransit_detail.id)
 									)
 					WHERE
-						runsheet_operational.custody = '$id_user' 
+						cashtransit.run_number!=''
+						AND runsheet_operational.custody = '$id_user' 
 						AND cashtransit_detail.data_solve = '' 
 						AND cashtransit_detail.unloading = '0' 
 						AND cashtransit.action_date <= '".date('Y-m-d')."'
@@ -119,7 +120,8 @@ class Plan extends REST_Controller {
 								(cashtransit_detail.id = runsheet_cashprocessing.id) 
 							)
 				WHERE 
-					runsheet_operational.custody = '$id_user' 
+					cashtransit.run_number!=''
+					AND runsheet_operational.custody = '$id_user' 
 					AND cashtransit_detail.data_solve = '' 
 					AND cashtransit_detail.unloading = '0' 
 					AND cashtransit.action_date <= '".date('Y-m-d')."'
@@ -135,7 +137,8 @@ class Plan extends REST_Controller {
 		$id_user = $this->input->get('id_user');
 		
 		$param = "WHERE 
-					runsheet_operational.custodian_1 = '$id_user' 
+					cashtransit.run_number!=''
+					AND runsheet_operational.custodian_1 = '$id_user' 
 					AND cashtransit_detail.data_solve = '' 
 					AND cashtransit.action_date <= '".date('Y-m-d')."'
 		";
@@ -540,7 +543,8 @@ class Plan extends REST_Controller {
 									(runsheet_operational.id_cashtransit = D.id_cashtransit) 
 								)
 						WHERE 
-						runsheet_operational.custody = '$id_user' 
+						cashtransit.run_number!=''
+						AND runsheet_operational.custody = '$id_user' 
 						AND data_solve = '' AND unloading = '0' 
 						AND cashtransit.action_date <= '".date('Y-m-d')."'
 						GROUP BY run_number, cashtransit.id
@@ -609,7 +613,8 @@ class Plan extends REST_Controller {
 								)
 								
 					WHERE
-						runsheet_operational.custody = '$id_user' 
+						cashtransit.run_number!=''
+						AND runsheet_operational.custody = '$id_user' 
 						AND cashtransit_detail.data_solve = '' 
 						AND cashtransit_detail.loading = '0' 
 						AND cashtransit.action_date <= '".date('Y-m-d')."'

@@ -80,6 +80,7 @@ class Security extends CI_Controller {
 		$param['column_search'] = array('action_date'); //field yang diizin untuk pencarian 
 		$param['order'] = array(array('id_ct' => 'DESC'));
 		$param['group'] = array('action_date');
+		$param['where'] = array(array('cashtransit.h_min[!]' => ''));
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;
@@ -224,7 +225,7 @@ class Security extends CI_Controller {
 		$search = $this->input->post('search');
 		$date = $this->input->post('date');
 		
-		$query = "SELECT * FROM cashtransit WHERE date='$date' AND h_min!='' AND cashtransit.id NOT IN (SELECT id_cashtransit FROM runsheet_security)";
+		$query = "SELECT * FROM cashtransit WHERE action_date='$date' AND h_min!='' AND cashtransit.id NOT IN (SELECT id_cashtransit FROM runsheet_security)";
 		
 		$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
 

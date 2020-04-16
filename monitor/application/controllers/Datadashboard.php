@@ -27,11 +27,11 @@ class Datadashboard extends CI_Controller {
     }
 
     public function get_data_ticket() {
-        $query = "SELECT * FROM flm_trouble_ticket WHERE data_solve=''";
+        $query = "SELECT * FROM (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket WHERE data_solve=''";
         $data = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
         $count_open = count($data);
         
-        $query = "SELECT * FROM flm_trouble_ticket WHERE data_solve!=''";
+        $query = "SELECT * FROM (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket WHERE data_solve!=''";
         $data = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
         $count_close = count($data);
 
@@ -57,11 +57,11 @@ class Datadashboard extends CI_Controller {
     }
 
     public function get_data_runsheet() {
-        $query = "SELECT * FROM cashtransit_detail WHERE data_solve=''";
+        $query = "SELECT * FROM (SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail WHERE data_solve=''";
         $data = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
         $count_open = count($data);
         
-        $query = "SELECT * FROM cashtransit_detail WHERE data_solve!=''";
+        $query = "SELECT * FROM (SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail WHERE data_solve!=''";
         $data = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
         $count_close = count($data);
 
@@ -102,13 +102,13 @@ class Datadashboard extends CI_Controller {
                         SELECT 
                             COUNT(DISTINCT id)
                                 FROM
-                                    flm_trouble_ticket
+                                    (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket 
                                         WHERE flm_trouble_ticket.id_bank = client.id
                     ), 0) AS cnt,
                     client.*
                     FROM 
                         client
-                            LEFT JOIN flm_trouble_ticket ON (flm_trouble_ticket.id_bank = client.id)
+                            LEFT JOIN (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket ON (flm_trouble_ticket.id_bank = client.id)
                                 WHERE flm_trouble_ticket.id_bank IS NOT NULL GROUP BY wsid ORDER BY cnt DESC";
 
         $data = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));

@@ -8,9 +8,12 @@
     }
 	
 	function rest_api() {
-		// $api = "http://www.pt-bijak.co.id/rest_api_dev_minggu/server/api";
-		// $api = "http://www.pt-bijak.co.id/rest_api_release/server/api";
-		$api = "http://localhost/rest_api_release/server/api";
-		// $api = "http://192.168.1.127/rest_api_release/server/api";
+		$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		if(get_domain($actual_link)=='pt-bijak.co.id') {
+			$api = "http://www.pt-bijak.co.id/repo_fix/rest_api_release/server/api";
+		} else {
+			$api = "http://192.168.10.23/bima/rest_api_release/server/api";
+		}
+		
 		return $api;
 	}

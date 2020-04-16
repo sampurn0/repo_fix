@@ -23,12 +23,20 @@ class Flm extends REST_Controller {
 		$id_teknisi = $this->db->select('id_teknisi')->from('teknisi')->where('nik', $id_user)->limit(1)->get()->row()->id_teknisi;
 		
 		// COUNT INCOMING JOB
-		$query_flm = $this->db->query("SELECT * FROM flm_trouble_ticket WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->num_rows();
-		$query_slm = $this->db->query("SELECT * FROM flm_trouble_ticket_slm WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->num_rows();
+		$query_flm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
+		WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->num_rows();
+		$query_slm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
+		WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->num_rows();
 		
 		// COUNT ACCEPTED JOB
-		$count_flm = $this->db->query("SELECT * FROM flm_trouble_ticket WHERE teknisi_1='$id_teknisi' AND data_solve=''")->num_rows();
-		$count_slm = $this->db->query("SELECT * FROM flm_trouble_ticket_slm WHERE teknisi_1='$id_teknisi' AND data_solve=''")->num_rows();
+		$count_flm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
+		WHERE teknisi_1='$id_teknisi' AND data_solve=''")->num_rows();
+		$count_slm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
+		WHERE teknisi_1='$id_teknisi' AND data_solve=''")->num_rows();
 		$query = array(
 			"incoming" => $query_flm+$query_slm,
 			"flm" => $count_flm,
@@ -44,7 +52,9 @@ class Flm extends REST_Controller {
 		$key=0;
 		
 		
-		$query_flm = $this->db->query("SELECT * FROM flm_trouble_ticket WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->result_array();
+		$query_flm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
+		WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->result_array();
 		foreach($query_flm as $r) {
 			$list[$key]['action'] = "FLM";
 			$list[$key]['id'] 				= $r['id'];
@@ -82,7 +92,9 @@ class Flm extends REST_Controller {
 			$key++;
 		}
 		
-		$query_slm = $this->db->query("SELECT * FROM flm_trouble_ticket_slm WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->result_array();
+		$query_slm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm	
+		WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL")->result_array();
 		foreach($query_slm as $r) {
 			$list[$key]['action'] = "SLM";
 			$list[$key]['id'] 				= $r['id'];
@@ -129,7 +141,9 @@ class Flm extends REST_Controller {
 		$list = array();
 		$key=0;
 		
-		$query_flm = $this->db->query("SELECT * FROM flm_trouble_ticket WHERE teknisi_1='$id_teknisi' AND accept_time IS NOT NULL AND data_solve=''")->result_array();
+		$query_flm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
+		WHERE teknisi_1='$id_teknisi' AND accept_time IS NOT NULL AND data_solve=''")->result_array();
 		foreach($query_flm as $r) {
 			$list[$key]['action'] = "FLM";
 			$list[$key]['id'] 				= $r['id'];
@@ -167,7 +181,9 @@ class Flm extends REST_Controller {
 			$key++;
 		}
 		
-		$query_slm = $this->db->query("SELECT * FROM flm_trouble_ticket_slm WHERE teknisi_1='$id_teknisi' AND accept_time IS NOT NULL AND data_solve=''")->result_array();
+		$query_slm = $this->db->query("SELECT * FROM 
+		(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
+		WHERE teknisi_1='$id_teknisi' AND accept_time IS NOT NULL AND data_solve=''")->result_array();
 		foreach($query_slm as $r) {
 			$list[$key]['action'] = "SLM";
 			$list[$key]['id'] 				= $r['id'];
@@ -211,7 +227,8 @@ class Flm extends REST_Controller {
 		$id_user = $this->input->get('id_user');
 		
 		
-		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket
+		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+			(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 			LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 			LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 			WHERE teknisi_1='$id_user' OR accept_time IS NULL
@@ -248,7 +265,8 @@ class Flm extends REST_Controller {
 			$key++;
 		}
 		
-		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket_slm
+		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+			(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
 			LEFT JOIN client ON(client.id=flm_trouble_ticket_slm.id_bank)
 			LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 			WHERE teknisi_1='$id_user' OR accept_time IS NULL
@@ -287,14 +305,16 @@ class Flm extends REST_Controller {
 		$id_ticket = $this->input->get('id_ticket');
 		$action = $this->input->get('action');
 		
+		$data['accept_time'] = date("Y-m-d H:i:s");
+		$data['updated'] = 'true';
+			
+		$this->db->where('id_ticket', $id_ticket);
+		$update = $this->db->update('flm_trouble_ticket', $data);
+		
 		if($action=="FLM") {
-			$data['accept_time'] = date("Y-m-d H:i:s");
-			
-			$this->db->where('id_ticket', $id_ticket);
-			$update = $this->db->update('flm_trouble_ticket', $data);
-			
 			if ($update) {
-				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket
+				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 					LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 					LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 					WHERE id_ticket='$id_ticket'
@@ -329,13 +349,9 @@ class Flm extends REST_Controller {
 				echo json_encode($list);
 			} 
 		} else if($action=="SLM") {
-			$data['accept_time'] = date("Y-m-d H:i:s");
-			
-			$this->db->where('id_ticket', $id_ticket);
-			$update = $this->db->update('flm_trouble_ticket_slm', $data);
-			
 			if ($update) {
-				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket_slm
+				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
 					LEFT JOIN client ON(client.id=flm_trouble_ticket_slm.id_bank)
 					LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 					WHERE id_ticket='$id_ticket'
@@ -378,7 +394,8 @@ class Flm extends REST_Controller {
 		$id_teknisi = $this->db->select('id_teknisi')->from('teknisi')->where('nik', $id_user)->limit(1)->get()->row()->id_teknisi;
 		
 		
-		$sql = "SELECT *, flm_trouble_ticket.id as id1, client.sektor as ga, client.vendor as brand, client.type_mesin as model, client.data_location FROM flm_trouble_ticket
+		$sql = "SELECT *, flm_trouble_ticket.id as id1, client.sektor as ga, client.vendor as brand, client.type_mesin as model, client.data_location FROM 	
+				(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 				LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 				LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 				WHERE teknisi_1='$id_teknisi' AND accept_time IS NOT NULL AND data_solve=''
@@ -412,7 +429,8 @@ class Flm extends REST_Controller {
 			$key++;
 		}
 		
-		$sql = "SELECT *, flm_trouble_ticket_slm.id as id1, client.sektor as ga, client.vendor as brand, client.type_mesin as model, client.data_location FROM flm_trouble_ticket_slm
+		$sql = "SELECT *, flm_trouble_ticket_slm.id as id1, client.sektor as ga, client.vendor as brand, client.type_mesin as model, client.data_location FROM 	
+				(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
 				LEFT JOIN client ON(client.id=flm_trouble_ticket_slm.id_bank)
 				LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 				WHERE teknisi_1='$id_teknisi' AND accept_time IS NOT NULL AND data_solve=''
@@ -453,16 +471,18 @@ class Flm extends REST_Controller {
 		$id_ticket = $this->input->get('id_ticket');
 		$action = $this->input->get('action');
 		
+		$data['arrival_date'] = date("Y-m-d H:i:s");
+		$data['start_scan'] = date("Y-m-d H:i:s");
+		$data['updated'] = 'true';
+		
+		$this->db->where('id_ticket', $id_ticket);
+        $update = $this->db->update('flm_trouble_ticket', $data);
+		
 		
 		if($action=="FLM") { 
-			$data['arrival_date'] = date("Y-m-d H:i:s");
-			$data['start_scan'] = date("Y-m-d H:i:s");
-			
-			$this->db->where('id_ticket', $id_ticket);
-			$update = $this->db->update('flm_trouble_ticket', $data);
-			
 			if ($update) {
-				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket
+				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 					LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 					LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 					WHERE flm_trouble_ticket.id_ticket='$id_ticket'
@@ -511,14 +531,9 @@ class Flm extends REST_Controller {
 				echo json_encode($list);
 			} 
 		} else if($action=="SLM") { 
-			$data['arrival_date'] = date("Y-m-d H:i:s");
-			$data['start_scan'] = date("Y-m-d H:i:s");
-			
-			$this->db->where('id_ticket', $id_ticket);
-			$update = $this->db->update('flm_trouble_ticket_slm', $data);
-			
 			if ($update) {
-				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket_slm
+				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
 					LEFT JOIN client ON(client.id=flm_trouble_ticket_slm.id_bank)
 					LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 					WHERE flm_trouble_ticket_slm.id_ticket='$id_ticket'
@@ -572,7 +587,8 @@ class Flm extends REST_Controller {
 	function scanqrcode_get() {
 		$id_ticket = $this->input->get('id_ticket');
 		
-		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket
+		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+			(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 			LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 			LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 			WHERE id_ticket='$id_ticket'
@@ -613,12 +629,14 @@ class Flm extends REST_Controller {
 		
 		$data['arrival_date'] = date("Y-m-d H:i:s");
 		$data['start_scan'] = date("Y-m-d H:i:s");
+		$data['updated'] = 'true';
 		
 		$this->db->where('id_ticket', $id_ticket);
         $update = $this->db->update('flm_trouble_ticket', $data);
 		
 		if ($update) {
-			$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM flm_trouble_ticket
+			$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
+				(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 				LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 				LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 				WHERE id_ticket='$id_ticket'
@@ -694,6 +712,7 @@ class Flm extends REST_Controller {
 		
 		if($action=="FLM") {
 			$data['end_apply'] = date("Y-m-d H:i:s");
+			$data['updated'] = 'true';
 			$data['status'] = $status;
 			$data['data_solve'] = $data_solve;
 			
@@ -707,6 +726,7 @@ class Flm extends REST_Controller {
 			}
 		} else if($action=="SLM") {
 			$data['end_apply'] = date("Y-m-d H:i:s");
+			$data['updated'] = 'true';
 			$data['status'] = $status;
 			$data['data_solve'] = $data_solve;
 			

@@ -177,7 +177,7 @@
 														<tr>
 															<td class="sticky-col first-col"><?=$no?></td>
 															<td><?=($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH")?></td>
-															<td style="text-align: center"><?=$r->wsid?>(<?=$r->type?>)</td>
+															<td style="text-align: center"><?=($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")")?></td>
 															<td><?=$r->lokasi_client?></td>
 															<td><?=$r->nama_client?></td>
 															<td><?=number_format($r->denom, 0, ',', '.')?></td>

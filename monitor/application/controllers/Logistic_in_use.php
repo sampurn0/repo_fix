@@ -2,6 +2,14 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use Dompdf\Dompdf;
+use Mpdf\Mpdf;
+
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\LabelAlignment;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Response\QrCodeResponse;
+
 class Logistic_in_use extends CI_Controller {
     var $data = array();
 	
@@ -220,7 +228,8 @@ class Logistic_in_use extends CI_Controller {
 				IF(runsheet_cashprocessing.bag_seal = '', 0, 1) +
 				IF(runsheet_cashprocessing.bag_seal_return = '', 0, 1)
 			) as jum_big
-			FROM cashtransit_detail 
+			FROM 
+			(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
 			LEFT JOIN runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
 			LEFT JOIN client ON(client.id=cashtransit_detail.id_bank)
 		";
@@ -293,6 +302,333 @@ class Logistic_in_use extends CI_Controller {
 		echo "<th>".$sum_big."</th>";
 		echo "</tr>";
 		echo "<table>";
+	}
+	
+	public function show() {
+		$this->data['active_menu'] = "logistic_in_use";
+		
+		
+		$this->data['generate'] = function($id) {
+			// $id = strval($id);
+			// $qrCode = new QrCode($id);
+			// $qrCode->setSize(300);
+			
+			// $qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$id.'.png');
+			
+			// return realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$id.'.png';
+			
+			// if(strpos($id,';')!==false){
+				// echo 'true';
+			// } else {
+				// echo 'false';
+			// }
+			
+			// return gettype($id);
+			return substr($id, 6);
+		};
+		
+		return view('admin/logistic_in_use/index', $this->data);
+	}
+	
+	public function json() {
+		$query = "
+			SELECT 
+			*,
+			cashtransit_detail.id as ids,
+			IF(runsheet_cashprocessing.cart_1_seal = '', 0, 1) AS seal_1,
+			IF(runsheet_cashprocessing.cart_2_seal = '', 0, 1) AS seal_2,
+			IF(runsheet_cashprocessing.cart_3_seal = '', 0, 1) AS seal_3,
+			IF(runsheet_cashprocessing.cart_4_seal = '', 0, 1) AS seal_4,
+			IF(runsheet_cashprocessing.cart_5_seal = '', 0, 1) AS seal_5,
+			(
+				IF(runsheet_cashprocessing.cart_1_seal = '', 0, 1) +
+				IF(runsheet_cashprocessing.cart_2_seal = '', 0, 1) +
+				IF(runsheet_cashprocessing.cart_3_seal = '', 0, 1) +
+				IF(runsheet_cashprocessing.cart_4_seal = '', 0, 1) +
+				IF(runsheet_cashprocessing.cart_5_seal = '', 0, 1) +
+				IF(runsheet_cashprocessing.divert = '', 0, 1)
+			) as jum_small,
+			(
+				IF(runsheet_cashprocessing.bag_seal = '', 0, 1) +
+				IF(runsheet_cashprocessing.bag_seal_return = '', 0, 1)
+			) as jum_big
+			FROM 
+			(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+			LEFT JOIN runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
+			LEFT JOIN client ON(client.id=cashtransit_detail.id_bank)
+		";
+		
+		$param['query'] = $query; //nama tabel dari database
+		$param['column_order'] = array('cashtransit_detail.id'); //field yang ada di table user
+		$param['column_search'] = array('client.wsid'); //field yang diizin untuk pencarian 
+		$param['order'] = array(array('cashtransit_detail.id' => 'DESC'));
+		$param['where'] = array(array('cashtransit_detail.state' => 'ro_atm'));;
+		
+		$data['param'] = json_encode($param);
+		$data['post'] = $_REQUEST;
+		
+		// echo ;
+		$data = $this->curl->simple_get(rest_api().'/datatables', array('data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
+		
+		$result = json_decode($data, true);
+		
+		$out = array();
+		$out['draw'] = $result['draw'];
+		$out['recordsTotal'] = $result['recordsTotal'];
+		$out['recordsFiltered'] = $result['recordsFiltered'];
+		
+		$datas = array();
+		$i = 0;
+		$no = $_REQUEST['start'];
+		foreach($result['data'] as $r) {
+			$no++;
+			
+			
+			$datas[$i]['ids'] 			= $r['ids']; 			
+			$datas[$i]['wsid'] 			= $r['wsid']; 			
+			$datas[$i]['lokasi'] 			= $r['lokasi']; 	
+			
+			
+			if($r['cart_1_seal']!=="") {
+				if(strpos($r['cart_1_seal'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_1_seal'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['cart_1_seal'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_1_seal'])[0].'.png');
+					}
+					
+					$datas[$i]['cart_1_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['cart_1_seal'])[0].'.png" width="80" height="80"></img><br>'.$r['cart_1_seal']; 		
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_1_seal'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['cart_1_seal']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_1_seal'].'.png');
+					}
+					
+					$datas[$i]['cart_1_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['cart_1_seal'].'.png" width="80" height="80"></img><br>'.$r['cart_1_seal']; 	
+				}
+			} else {
+				$datas[$i]['cart_1_seal'] 			= $r['cart_1_seal']; 	
+			}
+			
+			if($r['cart_2_seal']!=="") {
+				if(strpos($r['cart_2_seal'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_2_seal'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['cart_2_seal'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_2_seal'])[0].'.png');
+					}
+					
+					$datas[$i]['cart_2_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['cart_2_seal'])[0].'.png" width="80" height="80"></img><br>'.$r['cart_2_seal'];
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_2_seal'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['cart_2_seal']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_2_seal'].'.png');
+					}
+					
+					$datas[$i]['cart_2_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['cart_2_seal'].'.png" width="80" height="80"></img><br>'.$r['cart_2_seal'];
+				}		
+			} else {
+				$datas[$i]['cart_2_seal'] 			= $r['cart_2_seal']; 	
+			}	
+			
+			if($r['cart_3_seal']!=="") {
+				if(strpos($r['cart_3_seal'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_3_seal'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['cart_3_seal'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_3_seal'])[0].'.png');
+					}
+					
+					$datas[$i]['cart_3_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['cart_3_seal'])[0].'.png" width="80" height="80"></img><br>'.$r['cart_3_seal'];
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_3_seal'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['cart_3_seal']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_3_seal'].'.png');
+					}
+					
+					$datas[$i]['cart_3_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['cart_3_seal'].'.png" width="80" height="80"></img><br>'.$r['cart_3_seal'];	
+				}		
+			} else {
+				$datas[$i]['cart_3_seal'] 			= $r['cart_3_seal']; 	
+			}	
+			
+			if($r['cart_4_seal']!=="") {
+				if(strpos($r['cart_4_seal'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_4_seal'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['cart_4_seal'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_4_seal'])[0].'.png');
+					}
+					
+					$datas[$i]['cart_4_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['cart_4_seal'])[0].'.png" width="80" height="80"></img><br>'.$r['cart_4_seal'];
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_4_seal'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['cart_4_seal']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_4_seal'].'.png');
+					}
+					
+					$datas[$i]['cart_4_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['cart_4_seal'].'.png" width="80" height="80"></img><br>'.$r['cart_4_seal'];
+				}		
+			} else {
+				$datas[$i]['cart_4_seal'] 			= $r['cart_4_seal']; 	
+			}	
+			
+			if($r['cart_5_seal']!=="") {
+				if(strpos($r['cart_5_seal'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_5_seal'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['cart_5_seal'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_5_seal'])[0].'.png');
+					}
+					
+					$datas[$i]['cart_5_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['cart_5_seal'])[0].'.png" width="80" height="80"></img><br>'.$r['cart_5_seal'];
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_5_seal'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['cart_5_seal']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['cart_5_seal'].'.png');
+					}
+					
+					$datas[$i]['cart_5_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['cart_5_seal'].'.png" width="80" height="80"></img><br>'.$r['cart_5_seal'];
+				}		
+			} else {
+				$datas[$i]['cart_5_seal'] 			= $r['cart_5_seal']; 	
+			}	
+			
+			if($r['divert']!=="") {
+				if(strpos($r['divert'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['divert'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['divert'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['divert'])[0].'.png');
+					}
+					
+					$datas[$i]['divert'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['divert'])[0].'.png" width="80" height="80"></img><br>'.$r['divert']; 
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['divert'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['divert']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['divert'].'.png');
+					}
+					
+					$datas[$i]['divert'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['divert'].'.png" width="80" height="80"></img><br>'.$r['divert'];
+				}		
+			} else {
+				$datas[$i]['divert'] 			= $r['divert']; 	
+			}	
+			
+			if($r['bag_seal']!=="") {
+				if(strpos($r['bag_seal'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_big').'/'.explode(";", $r['bag_seal'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['bag_seal'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_big').'/'.explode(";", $r['bag_seal'])[0].'.png');
+					}
+					
+					$datas[$i]['bag_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_big/'.explode(";", $r['bag_seal'])[0].'.png" width="80" height="80"></img><br>'.$r['bag_seal'];
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_big').'/'.$r['bag_seal'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['bag_seal']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_big').'/'.$r['bag_seal'].'.png');
+					}
+					
+					$datas[$i]['bag_seal'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_big/'.$r['bag_seal'].'.png" width="80" height="80"></img><br>'.$r['bag_seal'];
+				}		
+			} else {
+				$datas[$i]['bag_seal'] 			= $r['bag_seal']; 	
+			}	
+ 			
+			if($r['bag_no']!=="") {
+				if(strpos($r['bag_no'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_no'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['bag_no'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_no'])[0].'.png');
+					}
+					
+					$datas[$i]['bag_no'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['bag_no'])[0].'.png" width="80" height="80"></img><br>'.$r['bag_no'];
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['bag_no'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['bag_no']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['bag_no'].'.png');
+					}
+					
+					$datas[$i]['bag_no'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['bag_no'].'.png" width="80" height="80"></img><br>'.$r['bag_no'];
+				}		
+			} else {
+				$datas[$i]['bag_no'] 			= $r['bag_no']; 	
+			}	
+			
+			if($r['bag_seal_return']!=="") {
+				if(strpos($r['bag_seal_return'],';')!==false){
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_seal_return'])[0].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode(explode(";", $r['bag_seal_return'])[0]);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_seal_return'])[0].'.png');
+					}
+					
+					$datas[$i]['bag_seal_return'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['bag_seal_return'])[0].'.png" width="80" height="80"></img><br>'.$r['bag_seal_return'];
+				} else {
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['bag_seal_return'].'.png';
+					if (file_exists($file_pointer)) {
+					}else {
+						$qrCode = new QrCode($r['bag_seal_return']);
+						$qrCode->setSize(300);
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['bag_seal_return'].'.png');
+					}
+					
+					$datas[$i]['bag_seal_return'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['bag_seal_return'].'.png" width="80" height="80"></img><br>'.$r['bag_seal_return'];
+				}		
+			} else {
+				$datas[$i]['bag_seal_return'] 			= $r['bag_seal_return']; 	
+			}				
+			
+			$i++;
+		}
+		
+		$out['data'] = $datas;
+		
+		echo json_encode($out);
 	}
 	
 	public function get_seal_demo() {

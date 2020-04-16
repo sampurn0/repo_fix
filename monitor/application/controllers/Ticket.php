@@ -318,7 +318,7 @@ class Ticket extends CI_Controller {
         return $nik;
     }
 	
-	function  save_data() {
+	function save_data() {
 		
 		// print_r($_REQUEST);
 		$ticket = $this->getkodeticket();

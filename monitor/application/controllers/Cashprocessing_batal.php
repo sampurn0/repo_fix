@@ -38,10 +38,41 @@ class Cashprocessing_batal extends CI_Controller {
 		$query = "	SELECT *, cashtransit.id as id_ct, 
 					IFNULL((SELECT COUNT(DISTINCT cashtransit_detail.id) FROM cashtransit_detail LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) WHERE cashtransit_detail.id_cashtransit=cashtransit.id AND cashtransit_detail.data_solve!='' AND cashtransit_detail.cpc_process='' GROUP BY cashtransit_detail.id_cashtransit), 0) as count 
 					FROM cashtransit 
-					LEFT JOIN cashtransit_detail ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+					LEFT JOIN (SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
 					LEFT JOIN master_branch ON(cashtransit.branch=master_branch.id) 
 					WHERE cashtransit_detail.data_solve='batal'
 					ORDER BY cashtransit.id DESC";
+		
+		$query = '
+			SELECT 
+				*, 
+				cashtransit.id as id_ct, 
+				IFNULL(
+					(
+						SELECT 
+							COUNT(DISTINCT cashtransit_detail.id) 
+						FROM 
+							cashtransit_detail 
+						LEFT JOIN 
+							client ON(cashtransit_detail.id_bank=client.id) 
+						WHERE cashtransit_detail.id_cashtransit=cashtransit.id
+							AND cashtransit_detail.data_solve="batal"
+							#AND cashtransit_detail.id NOT IN (SELECT id FROM runsheet_cashprocessing WHERE id_cashtransit=cashtransit.id) 
+						GROUP BY 
+							cashtransit_detail.id_cashtransit
+					), 0
+				) as count 
+			FROM 
+				cashtransit 
+			LEFT JOIN 
+				(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS 
+				cashtransit_detail ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+			LEFT JOIN 
+				master_branch ON(cashtransit.branch=master_branch.id)
+			WHERE cashtransit_detail.data_solve="batal"
+			ORDER BY 
+				cashtransit.id DESC, cashtransit.h_min DESC
+		';
 		
 		
         $this->data['data_cashprocessing'] = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
@@ -51,6 +82,48 @@ class Cashprocessing_batal extends CI_Controller {
 		// echo "</pre>";
 		
         return view('admin/cashprocessing_batal/index', $this->data);
+	}
+	
+	function json() {
+		$query = '
+			SELECT 
+				*, 
+				cashtransit.id as id_ct, 
+				master_branch.name as branch,
+				IFNULL(
+					(
+						SELECT 
+							COUNT(DISTINCT cashtransit_detail.id) 
+						FROM 
+							cashtransit_detail 
+						LEFT JOIN 
+							client ON(cashtransit_detail.id_bank=client.id) 
+						WHERE cashtransit_detail.id_cashtransit=cashtransit.id
+							AND cashtransit_detail.data_solve="batal"
+							AND cashtransit_detail.data_solve!="" 
+							AND cashtransit_detail.cpc_process=""
+						GROUP BY 
+							cashtransit_detail.id_cashtransit
+					), 0
+				) as count 
+			FROM 
+				cashtransit 
+			LEFT JOIN 
+				master_branch ON(cashtransit.branch=master_branch.id) 
+		';
+		
+		$param['query'] = $query; //nama tabel dari database
+		$param['column_order'] = array('id_ct'); //field yang ada di table user
+		$param['column_search'] = array('action_date'); //field yang diizin untuk pencarian 
+		$param['order'] = array(
+			array('id_ct' => 'DESC'),
+			array('h_min' => 'DESC'),
+		);
+		
+		$data['param'] = json_encode($param);
+		$data['post'] = $_REQUEST;
+		
+		echo $this->curl->simple_get(rest_api().'/datatables', array('data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
 	}
 	
 	public function add() {
@@ -99,7 +172,7 @@ class Cashprocessing_batal extends CI_Controller {
 		$data['page'] = $page;
 		$data['rows'] = $rows;
 		
-		$result = $this->curl->simple_post(rest_api().'/cpc_return/get_data',$data,array(CURLOPT_BUFFERSIZE => 10));
+		$result = $this->curl->simple_post(rest_api().'/cpc_return/get_data_batal',$data,array(CURLOPT_BUFFERSIZE => 10));
 
 		echo $result;
 	}
@@ -129,14 +202,12 @@ class Cashprocessing_batal extends CI_Controller {
 		$this->data['row'] = json_decode($this->input->get('row'));
 		
 		
-		if($session->userdata['level']=="LEVEL1") {
-			if($this->input->get('act')=="ATM") {
-				return view('admin/cashprocessing_batal/show_form_atm', $this->data);
-			} else if($this->input->get('act')=="CRM") {
-				return view('admin/cashprocessing_batal/show_form_crm', $this->data);
-			} else if($this->input->get('act')=="CDM") {
-				return view('admin/cashprocessing_batal/show_form_cdm', $this->data);
-			}
+		if($this->input->get('act')=="ATM") {
+			return view('admin/cashprocessing_batal/show_form_atm', $this->data);
+		} else if($this->input->get('act')=="CRM") {
+			return view('admin/cashprocessing_batal/show_form_crm', $this->data);
+		} else if($this->input->get('act')=="CDM") {
+			return view('admin/cashprocessing_batal/show_form_cdm', $this->data);
 		}
 	}
 	
@@ -327,33 +398,61 @@ class Cashprocessing_batal extends CI_Controller {
 		
 		if($state=="ro_atm") {
 			if($act=="ATM") {
-				$data_jurnal['id_detail'] = $id;
-				$data_jurnal['tanggal'] = date("Y-m-d");
-				$data_jurnal['keterangan'] = "batal replenishment";
-				$data_jurnal['posisi'] = "debit";
-				
-				$debit_100 = ($denom==100000 ? 
-					intval($this->input->post('cart_1_val')) +
-					intval($this->input->post('cart_2_val')) +
-					intval($this->input->post('cart_3_val')) +
-					intval($this->input->post('cart_4_val')) +
-					intval($this->input->post('div_val'))
-				: 0);
-				$data_jurnal['debit_100'] = $debit_100*100000;
-				
-				$debit_50 = ($denom==50000 ? 
-					intval($this->input->post('cart_1_val')) +
-					intval($this->input->post('cart_2_val')) +
-					intval($this->input->post('cart_3_val')) +
-					intval($this->input->post('cart_4_val')) +
-					intval($this->input->post('div_val'))
-				: 0);
-				$data_jurnal['debit_50'] = $debit_50*50000;
-				
-				
-				$table = "jurnal";
-				$this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
-				// print_r($data_jurnal);
+				$query_jurnal = "SELECT * FROM jurnal WHERE id_detail='".$id."' AND keterangan='batal replenishment' AND posisi='debit'";
+				$id_jurnal = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$query_jurnal), array(CURLOPT_BUFFERSIZE => 10)))->id;
+				if(!empty($id_jurnal)) {
+					$data_jurnal['id_detail'] = $id;
+					$data_jurnal['keterangan'] = "batal replenishment";
+					$data_jurnal['posisi'] = "debit";
+					
+					$debit_100 = ($denom==100000 ? 
+						intval($this->input->post('cart_1_val')) +
+						intval($this->input->post('cart_2_val')) +
+						intval($this->input->post('cart_3_val')) +
+						intval($this->input->post('cart_4_val')) +
+						intval($this->input->post('div_val'))
+					: 0);
+					$data_jurnal['debit_100'] = $debit_100*100000;
+					
+					$debit_50 = ($denom==50000 ? 
+						intval($this->input->post('cart_1_val')) +
+						intval($this->input->post('cart_2_val')) +
+						intval($this->input->post('cart_3_val')) +
+						intval($this->input->post('cart_4_val')) +
+						intval($this->input->post('div_val'))
+					: 0);
+					$data_jurnal['debit_50'] = $debit_50*50000;
+					
+					$data_jurnal['id'] = $id_jurnal;
+					$table = "jurnal";
+					$this->curl->simple_get(rest_api().'/select/update', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
+				} else {
+					$data_jurnal['id_detail'] = $id;
+					$data_jurnal['tanggal'] = date("Y-m-d");
+					$data_jurnal['keterangan'] = "batal replenishment";
+					$data_jurnal['posisi'] = "debit";
+					
+					$debit_100 = ($denom==100000 ? 
+						intval($this->input->post('cart_1_val')) +
+						intval($this->input->post('cart_2_val')) +
+						intval($this->input->post('cart_3_val')) +
+						intval($this->input->post('cart_4_val')) +
+						intval($this->input->post('div_val'))
+					: 0);
+					$data_jurnal['debit_100'] = $debit_100*100000;
+					
+					$debit_50 = ($denom==50000 ? 
+						intval($this->input->post('cart_1_val')) +
+						intval($this->input->post('cart_2_val')) +
+						intval($this->input->post('cart_3_val')) +
+						intval($this->input->post('cart_4_val')) +
+						intval($this->input->post('div_val'))
+					: 0);
+					$data_jurnal['debit_50'] = $debit_50*50000;
+					
+					$table = "jurnal";
+					$this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
+				}
 				
 				$data_save = array(
 					"cashier"			=> $this->input->post('cashier'),
@@ -423,15 +522,29 @@ class Cashprocessing_batal extends CI_Controller {
 					$sum += $item['100'];
 				}
 				
-				$data_jurnal['id_detail'] = $id;
-				$data_jurnal['tanggal'] = date("Y-m-d");
-				$data_jurnal['keterangan'] = "return";
-				$data_jurnal['posisi'] = "debit";
-				$data_jurnal['debit_100'] = $debit_100*100000;
-				$data_jurnal['debit_50'] = $debit_50*50000;
-				
-				$table = "jurnal";
-				$this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
+				$query_jurnal = "SELECT * FROM jurnal WHERE id_detail='".$id."' AND keterangan='batal replenishment' AND posisi='debit'";
+				$id_jurnal = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$query_jurnal), array(CURLOPT_BUFFERSIZE => 10)))->id;
+				if(!empty($id_jurnal)) {
+					$data_jurnal['id_detail'] = $id;
+					$data_jurnal['keterangan'] = "batal replenishment";
+					$data_jurnal['posisi'] = "debit";
+					$data_jurnal['debit_100'] = $debit_100*100000;
+					$data_jurnal['debit_50'] = $debit_50*50000;
+					
+					$data_jurnal['id'] = $id_jurnal;
+					$table = "jurnal";
+					$this->curl->simple_get(rest_api().'/select/update', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
+				} else {
+					$data_jurnal['id_detail'] = $id;
+					$data_jurnal['tanggal'] = date("Y-m-d");
+					$data_jurnal['keterangan'] = "batal replenishment";
+					$data_jurnal['posisi'] = "debit";
+					$data_jurnal['debit_100'] = $debit_100*100000;
+					$data_jurnal['debit_50'] = $debit_50*50000;
+					
+					$table = "jurnal";
+					$this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
+				}
 				
 				$data_save = array(
 					"cashier"				=> $this->input->post('cashier'),
@@ -500,19 +613,31 @@ class Cashprocessing_batal extends CI_Controller {
 					$debit_20 = $debit_20 + $item['20'];
 				}
 				
-				$data_jurnal['id_detail'] = $id;
-				$data_jurnal['tanggal'] = date("Y-m-d");
-				$data_jurnal['keterangan'] = "return";
-				$data_jurnal['posisi'] = "debit";
-				$data_jurnal['debit_100'] = $debit_100*100000;
-				$data_jurnal['debit_50'] = $debit_50*50000;
-				$data_jurnal['debit_20'] = $debit_20*20000;
-				
-				$table = "jurnal";
-				$this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
-				
-				// print_r($data_jurnal);
-				
+				$query_jurnal = "SELECT * FROM jurnal WHERE id_detail='".$id."' AND keterangan='batal replenishment' AND posisi='debit'";
+				$id_jurnal = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$query_jurnal), array(CURLOPT_BUFFERSIZE => 10)))->id;
+				if(!empty($id_jurnal)) {
+					$data_jurnal['id_detail'] = $id;
+					$data_jurnal['keterangan'] = "batal replenishment";
+					$data_jurnal['posisi'] = "debit";
+					$data_jurnal['debit_100'] = $debit_100*100000;
+					$data_jurnal['debit_50'] = $debit_50*50000;
+					$data_jurnal['debit_20'] = $debit_20*20000;
+					
+					$data_jurnal['id'] = $id_jurnal;
+					$table = "jurnal";
+					$this->curl->simple_get(rest_api().'/select/update', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
+				} else {
+					$data_jurnal['id_detail'] = $id;
+					$data_jurnal['tanggal'] = date("Y-m-d");
+					$data_jurnal['keterangan'] = "batal replenishment";
+					$data_jurnal['posisi'] = "debit";
+					$data_jurnal['debit_100'] = $debit_100*100000;
+					$data_jurnal['debit_50'] = $debit_50*50000;
+					$data_jurnal['debit_20'] = $debit_20*20000;
+					
+					$table = "jurnal";
+					$this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data_jurnal), array(CURLOPT_BUFFERSIZE => 10));
+				}
 				
 				$data_save = array(
 					"cashier"				=> $this->input->post('cashier'),
@@ -566,11 +691,11 @@ class Cashprocessing_batal extends CI_Controller {
 			// print_r(json_encode($data_seal));
 			
 			
-			// $data_simpan['id'] = $id;
-			// $data_simpan['cpc_process'] = json_encode($data_save);
+			$data_simpan['id'] = $id;
+			$data_simpan['cpc_process'] = json_encode($data_save);
 			
-			// $table = "cashtransit_detail";
-			// $this->curl->simple_get(rest_api().'/select/update', array('table'=>$table, 'data'=>$data_simpan), array(CURLOPT_BUFFERSIZE => 10));
+			$table = "cashtransit_detail";
+			$this->curl->simple_get(rest_api().'/select/update', array('table'=>$table, 'data'=>$data_simpan), array(CURLOPT_BUFFERSIZE => 10));
 		}
 		
 		

@@ -25,11 +25,117 @@ class Sla extends CI_Controller {
     public function index() {
 		$this->data['active_menu'] = "sla";
 		
-        $data = json_decode($this->curl->simple_get(rest_api().'/sla_report/get_data'), true);
-        $this->data['data_sla'] =  $data;
+        // $data = json_decode($this->curl->simple_get(rest_api().'/sla_report/get_data'), true);
+        // $this->data['data_sla'] =  $data;
         
         return view('admin/sla/index', $this->data);
     }
+	
+	function json() {
+		$query = "
+			SELECT 
+				*,
+				flm_trouble_ticket.id as ids,
+				(SELECT nama FROM karyawan LEFT JOIN teknisi ON(teknisi.nik=karyawan.nik) WHERE teknisi.id_teknisi=flm_trouble_ticket.teknisi_1) AS nama_teknisi_1,
+				(SELECT nama FROM karyawan LEFT JOIN teknisi ON(teknisi.nik=karyawan.nik) WHERE teknisi.id_teknisi=flm_trouble_ticket.teknisi_2) AS nama_teknisi_2,
+				(SELECT nama FROM karyawan WHERE karyawan.nik=flm_trouble_ticket.guard) AS nama_guard
+				FROM (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket 
+					LEFT JOIN client ON (client.id=flm_trouble_ticket.id_bank) 
+		";
+		
+		$param['query'] = $query; //nama tabel dari database
+		$param['column_order'] = array('flm_trouble_ticket.id'); //field yang ada di table user
+		$param['column_search'] = array('flm_trouble_ticket.id_ticket'); //field yang diizin untuk pencarian 
+		$param['order'] = array(array('flm_trouble_ticket.id' => 'DESC'));
+		$param['where'] = array(array('flm_trouble_ticket.end_apply[!]' => null));
+		
+		$data['param'] = json_encode($param);
+		$data['post'] = $_REQUEST;
+		
+		$data = $this->curl->simple_get(rest_api().'/datatables', array('data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
+		// echo $data;
+		$r = json_decode($data, true);
+		
+		$out = array();
+		$out['draw'] = $r['draw'];
+		$out['recordsTotal'] = $r['recordsTotal'];
+		$out['recordsFiltered'] = $r['recordsFiltered'];
+		$datas = array();
+		$key = 0;
+		$no = $_REQUEST['start'];
+		foreach($r['data'] as $r) {
+			$no++;
+			
+			$data_solve = json_decode($r->data_solve);
+			
+            $list[$key]['no'] = $no;
+            $list[$key]['lokasi'] = $r['wsid']." / ".$r['lokasi'];
+            $list[$key]['ticket'] = $r['id_ticket'];
+            $list[$key]['ticket_client'] = $r['ticket_client'];
+            $list[$key]['teknisi_1'] = $r['teknisi_1'];
+            $list[$key]['nama_teknisi'] = $r['nama_teknisi_1'];
+            $list[$key]['guard'] = $r['guard'];
+            $list[$key]['nama_guard'] = $r['nama_guard'];
+			
+			if(gettype(json_decode($r['problem_type'], true))=="array") {
+				$problem = array();
+				foreach(json_decode($r['problem_type'], true) as $p) {
+					$problem[] = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"
+						SELECT nama_sub_kategori FROM sub_kategori WHERE id_sub_kategori='$p' LIMIT 0, 1
+					"), array(CURLOPT_BUFFERSIZE => 10)))->nama_sub_kategori;
+					
+					$problem = implode(", ", $problem);
+					
+					json_decode($this->curl->simple_get(rest_api().'/select/query2', array('query'=>"
+						UPDATE `flm_trouble_ticket` SET `problem_type`='".$problem."' WHERE `id`='".$r['ids']."'
+					"), array(CURLOPT_BUFFERSIZE => 10)));
+				}
+			}
+			
+			$problem = '<ol>';
+			$problem .= '<li>' . implode('</li><li>', explode(", ", $r['problem_type'])).'</li>';
+			$problem .= '</ol>';
+			// $list[$key]['problem_type'] = gettype(json_decode($r['problem_type'], true));
+			$list[$key]['problem_type'] = ($r['problem_type']!=="null" ? $r['problem_type'] : "");
+			
+			$list[$key]['email_date'] = date("d-m-Y", strtotime($r['email_date']))." / ".date("H:i:s", strtotime($r['email_date']));
+            $list[$key]['email_time'] = date("H:i:s", strtotime($r['email_date']));
+			$list[$key]['entry_date'] = date("d-m-Y", strtotime($r['entry_date']))." / ".date("H:i:s", strtotime($r['entry_date']));
+            $list[$key]['entry_time'] = date("H:i:s", strtotime($r['entry_date']));
+			$list[$key]['accept_time'] = date("H:i:s", strtotime($r['accept_time']));
+            $list[$key]['arrival_date'] = date("d-m-Y", strtotime($r['arrival_date']))." / ".date("H:i:s", strtotime($r['arrival_date']));
+            $list[$key]['arrival_time'] = date("H:i:s", strtotime($r['arrival_date']));
+            $list[$key]['start_date'] = date("d-m-Y", strtotime($r['arrival_date']))." / ".date("H:i:s", strtotime($r['start_scan']));
+            $list[$key]['start_time'] = date("H:i:s", strtotime($r['start_scan']));
+            $list[$key]['close_date'] = date("d-m-Y", strtotime($r['arrival_date']))." / ".date("H:i:s", strtotime($r['end_apply']));
+            $list[$key]['close_time'] = date("H:i:s", strtotime($r['end_apply']));
+			
+			$response_duty = $this->diff($r['email_date'], $r['entry_date']);
+            $list[$key]['response_duty'] = $response_duty;
+			
+			$response_flm = $this->diff($r['entry_date'], $r['accept_time']);
+            $list[$key]['response_flm'] = $response_flm;
+			
+			$repair_time = $this->diff($r['arrival_date'], $r['end_apply']);
+            $list[$key]['repair_time'] = $repair_time;
+			
+			$resolution_time = $this->diff($r['email_date'], $r['end_apply']);
+            $list[$key]['resolution_time'] = $resolution_time;
+			
+			$down_time = $this->hoursToMinutes($resolution_time);
+			$rumus = ($this->dayNumber(date("Y-m-d", strtotime($r['arrival_date'])))*24);
+			// $list[$key]['down_time'] = $down_time." ".$rumus." = ".$down_time/$rumus;
+			$list[$key]['down_time'] = round($down_time/$rumus, 2)." / ".(100-round($down_time/$rumus, 2));
+			$list[$key]['up_time'] = 100-round($down_time/$rumus, 2);
+			
+            $list[$key]['keterangan'] = $data_solve->keterangan;
+			
+			$key++;
+		}
+		$out['data'] = $list;
+		
+		echo json_encode($out);
+	}
 
     public function index3() {
 		$this->data['active_menu'] = "sla";
@@ -64,11 +170,10 @@ class Sla extends CI_Controller {
             $list[$key]['guard'] = $r->guard;
             $list[$key]['nama_guard'] = $r->nama_guard;
             
-            $problem = array();
-			foreach(json_decode($r->problem_type) as $p) {
-				$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
-			}
-			$list[$key]['problem_type'] = implode(', ', $problem);
+            $problem = '<ol>';
+			$problem .= '<li>' . implode('</li><li>', explode(", ", $r['problem_type'])).'</li>';
+			$problem .= '</ol>';
+			$list[$key]['problem_type'] = $problem;
 			
 			$list[$key]['email_date'] = date("d-m-Y", strtotime($r->email_date));
             $list[$key]['email_time'] = date("H:i:s", strtotime($r->email_date));
