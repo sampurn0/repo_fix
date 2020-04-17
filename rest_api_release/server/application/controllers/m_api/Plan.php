@@ -392,7 +392,6 @@ class Plan extends REST_Controller {
 				$result['cart_4_seal'] 				= explode(";", $query['cart_4_seal'])[0];
 				$result['cart_5_seal'] 				= explode(";", $query['cart_5_seal'])[0];
 				$result['bag_seal'] 				= $query['bag_seal'];
-				$result['bag_seal_return'] 			= $query['bag_seal_return'];
 				$result['bag_no'] 					= $query['bag_no'];
 				$result['t_bag'] 					= $query['t_bag'];
 				$result['data_seal'] 				= $query['data_seal'];
@@ -470,7 +469,6 @@ class Plan extends REST_Controller {
 			$data['cart_4_seal'] 				= explode(";", $query['cart_4_seal'])[0];
 			$data['cart_5_seal'] 				= explode(";", $query['cart_5_seal'])[0];
 			$data['bag_seal'] 				= $query['bag_seal'];
-			$data['bag_seal_return'] 			= $query['bag_seal_return'];
 			$data['bag_no'] 					= $query['bag_no'];
 			$data['t_bag'] 					= $query['t_bag'];
 			$data['data_seal'] 				= $query['data_seal'];
@@ -714,7 +712,8 @@ class Plan extends REST_Controller {
 		foreach($data_plan as $r) {
 			if($r['state']=="ro_cit") {
 				$this->simpan_cit($r);
-			} else if($r['state']=="ro_atm") {
+			} 
+			if($r['state']=="ro_atm") {
 				$this->simpan_cr($r);
 				$this->update_seal($r);
 			}
@@ -729,7 +728,8 @@ class Plan extends REST_Controller {
 		foreach($data_plan as $r) {
 			if($r['state']=="ro_cit") {
 				$this->simpan_cit($r);
-			} else if($r['state']=="ro_atm") {
+			} 
+			if($r['state']=="ro_atm") {
 				$this->simpan_cr($r);
 				$this->update_seal($r);
 			}

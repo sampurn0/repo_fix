@@ -38,8 +38,8 @@
 							<thead>
 								<tr>
 									<th>ID</th>
-									<th>WSID</th>
 									<th>LOKASI</th>
+									<th>WSID</th>
 									<th>SEAL 1</th>
 									<th>SEAL 2</th>
 									<th>SEAL 3</th>
@@ -180,8 +180,8 @@
 				"order": [[ 0, "desc" ]],
 				"columns": [
 					{"data": "ids"},
-					{"data": "wsid"},
 					{"data": "lokasi"},
+					{"data": "wsid"},
 					{"data": "cart_1_seal"},
 					{"data": "cart_2_seal"},
 					{"data": "cart_3_seal"},

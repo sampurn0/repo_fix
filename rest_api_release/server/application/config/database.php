@@ -73,12 +73,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'rtms2019_release2',
+	'username' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'ptbijakc_root' : 'root'),
+	'password' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'lopilopi123qwe123' : ''),
+	'database' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'rtms2019_progress_indev' : 'rtms2019_release2'),
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -94,3 +96,13 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+
+function get_domain($url) {
+	$pieces = parse_url($url);
+	$domain = isset($pieces['host']) ? $pieces['host'] : '';
+	if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
+		return $regs['domain'];
+	}
+	return false;
+}

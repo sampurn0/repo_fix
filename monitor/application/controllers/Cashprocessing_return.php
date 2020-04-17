@@ -74,7 +74,7 @@ class Cashprocessing_return extends CI_Controller {
 		$param['column_search'] = array('action_date'); //field yang diizin untuk pencarian 
 		$param['order'] = array(array('cashtransit.id' => 'DESC'));
 		$param['group'] = array('cashtransit.id');
-		$param['where'] = array(array('cashtransit_detail.data_solve[!]' => 'batal'));
+		$param['where'] = array(array('cashtransit_detail.data_solve[!]' => 'batal'), array('cashtransit_detail.unloading' => '1'));
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;
@@ -114,23 +114,197 @@ class Cashprocessing_return extends CI_Controller {
         return view('admin/cashprocessing_return/form', $this->data);
 	}
 	
-	function delete() {
-		
+	function tes() {
+		echo rest_api();
 	}
 	
 	public function get_data() {
-		// header('Content-Type: application/json');
 		$id = $this->uri->segment(3);
-		$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-		$rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+		$page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
+		$rows = isset($_REQUEST['rows']) ? intval($_REQUEST['rows']) : 10;
+		$offset = ($page-1)*$rows;
 		
-		$data['id'] = $id;
-		$data['page'] = $page;
-		$data['rows'] = $rows;
+		$query = "select *,
+			cashtransit_detail.id as id_ct, 
+			cashtransit_detail.id_cashtransit, 
+			cashtransit_detail.id_bank, 
+			cashtransit_detail.state as state,
+			cashtransit_detail.ctr as ctr2, 
+			cashtransit_detail.pcs_100000 as pcs_100000, 
+			cashtransit_detail.pcs_50000 as pcs_50000, 
+			cashtransit_detail.pcs_20000 as pcs_20000, 
+			cashtransit_detail.pcs_10000 as pcs_10000, 
+			cashtransit_detail.pcs_5000 as pcs_5000, 
+			cashtransit_detail.pcs_2000 as pcs_2000, 
+			cashtransit_detail.pcs_1000 as pcs_1000, 
+			cashtransit_detail.pcs_coin as pcs_coin, 
+			cashtransit_detail.total as total, 
+			cashtransit_detail.data_solve as data_solve, 
+			cashtransit_detail.cpc_process as cpc_process, 
+			client.cabang as branch,
+			client.wsid,
+			client.bank,
+			client.lokasi,
+			client.sektor,
+			cashtransit_detail.jenis,
+			cashtransit_detail.ctr as ctr,
+			client.denom,
+			client.vendor,
+			client.type,
+			client.type_mesin,
+			client.ctr as ctr2,
+			runsheet_cashprocessing.pcs_100000 as s100k,
+			runsheet_cashprocessing.pcs_50000 as s50k,
+			runsheet_cashprocessing.pcs_20000 as s20k,
+			runsheet_cashprocessing.pcs_10000 as s10k,
+			runsheet_cashprocessing.pcs_5000 as s5k,
+			runsheet_cashprocessing.pcs_2000 as s2k,
+			runsheet_cashprocessing.pcs_1000 as s1k,
+			runsheet_cashprocessing.pcs_coin as coin,
+			runsheet_cashprocessing.total as nominal,
+			runsheet_cashprocessing.ctr_1_no,
+			runsheet_cashprocessing.ctr_2_no,
+			runsheet_cashprocessing.ctr_3_no,
+			runsheet_cashprocessing.ctr_4_no,
+			runsheet_cashprocessing.cart_1_seal,
+			runsheet_cashprocessing.cart_2_seal,
+			runsheet_cashprocessing.cart_3_seal,
+			runsheet_cashprocessing.cart_4_seal,
+			runsheet_cashprocessing.divert,
+			runsheet_cashprocessing.bag_seal,
+			runsheet_cashprocessing.bag_no
+		from 
+			(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+			LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+			LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+			LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+			WHERE 
+				cashtransit_detail.data_solve!='batal' AND 
+				cashtransit_detail.id_cashtransit='".$id."' AND 
+				cashtransit_detail.data_solve!='' AND 
+				cashtransit_detail.cpc_process='' AND 
+				cashtransit_detail.state='ro_atm' 
+				limit $offset,$rows";
 		
-		$result = $this->curl->simple_post(rest_api().'/cpc_return/get_data',$data,array(CURLOPT_BUFFERSIZE => 10));
-
-		echo $result;
+		$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+		
+		$query = "select *,
+			cashtransit_detail.id as id_ct, 
+			cashtransit_detail.id_cashtransit, 
+			cashtransit_detail.id_bank, 
+			cashtransit_detail.state as state,
+			cashtransit_detail.ctr as ctr2, 
+			cashtransit_detail.pcs_100000 as pcs_100000, 
+			cashtransit_detail.pcs_50000 as pcs_50000, 
+			cashtransit_detail.pcs_20000 as pcs_20000, 
+			cashtransit_detail.pcs_10000 as pcs_10000, 
+			cashtransit_detail.pcs_5000 as pcs_5000, 
+			cashtransit_detail.pcs_2000 as pcs_2000, 
+			cashtransit_detail.pcs_1000 as pcs_1000, 
+			cashtransit_detail.pcs_coin as pcs_coin, 
+			cashtransit_detail.total as total, 
+			cashtransit_detail.data_solve as data_solve, 
+			cashtransit_detail.cpc_process as cpc_process, 
+			client.cabang as branch,
+			client.wsid,
+			client.bank,
+			client.lokasi,
+			client.sektor,
+			cashtransit_detail.jenis,
+			cashtransit_detail.ctr as ctr,
+			client.denom,
+			client.vendor,
+			client.type,
+			client.type_mesin,
+			client.ctr as ctr2,
+			runsheet_cashprocessing.pcs_100000 as s100k,
+			runsheet_cashprocessing.pcs_50000 as s50k,
+			runsheet_cashprocessing.pcs_20000 as s20k,
+			runsheet_cashprocessing.pcs_10000 as s10k,
+			runsheet_cashprocessing.pcs_5000 as s5k,
+			runsheet_cashprocessing.pcs_2000 as s2k,
+			runsheet_cashprocessing.pcs_1000 as s1k,
+			runsheet_cashprocessing.pcs_coin as coin,
+			runsheet_cashprocessing.total as nominal,
+			runsheet_cashprocessing.ctr_1_no,
+			runsheet_cashprocessing.ctr_2_no,
+			runsheet_cashprocessing.ctr_3_no,
+			runsheet_cashprocessing.ctr_4_no,
+			runsheet_cashprocessing.cart_1_seal,
+			runsheet_cashprocessing.cart_2_seal,
+			runsheet_cashprocessing.cart_3_seal,
+			runsheet_cashprocessing.cart_4_seal,
+			runsheet_cashprocessing.divert,
+			runsheet_cashprocessing.bag_seal,
+			runsheet_cashprocessing.bag_no
+		from 
+			(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+			LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+			LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+			LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+			WHERE 
+				cashtransit_detail.data_solve!='batal' AND 
+				cashtransit_detail.id_cashtransit='".$id."' AND 
+				cashtransit_detail.data_solve!='' AND 
+				cashtransit_detail.cpc_process='' AND 
+				cashtransit_detail.state='ro_atm'";
+				
+		$total = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+		$result["total"] = count($total);
+		
+		$items = array();
+		$i = 0;
+		foreach($res as $row){
+			$items[$i]['id'] = $row->id_ct;
+			$items[$i]['id_cashtransit'] = $row->id_cashtransit;
+			$items[$i]['wsid'] = $row->wsid;
+			$items[$i]['id_bank'] = $row->id_bank;
+			$items[$i]['state'] = $row->state;
+			$items[$i]['branch'] = $this->db->query("SELECT name FROM master_branch where id='".$row->branch."'")->row()->name;
+			$items[$i]['bank'] = $row->bank;
+			$items[$i]['lokasi'] = $row->lokasi;
+			$items[$i]['runsheet'] = $row->sektor;
+			$items[$i]['jenis'] = $row->type;
+			$items[$i]['denom'] = $row->denom;
+			$items[$i]['brand'] = $row->vendor;
+			$items[$i]['model'] = $row->type_mesin;
+			$items[$i]['pcs_100000'] = $row->pcs_100000;
+			$items[$i]['pcs_50000'] = $row->pcs_50000;
+			$items[$i]['pcs_20000'] = $row->pcs_20000;
+			$items[$i]['pcs_10000'] = $row->pcs_10000;
+			$items[$i]['pcs_5000'] = $row->pcs_5000;
+			$items[$i]['pcs_2000'] = $row->pcs_2000;
+			$items[$i]['pcs_1000'] = $row->pcs_1000;
+			$items[$i]['pcs_coin'] = $row->pcs_coin;
+			$items[$i]['s100k'] = $row->s100k;
+			$items[$i]['s50k'] = $row->s50k;
+			$items[$i]['s20k'] = $row->s20k;
+			$items[$i]['s10k'] = $row->s10k;
+			$items[$i]['s5k'] = $row->s5k;
+			$items[$i]['s2k'] = $row->s2k;
+			$items[$i]['s1k'] = $row->s1k;
+			$items[$i]['coin'] = $row->coin;
+			$items[$i]['ctr'] = $row->ctr;
+			$items[$i]['cart_1_no'] = $row->ctr_1_no;
+			$items[$i]['cart_2_no'] = $row->ctr_2_no;
+			$items[$i]['cart_3_no'] = $row->ctr_3_no;
+			$items[$i]['cart_4_no'] = $row->ctr_4_no;
+			$items[$i]['cart_1_seal'] = $row->cart_1_seal;
+			$items[$i]['cart_2_seal'] = $row->cart_2_seal;
+			$items[$i]['cart_3_seal'] = $row->cart_3_seal;
+			$items[$i]['cart_4_seal'] = $row->cart_4_seal;
+			$items[$i]['divert'] = $row->divert;
+			$items[$i]['total'] = $row->total;
+			$items[$i]['nominal'] = (100000*$row->s100k)+(50000*$row->s50k)+(20000*$row->s20k)+(10000*$row->s10k)+(5000*$row->s5k)+(2000*$row->s2k)+(1000*$row->s1k)+(1*$row->coin);
+			$items[$i]['bag_seal'] = $row->bag_seal;
+			$items[$i]['bag_no'] = $row->bag_no;
+			$items[$i]['data_solve'] = $row->data_solve;
+			$items[$i]['cpc_process'] = $row->cpc_process;
+			$i++;
+		}
+		$result["rows"] = $items;
+		
+		echo json_encode($result);
 	}
 	
 	public function get_data_cit() {
@@ -322,6 +496,15 @@ class Cashprocessing_return extends CI_Controller {
 		
 		if($state=="ro_atm") {
 			if($act=="ATM") {
+				$query_jurnal = "SELECT count(*) as cnt, id FROM jurnal WHERE id_detail='".$id."' AND keterangan='return' AND posisi='debit'";
+				$id_jurnal = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$query_jurnal), array(CURLOPT_BUFFERSIZE => 10)));
+				
+				if($id_jurnal->cnt>1) {
+					json_decode($this->curl->simple_get(rest_api().'/select/query2', array('query'=>
+						"DELETE FROM `jurnal` WHERE id_detail='".$id."' AND keterangan='return' AND posisi='debit'"
+					), array(CURLOPT_BUFFERSIZE => 10)));
+				}
+				
 				$data_jurnal['id_detail'] = $id;
 				$data_jurnal['tanggal'] = date("Y-m-d");
 				$data_jurnal['keterangan'] = "return";

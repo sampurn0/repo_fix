@@ -492,6 +492,7 @@ class Cashprocessing extends CI_Controller {
 			$cart_4_seal		= trim($this->input->post('cart_4_seal'));
 			$divert				= trim($this->input->post('divert'));
 			$bag_seal			= trim($this->input->post('bag_seal'));
+			// $bag_seal_return			= trim($this->input->post('bag_seal_return'));
 			$bag_no				= trim($this->input->post('bag_no'));
 			$t_bag				= trim($this->input->post('t_bag'));
 			$nominal			= strtoupper(trim($this->input->post('nominal')));
@@ -511,6 +512,7 @@ class Cashprocessing extends CI_Controller {
 			$data['cart_4_seal'] = ($cart_4_seal!=="") ? $cart_4_seal : "";
 			$data['divert'] = $divert;
 			$data['bag_seal'] = $bag_seal;
+			// $data['bag_seal_return'] = $bag_seal_return;
 			$data['bag_no'] = $bag_no;
 			$data['t_bag'] = $t_bag;
 			
@@ -533,6 +535,7 @@ class Cashprocessing extends CI_Controller {
 			if(!empty($cart_4_seal)) { array_push($update_seal, $cart_4_seal); } 
 			if(!empty($divert)) { array_push($update_seal, $divert); } 
 			if(!empty($bag_seal)) { array_push($update_seal, $bag_seal); } 
+			// if(!empty($bag_seal_return)) { array_push($update_seal, $bag_seal_return); } 
 			if(!empty($t_bag)) { array_push($update_seal, $t_bag); } 
 			
 			foreach($update_seal as $seal) {

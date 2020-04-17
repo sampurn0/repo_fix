@@ -384,10 +384,18 @@ class Logistic_in_use extends CI_Controller {
 			$no++;
 			
 			
+			
 			$datas[$i]['ids'] 			= $r['ids']; 			
-			$datas[$i]['wsid'] 			= $r['wsid']; 			
 			$datas[$i]['lokasi'] 			= $r['lokasi']; 	
 			
+			$file_pointer = realpath(__DIR__ . '/../../upload/qrcode').'/'.$r['wsid'].'.png';
+			if (file_exists($file_pointer)) {	
+			}else {
+				$qrCode = new QrCode($r['wsid']);
+				$qrCode->setSize(300);
+				$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode').'/'.$r['wsid'].'.png');
+			}
+			$datas[$i]['wsid'] 			= '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode/'.$r['wsid'].'.png" width="80" height="80"></img><br>'.$r['wsid']; 	
 			
 			if($r['cart_1_seal']!=="") {
 				if(strpos($r['cart_1_seal'],';')!==false){
@@ -643,7 +651,7 @@ class Logistic_in_use extends CI_Controller {
 			echo $res;
 		}
 		if($val=='w') {
-			$query = "SELECT kode FROM master_seal WHERE jenis='big' AND status='available' LIMIT 0,1";
+			$query = "SELECT kode FROM master_seal WHERE jenis='big' AND status='available' AND kode > '$barcode'LIMIT 0,1";
 			
 			$res = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)))->kode;
 			

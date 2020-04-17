@@ -198,7 +198,7 @@
 					<table id="dg" class="easyui-datagrid" title="Cash Transit <?=$branch?>" style="width:100%;height:550px" data-options="rownumbers:true,singleSelect:true,url:'<?=base_url()?>cashprocessing_return/get_data/<?=$id?>',method:'get'" toolbar="#toolbar" pagination="true">
 						<thead>
 							<tr>
-								<th data-options="field:'id_bank',width:50">ID</th>
+								<th data-options="field:'wsid',width:50">ID</th>
 								<th data-options="field:'branch',width:100">BRANCH</th>
 								<th data-options="field:'runsheet',width:60">GA</th>
 								<th data-options="field:'bank',width:100">BANK</th>

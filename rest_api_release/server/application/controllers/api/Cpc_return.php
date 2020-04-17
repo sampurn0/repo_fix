@@ -207,6 +207,7 @@ class Cpc_return extends REST_Controller {
 			WHERE 
 				cashtransit_detail.data_solve='batal' AND 
 				cashtransit_detail.id_cashtransit='".$id."' AND 
+				cashtransit_detail.cpc_process='' AND 
 				cashtransit_detail.state='ro_atm' 
 				limit $offset,$rows";
 		$query = $this->db->query($qry)->result();
@@ -222,6 +223,7 @@ class Cpc_return extends REST_Controller {
 			$items[$i]['state'] = $row->state;
 			$items[$i]['branch'] = $this->db->query("SELECT name FROM master_branch where id='".$row->branch."'")->row()->name;
 			$items[$i]['bank'] = $row->bank;
+			$items[$i]['wsid'] = $row->wsid;
 			$items[$i]['lokasi'] = $row->lokasi;
 			$items[$i]['runsheet'] = $row->sektor;
 			$items[$i]['jenis'] = $row->type;
@@ -320,7 +322,10 @@ class Cpc_return extends REST_Controller {
 			LEFT JOIN client_cit on(cashtransit_detail.id_pengirim=client_cit.id) 
 			LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
 			LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
-			WHERE cashtransit_detail.id_cashtransit='$id' AND cashtransit_detail.state='ro_cit' limit $offset,$rows";
+			WHERE 
+				cashtransit_detail.id_cashtransit='$id' AND 
+				cashtransit_detail.cpc_process='' AND 
+				cashtransit_detail.state='ro_cit' limit $offset,$rows";
 			
 			
 			// echo $qry;

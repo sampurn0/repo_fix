@@ -305,13 +305,14 @@ class Flm extends REST_Controller {
 		$id_ticket = $this->input->get('id_ticket');
 		$action = $this->input->get('action');
 		
-		$data['accept_time'] = date("Y-m-d H:i:s");
-		$data['updated'] = 'true';
-			
-		$this->db->where('id_ticket', $id_ticket);
-		$update = $this->db->update('flm_trouble_ticket', $data);
 		
 		if($action=="FLM") {
+			$data['accept_time'] = date("Y-m-d H:i:s");
+			$data['updated'] = 'true';
+				
+			$this->db->where('id_ticket', $id_ticket);
+			$update = $this->db->update('flm_trouble_ticket', $data);
+			
 			if ($update) {
 				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
 					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
@@ -349,6 +350,13 @@ class Flm extends REST_Controller {
 				echo json_encode($list);
 			} 
 		} else if($action=="SLM") {
+			
+			$data['accept_time'] = date("Y-m-d H:i:s");
+			$data['updated'] = 'true';
+				
+			$this->db->where('id_ticket', $id_ticket);
+			$update = $this->db->update('flm_trouble_ticket_slm', $data);
+			
 			if ($update) {
 				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
 					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
@@ -471,15 +479,15 @@ class Flm extends REST_Controller {
 		$id_ticket = $this->input->get('id_ticket');
 		$action = $this->input->get('action');
 		
-		$data['arrival_date'] = date("Y-m-d H:i:s");
-		$data['start_scan'] = date("Y-m-d H:i:s");
-		$data['updated'] = 'true';
-		
-		$this->db->where('id_ticket', $id_ticket);
-        $update = $this->db->update('flm_trouble_ticket', $data);
 		
 		
 		if($action=="FLM") { 
+			$data['arrival_date'] = date("Y-m-d H:i:s");
+			$data['start_scan'] = date("Y-m-d H:i:s");
+			$data['updated'] = 'true';
+			
+			$this->db->where('id_ticket', $id_ticket);
+			$update = $this->db->update('flm_trouble_ticket', $data);
 			if ($update) {
 				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
 					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
@@ -531,6 +539,12 @@ class Flm extends REST_Controller {
 				echo json_encode($list);
 			} 
 		} else if($action=="SLM") { 
+			$data['arrival_date'] = date("Y-m-d H:i:s");
+			$data['start_scan'] = date("Y-m-d H:i:s");
+			$data['updated'] = 'true';
+			
+			$this->db->where('id_ticket', $id_ticket);
+			$update = $this->db->update('flm_trouble_ticket_slm', $data);
 			if ($update) {
 				$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
 					(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm

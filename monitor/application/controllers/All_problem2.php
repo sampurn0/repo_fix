@@ -197,19 +197,19 @@ class All_problem extends CI_Controller {
 					<td>
 						<table>
 							<tr>
-								<td>Close Date</td>
+								<td>Accepted Date</td>
 								<td> : </td>
-								<td>'.($d['end_apply']=="" ? "-" : date("d-m-Y", strtotime($d['end_apply']))).'</td>
+								<td>'.($d['accept_time']=="" ? "-" : date("d-m-Y", strtotime($d['accept_time']))).'</td>
 							</tr>
 							<tr>
-								<td>Close Time</td>
+								<td>Accepted Time</td>
 								<td> : </td>
-								<td>'.($d['end_apply']=="" ? "-" : date("H:i:s", strtotime($d['end_apply']))).'</td>
+								<td>'.($d['accept_time']=="" ? "-" : date("H:i:s", strtotime($d['accept_time']))).'</td>
 							</tr>
 							<tr>
 								<td>Resolution</td>
 								<td> : </td>
-								<td><span id="demo2'.$d['id'].'">'.($d['end_apply']=="" ? "-" : $d['selisih2']).'</span></td>
+								<td><span id="demo2'.$d['id'].'">'.($d['accept_time']=="" ? "-" : $d['selisih2']).'</span></td>
 							</tr>
 						</table>
 					</td>
@@ -242,10 +242,11 @@ class All_problem extends CI_Controller {
 						<table class="table" style="width: 100%">
 							<thead>
 								<tr>
-									<th style="text-align: center;">No</th>
-									<th style="text-align: center;">Description</th>
-									<th colspan="2" style="text-align: center;">Repair Time</th>
-									<th style="text-align: center;">Status</th>
+									<th>No</th>
+									<th>Description</th>
+									<th>Response Time FLM</th>
+									<th>Resolution Time FLM</th>
+									<th>Status</th>
 								</tr>
 							</thead>
 							<tbody>

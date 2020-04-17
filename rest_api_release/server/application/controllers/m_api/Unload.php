@@ -381,7 +381,7 @@ class Unload extends REST_Controller {
 		
 		foreach($data_plan as $r) {
 			$data = array();
-			if($r['unloading']!="") 		{ $data['unloading']	= $r['unloading']; }
+			if($r['unloading']!="") 		{ $data['unloading']	= 0; }
 		
 			$this->db->where('id', $r['id']);
 			$update = $this->db->update('cashtransit_detail', $data);
