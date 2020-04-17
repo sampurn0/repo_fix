@@ -194,7 +194,7 @@
 																?>
 															</td>
 															<td style="text-align: center">
-																<?php if(($r->data_solve=="batal" || $r->data_solve=="") && $r->cpc_process=="") { ?>
+																<?php if(($r->data_solve=="batal" && $r->cpc_process!=="") || ($r->data_solve=="" && $r->cpc_process=="")) { ?>
 																	<button type="button" class="red" onclick="openBatal(
 																		'<?=$r->ids?>'
 																	)" style="font-size: 10px" <?php if($r->data_solve=="batal") { echo "disabled"; } ?>>BATAL</button>

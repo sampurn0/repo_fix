@@ -397,7 +397,7 @@ class Logistic_in_use extends CI_Controller {
 			}
 			$datas[$i]['wsid'] 			= '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode/'.$r['wsid'].'.png" width="80" height="80"></img><br>'.$r['wsid']; 	
 			
-			if($r['cart_1_seal']!=="") {
+			if(gettype($r['cart_1_seal'])!=="NULL" AND $r['cart_1_seal']!=="") {
 				if(strpos($r['cart_1_seal'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_1_seal'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -423,7 +423,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['cart_1_seal'] 			= $r['cart_1_seal']; 	
 			}
 			
-			if($r['cart_2_seal']!=="") {
+			if(gettype($r['cart_2_seal'])!=="NULL" AND $r['cart_2_seal']!=="") {
 				if(strpos($r['cart_2_seal'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_2_seal'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -449,7 +449,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['cart_2_seal'] 			= $r['cart_2_seal']; 	
 			}	
 			
-			if($r['cart_3_seal']!=="") {
+			if(gettype($r['cart_3_seal'])!=="NULL" AND $r['cart_3_seal']!=="") {
 				if(strpos($r['cart_3_seal'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_3_seal'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -475,7 +475,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['cart_3_seal'] 			= $r['cart_3_seal']; 	
 			}	
 			
-			if($r['cart_4_seal']!=="") {
+			if(gettype($r['cart_4_seal'])!=="NULL" AND $r['cart_4_seal']!=="") {
 				if(strpos($r['cart_4_seal'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_4_seal'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -501,7 +501,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['cart_4_seal'] 			= $r['cart_4_seal']; 	
 			}	
 			
-			if($r['cart_5_seal']!=="") {
+			if(gettype($r['cart_5_seal'])!=="NULL" AND $r['cart_5_seal']!=="") {
 				if(strpos($r['cart_5_seal'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['cart_5_seal'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -527,7 +527,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['cart_5_seal'] 			= $r['cart_5_seal']; 	
 			}	
 			
-			if($r['divert']!=="") {
+			if(gettype($r['divert'])!=="NULL" AND $r['divert']!=="") {
 				if(strpos($r['divert'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['divert'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -553,7 +553,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['divert'] 			= $r['divert']; 	
 			}	
 			
-			if($r['bag_seal']!=="") {
+			if(gettype($r['bag_seal'])!=="NULL" AND $r['bag_seal']!=="") {
 				if(strpos($r['bag_seal'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_big').'/'.explode(";", $r['bag_seal'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -579,7 +579,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['bag_seal'] 			= $r['bag_seal']; 	
 			}	
  			
-			if($r['bag_no']!=="") {
+			if(gettype($r['bag_no'])!=="NULL" AND $r['bag_no']!=="") {
 				if(strpos($r['bag_no'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_no'])[0].'.png';
 					if (file_exists($file_pointer)) {
@@ -605,7 +605,7 @@ class Logistic_in_use extends CI_Controller {
 				$datas[$i]['bag_no'] 			= $r['bag_no']; 	
 			}	
 			
-			if($r['bag_seal_return']!=="") {
+			if(gettype($r['bag_seal_return'])!=="NULL" AND $r['bag_seal_return']!=="") {
 				if(strpos($r['bag_seal_return'],';')!==false){
 					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_seal_return'])[0].'.png';
 					if (file_exists($file_pointer)) {

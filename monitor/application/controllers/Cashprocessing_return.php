@@ -65,7 +65,9 @@ class Cashprocessing_return extends CI_Controller {
 				master_branch.name as branch,
 				IFNULL((SELECT COUNT(DISTINCT cashtransit_detail.id) FROM cashtransit_detail LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) WHERE cashtransit_detail.id_cashtransit=cashtransit.id AND cashtransit_detail.data_solve!='' AND cashtransit_detail.cpc_process='' GROUP BY cashtransit_detail.id_cashtransit), 0) as count 
 					FROM cashtransit 
-					LEFT JOIN cashtransit_detail ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+					LEFT JOIN 
+					(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+					ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
 					LEFT JOIN master_branch ON(cashtransit.branch=master_branch.id) 
 		";
 		
@@ -74,7 +76,11 @@ class Cashprocessing_return extends CI_Controller {
 		$param['column_search'] = array('action_date'); //field yang diizin untuk pencarian 
 		$param['order'] = array(array('cashtransit.id' => 'DESC'));
 		$param['group'] = array('cashtransit.id');
-		$param['where'] = array(array('cashtransit_detail.data_solve[!]' => 'batal'), array('cashtransit_detail.unloading' => '1'));
+		$param['where'] = array(
+			array('cashtransit_detail.data_solve[!]' => 'batal'), 
+			array('cashtransit_detail.unloading' => '1'),
+			array('cashtransit.action_date[!]' => '')
+		);
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;

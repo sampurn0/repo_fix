@@ -383,10 +383,28 @@ class Unload extends REST_Controller {
 			$data = array();
 			if($r['unloading']!="") 		{ $data['unloading']	= 0; }
 		
-			$this->db->where('id', $r['id']);
-			$update = $this->db->update('cashtransit_detail', $data);
-			
-			echo $this->db->last_query()."\n";
+			if(!empty($data)) {
+				$this->db->where('id', $r['id']);
+				$update = $this->db->update('cashtransit_detail', $data);
+				echo $this->db->last_query()."\n";
+			}
+		}
+	}
+	
+	function syncronize_post() {
+		$data_plan = json_decode($_REQUEST['data_plan'], true);
+		// echo "<pre>";
+		// print_r($data_plan);
+		
+		foreach($data_plan as $r) {
+			$data = array();
+			if($r['unloading']!="") 		{ $data['unloading']	= 0; }
+		
+			if(!empty($data)) {
+				$this->db->where('id', $r['id']);
+				$update = $this->db->update('cashtransit_detail', $data);
+				echo $this->db->last_query()."\n";
+			}
 		}
 	}
 }
