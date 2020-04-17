@@ -91,6 +91,7 @@ class Cashprocessing extends CI_Controller {
 			array('id_ct' => 'DESC'),
 			array('h_min' => 'DESC'),
 		);
+		$param['where'] = array(array('cashtransit.action_date[!]' => ''));
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;

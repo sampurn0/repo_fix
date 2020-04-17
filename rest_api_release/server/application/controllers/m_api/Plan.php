@@ -706,18 +706,18 @@ class Plan extends REST_Controller {
 	
 	function syncronize_get() {
 		$data_plan = json_decode($_REQUEST['data_plan'], true);
-		// echo "<pre>";
-		// print_r($data_plan);
+		echo "<pre>";
+		print_r($data_plan);
 		
-		foreach($data_plan as $r) {
-			if($r['state']=="ro_cit") {
-				$this->simpan_cit($r);
-			} 
-			if($r['state']=="ro_atm") {
-				$this->simpan_cr($r);
-				$this->update_seal($r);
-			}
-		}
+		// foreach($data_plan as $r) {
+			// if($r['state']=="ro_cit") {
+				// $this->simpan_cit($r);
+			// } 
+			// if($r['state']=="ro_atm") {
+				// $this->simpan_cr($r);
+				// $this->update_seal($r);
+			// }
+		// }
 	}
 	
 	function syncronize_post() {

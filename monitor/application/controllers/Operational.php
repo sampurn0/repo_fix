@@ -75,7 +75,7 @@ class Operational extends CI_Controller {
 		$param['column_search'] = array('action_date'); //field yang diizin untuk pencarian 
 		$param['order'] = array(array('id_ct' => 'DESC'));
 		$param['group'] = array('action_date');
-		$param['where'] = array(array('cashtransit.h_min[!]' => ''));
+		$param['where'] = array(array('cashtransit.action_date[!]' => ''));
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;

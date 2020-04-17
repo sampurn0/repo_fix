@@ -12,7 +12,7 @@
 		if(get_domain($actual_link)=='pt-bijak.co.id') {
 			$api = "http://www.pt-bijak.co.id/repo_fix/rest_api_release/server/api";
 		} else {
-			$api = "http://localhost/bima/rest_api_release/server/api";
+			$api = "http://www.pt-bijak.co.id/repo_fix/rest_api_release/server/api";
 		}
 		
 		return $api;
