@@ -709,15 +709,14 @@ class Plan extends REST_Controller {
 		echo "<pre>";
 		print_r($data_plan);
 		
-		// foreach($data_plan as $r) {
-			// if($r['state']=="ro_cit") {
-				// $this->simpan_cit($r);
-			// } 
-			// if($r['state']=="ro_atm") {
-				// $this->simpan_cr($r);
-				// $this->update_seal($r);
-			// }
-		// }
+		foreach($data_plan as $r) {
+			if($r['state']=="ro_cit") {
+				$this->simpan_cit($r);
+			}  else if($r['state']=="ro_atm") {
+				$this->simpan_cr($r);
+				$this->update_seal($r);
+			}
+		}
 	}
 	
 	function syncronize_post() {
@@ -728,8 +727,7 @@ class Plan extends REST_Controller {
 		foreach($data_plan as $r) {
 			if($r['state']=="ro_cit") {
 				$this->simpan_cit($r);
-			} 
-			if($r['state']=="ro_atm") {
+			} else if($r['state']=="ro_atm") {
 				$this->simpan_cr($r);
 				$this->update_seal($r);
 			}
@@ -737,19 +735,23 @@ class Plan extends REST_Controller {
 	}
 	
 	function update_seal($r) {
+		$data2 = array();
 		$return_seal = json_decode($r['data_solve'], true)['bag_seal'];
 		$t_bag = json_decode($r['data_solve'], true)['t_bag'];
 		
-		if($return_seal!="")	{ $data['bag_seal_return']	= $return_seal; }
-		if($t_bag!="")			{ $data['t_bag']	= $t_bag; }
+		if($return_seal!="")	{ $data2['bag_seal_return']	= $return_seal; }
+		if($t_bag!="")			{ $data2['t_bag']	= $t_bag; }
 		
-		$this->db->query("UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$return_seal'");
-		$this->db->where('id', $r['id']);
-		$update = $this->db->update('runsheet_cashprocessing', $data);
+		if(!empty($data2)) {
+			$this->db->query("UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$return_seal'");
+			$this->db->where('id', $r['id']);
+			$update = $this->db->update('runsheet_cashprocessing', $data2);
+		}
 	}
 	
 	function simpan_cr($r) {
 		$data = array();
+		if($r['id']!="")			{ $data['id']			= $r['id']; }
 		if($r['foto_selfie']!="")	{ $data['foto_selfie']	= $r['foto_selfie']; }
 		if($r['receipt_1']!="") 	{ $data['receipt_1']	= $r['receipt_1']; }
 		if($r['receipt_2']!="") 	{ $data['receipt_2']	= $r['receipt_2']; }
@@ -763,8 +765,12 @@ class Plan extends REST_Controller {
 		if($r['data_solve']!="") 	{ $data['data_solve']	= $r['data_solve']; }
 		if($r['loading']!="") 		{ $data['loading']	= $r['loading']; }
 		
-		$this->db->where('id', $r['id']);
-		$update = $this->db->update('cashtransit_detail', $data);
+		if(!empty($data)) {
+			$this->db->where('id', $data['id']);
+			$update = $this->db->update('cashtransit_detail', $data);
+			echo $this->db->last_query()."<br>";
+		}
+		
 	}
 	
 	function simpan_cit($r) {
@@ -782,10 +788,15 @@ class Plan extends REST_Controller {
 		if($r['data_solve']!="") 	{ $data['data_solve']	= $r['data_solve']; }
 		if($r['loading']!="") 		{ $data['loading']	= $r['loading']; }
 		
-		$this->jurnal_cit($r);
 		
-		$this->db->where('id', $r['id']);
-		$update = $this->db->update('cashtransit_detail', $data);
+		
+		if(!empty($data)) {
+			$this->jurnal_cit($r);
+		
+			$this->db->where('id', $r['id']);
+			$update = $this->db->update('cashtransit_detail', $data);
+			echo $this->db->last_query()."<br>";
+		}
 	}
 	
 	function jurnal_cit($r) {
