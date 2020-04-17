@@ -768,7 +768,7 @@ class Plan extends REST_Controller {
 		if(!empty($data)) {
 			$this->db->where('id', $data['id']);
 			$update = $this->db->update('cashtransit_detail', $data);
-			echo $this->db->last_query()."<br>";
+			echo $this->db->last_query()."\n";
 		}
 		
 	}
@@ -795,7 +795,7 @@ class Plan extends REST_Controller {
 		
 			$this->db->where('id', $r['id']);
 			$update = $this->db->update('cashtransit_detail', $data);
-			echo $this->db->last_query()."<br>";
+			echo $this->db->last_query()."\n";
 		}
 	}
 	
