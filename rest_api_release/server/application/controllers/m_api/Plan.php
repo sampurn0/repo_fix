@@ -135,6 +135,7 @@ class Plan extends REST_Controller {
 	
 	function getreplenish_get() {
 		$id_user = $this->input->get('id_user');
+		$id_ticket = $this->input->get('id_ticket');
 		
 		$param = "WHERE 
 					cashtransit.run_number!=''
@@ -207,6 +208,7 @@ class Plan extends REST_Controller {
 		$list = array();
 		$key=0;
 		foreach($query as $r) {
+			$id_ticket = $r['id_ticket'];
 			$seal = [];
 			// echo $r['type']."<br>";
 			// echo $r['ctr']."<br>";
