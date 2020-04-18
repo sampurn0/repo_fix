@@ -360,6 +360,7 @@ class All_runsheet extends CI_Controller {
 			echo '		<th>NOMOR POLISI</th>';
 			echo '		<th>CUSTODY STAFF</th>';
 			echo '		<th>GUARD</th>';
+			echo '		<th>BANK / CLIENT</th>';
 			echo '	</tr>';
 			echo '	<tr>';
 			echo '		<td hidden>'.date("d M Y", strtotime($d->action_date)).'</td>';
@@ -367,6 +368,7 @@ class All_runsheet extends CI_Controller {
 			echo '		<td>'.$d->police_number.'</td>';
 			echo '		<td>('.$d->id_karyawan.') '.$d->nama_custody.'</td>';
 			echo '		<td>'.$d->nama_security.'</td>';
+			echo '		<td>'.$d->nama_client.'</td>';
 			echo '	</tr>';
 			echo '</table>';
 			
@@ -379,7 +381,6 @@ class All_runsheet extends CI_Controller {
 			echo '					<th style="text-align: center">Layanan</th>';
 			echo '					<th style="text-align: center">ID ATM/NO BOC</th>';
 			echo '					<th style="text-align: center">Lokasi</th>';
-			echo '					<th style="text-align: center">Bank</th>';
 			echo '					<th style="text-align: center">Denom</th>';
 			echo '					<th style="text-align: center">Jumlah</th>';
 			echo '					<th style="text-align: center">Status</th>';
@@ -395,7 +396,6 @@ class All_runsheet extends CI_Controller {
 				echo '	<td>'.($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH").'</td>';
 				echo '	<td style="text-align: center">'.($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")").'</td>';
 				echo '	<td>'.$r->lokasi_client.'</td>';
-				echo '	<td>'.$r->nama_client.'</td>';
 				echo '	<td>'.number_format($r->denom, 0, ',', '.').'</td>';
 				echo '	<td>'.number_format($r->total, 0, ',', '.').'</td>';
 				echo '	<td style="text-align: center">';

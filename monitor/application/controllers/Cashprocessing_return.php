@@ -78,9 +78,9 @@ class Cashprocessing_return extends CI_Controller {
 		$param['group'] = array('cashtransit.id');
 		$param['where'] = array(
 			array('cashtransit_detail.data_solve[!]' => 'batal'), 
-			array('cashtransit_detail.unloading' => '1'),
 			array('cashtransit.action_date[!]' => '')
 		);
+			// array('cashtransit_detail.unloading' => '1'),
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;

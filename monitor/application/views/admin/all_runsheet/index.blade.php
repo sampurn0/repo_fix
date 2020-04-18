@@ -140,6 +140,7 @@
 										<th>NOMOR POLISI</th>
 										<th>CUSTODY STAFF</th>
 										<th>GUARD</th>
+										<th>BANK / CLIENT</th>
 									</tr>
 									<tr>
 										<td hidden><?=date("d M Y", strtotime($d->action_date))?></td>
@@ -147,6 +148,7 @@
 										<td><?=$d->police_number?></td>
 										<td>(<?=$d->id_karyawan?>) <?=$d->nama_custody?></td>
 										<td><?=$d->nama_security?></td>
+										<td><?=$d->nama_client?></td>
 									</tr>
 								</table>
 								
@@ -159,7 +161,6 @@
 													<th style="text-align: center">Layanan</th>
 													<th style="text-align: center">ID ATM/NO BOC</th>
 													<th style="text-align: center">Lokasi</th>
-													<th style="text-align: center">Bank</th>
 													<th style="text-align: center">Denom</th>
 													<th style="text-align: center">Jumlah</th>
 													<th style="text-align: center">Status</th>
@@ -179,7 +180,6 @@
 															<td><?=($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH")?></td>
 															<td style="text-align: center"><?=($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")")?></td>
 															<td><?=$r->lokasi_client?></td>
-															<td><?=$r->nama_client?></td>
 															<td><?=number_format($r->denom, 0, ',', '.')?></td>
 															<td><?=number_format($r->total, 0, ',', '.')?></td>
 															<td style="text-align: center">
