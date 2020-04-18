@@ -381,7 +381,7 @@ class Unload extends REST_Controller {
 		
 		// foreach($data_plan as $r) {
 			// $data = array();
-			// if($r['unloading']!="") 		{ $data['unloading']	= 0; }
+			// if($r['unloading']!="") 		{ $data['unloading'] = $r['unloading']; }
 		
 			// if(!empty($data)) {
 				// $this->db->where('id', $r['id']);
@@ -398,7 +398,7 @@ class Unload extends REST_Controller {
 		
 		foreach($data_plan as $r) {
 			$data = array();
-			if($r['unloading']!="") 		{ $data['unloading']	= 0; }
+			if($r['unloading']!="") 		{ $data['unloading'] = $r['unloading']; }
 		
 			if(!empty($data)) {
 				$this->db->where('id', $r['id']);
