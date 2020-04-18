@@ -218,7 +218,7 @@
 					</table>
 
 					<div id="toolbar">
-						<a href="<?=base_url()?>cashprocessing#&tab-hcp" class="easyui-linkbutton" iconCls="icon-back" plain="true">Back</a>
+						<a href="<?=base_url()?>cashprocessing_return#&tab-hcp" class="easyui-linkbutton" iconCls="icon-back" plain="true">Back</a>
 					</div>
 
 				</form>

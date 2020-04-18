@@ -178,7 +178,7 @@
 															<td class="sticky-col first-col"><?=$no?></td>
 															<td><?=$r->ids?></td>
 															<td><?=($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH")?></td>
-															<td style="text-align: center"><?=($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")")?></td>
+															<td style="text-align: center"><?=($r->wsid=="" ? $r->no_boc : $r->wsid." (".$r->type.")")?></td>
 															<td><?=$r->lokasi_client?></td>
 															<td><?=number_format($r->denom, 0, ',', '.')?></td>
 															<td><?=number_format($r->total, 0, ',', '.')?></td>
@@ -196,24 +196,26 @@
 																?>
 															</td>
 															<td style="text-align: center">
-																<?php if(($r->data_solve=="batal" && ($r->cpc_process!=="" OR $r->cpc_process=="")) || ($r->data_solve=="" && $r->cpc_process=="")) { ?>
-																	<button type="button" class="red" onclick="openBatal(
-																		'<?=$r->ids?>'
-																	)" style="font-size: 10px" <?php if($r->data_solve=="batal") { echo "disabled"; } ?>>BATAL</button>
-																<?php } ?>
-															
-																<?php if(($r->data_solve!=="batal" && $r->data_solve=="") && $r->cpc_process=="") { ?>
-																	<button type="button" class="yellow" onclick="openPengalihan(
-																		'<?=$r->ids?>'
-																	)" style="font-size: 10px;" <?php if($r->data_solve=="batal") { echo "disabled"; } ?>>PENGALIHAN</button>
-																<?php } ?>
+																<?php if($r->loading==1) { ?>
+																	<?php if(($r->data_solve=="batal" && ($r->cpc_process!=="" OR $r->cpc_process=="")) || ($r->data_solve=="" && $r->cpc_process=="")) { ?>
+																		<button type="button" class="red" onclick="openBatal(
+																			'<?=$r->ids?>'
+																		)" style="font-size: 10px" <?php if($r->data_solve=="batal") { echo "disabled"; } ?>>BATAL</button>
+																	<?php } ?>
 																
-																<?php if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process=="") { ?>
-																	<button type="button" class="yellow" onclick="" style="font-size: 10px;" <?php if($r->data_solve=="batal") { echo "hidden"; } ?>>DONE ANDROID</button>
-																<?php } ?>
-																
-																<?php if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process!=="") { ?>
-																	<button type="button" class="green" onclick="" style="font-size: 10px;" <?php if($r->data_solve=="batal") { echo "hidden"; } ?>>DONE</button>
+																	<?php if(($r->data_solve!=="batal" && $r->data_solve=="") && $r->cpc_process=="") { ?>
+																		<button type="button" class="yellow" onclick="openPengalihan(
+																			'<?=$r->ids?>'
+																		)" style="font-size: 10px;" <?php if($r->data_solve=="batal") { echo "disabled"; } ?>>PENGALIHAN</button>
+																	<?php } ?>
+																	
+																	<?php if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process=="") { ?>
+																		<button type="button" class="yellow" onclick="" style="font-size: 10px;" <?php if($r->data_solve=="batal") { echo "hidden"; } ?>>DONE ANDROID</button>
+																	<?php } ?>
+																	
+																	<?php if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process!=="") { ?>
+																		<button type="button" class="green" onclick="" style="font-size: 10px;" <?php if($r->data_solve=="batal") { echo "hidden"; } ?>>DONE</button>
+																	<?php } ?>
 																<?php } ?>
 															</td>
 														</tr>

@@ -100,6 +100,7 @@
 						index: index,
 						row: data
 					});
+					$('#dg2').datagrid('reload');
 				}, error: function(e) {
 					console.log(e);
 				}
@@ -134,6 +135,7 @@
 						index: index,
 						row: data
 					});
+					$('#dg').datagrid('reload');
 				}
 			});
 		}

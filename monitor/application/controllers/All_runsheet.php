@@ -70,6 +70,7 @@ class All_runsheet extends CI_Controller {
 			$query = "
 				SELECT *, 
 					cashtransit_detail.id as ids,
+					runsheet_cashprocessing.id as ids2,
 					IFNULL(client.bank, client_cit.nama_client) AS nama_client, 
 					IFNULL(client.lokasi, client_cit.alamat) AS lokasi_client, 
 					IFNULL((
@@ -103,7 +104,6 @@ class All_runsheet extends CI_Controller {
 					WHERE 
 						cashtransit.action_date LIKE '%".$date."%' 
 						AND cashtransit_detail.id_cashtransit='".$val."'
-						AND runsheet_cashprocessing.id IS NOT NULL
 			";
 			
 			$array = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
@@ -254,7 +254,7 @@ class All_runsheet extends CI_Controller {
 	
 	function save_batal() {
 		$id = $this->input->post('id');
-		$query = "UPDATE cashtransit_detail SET data_solve='batal', loading='1' WHERE id='$id'";
+		$query = "UPDATE cashtransit_detail SET data_solve='batal' WHERE id='$id'";
 		
 		// echo $query;
 		$result = $this->curl->simple_get(rest_api().'/select/query2', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10));
@@ -314,6 +314,7 @@ class All_runsheet extends CI_Controller {
 			$query = "
 				SELECT *, 
 					cashtransit_detail.id as ids,
+					runsheet_cashprocessing.id as ids2,
 					IFNULL(client.bank, client_cit.nama_client) AS nama_client, 
 					IFNULL(client.lokasi, client_cit.alamat) AS lokasi_client, 
 					IFNULL((
@@ -347,7 +348,6 @@ class All_runsheet extends CI_Controller {
 					WHERE 
 						cashtransit.action_date LIKE '%".$date."%' 
 						AND cashtransit_detail.id_cashtransit='".$val."'
-						AND runsheet_cashprocessing.id IS NOT NULL
 			";
 			
 			$array = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
@@ -418,23 +418,24 @@ class All_runsheet extends CI_Controller {
 					}
 				echo '	</td>';
 				echo '	<td style="text-align: center">';
-					if(($r->data_solve=="batal" && ($r->cpc_process!=="" OR $r->cpc_process=="")) || ($r->data_solve=="" && $r->cpc_process=="")) {
-						if($r->data_solve=="batal") { $disabled = "disabled"; } else { $disabled = ""; }
-						echo '<button type="button" class="red" onclick="openBatal(\''.$r->ids.'\')" style="font-size: 10px" '.$disabled.'>BATAL</button>';
+					if($r->loading==1) {
+						if(($r->data_solve=="batal" && ($r->cpc_process!=="" OR $r->cpc_process=="")) || ($r->data_solve=="" && $r->cpc_process=="")) {
+							if($r->data_solve=="batal") { $disabled = "disabled"; } else { $disabled = ""; }
+							echo '<button type="button" class="red" onclick="openBatal(\''.$r->ids.'\')" style="font-size: 10px" '.$disabled.'>BATAL</button>';
+						}
+						if(($r->data_solve!=="batal" && $r->data_solve=="") && $r->cpc_process=="") {
+							if($r->data_solve=="batal") { $disabled = "disabled"; } else { $disabled = ""; }
+							echo '<button type="button" class="yellow" onclick="openPengalihan(\''.$r->ids.'\')" style="font-size: 10px" '.$disabled.'>PENGALIHAN</button>';
+						}
+						if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process=="") {
+							if($r->data_solve=="batal") { $disabled = "hidden"; } else { $disabled = ""; }
+							echo '<button type="button" class="yellow" style="font-size: 10px" '.$disabled.'>DONE ANDROID</button>';
+						}
+						if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process!=="") {
+							if($r->data_solve=="batal") { $disabled = "hidden"; } else { $disabled = ""; }
+							echo '<button type="button" class="green" style="font-size: 10px" '.$disabled.'>DONE</button>';
+						}
 					}
-					if(($r->data_solve!=="batal" && $r->data_solve=="") && $r->cpc_process=="") {
-						if($r->data_solve=="batal") { $disabled = "disabled"; } else { $disabled = ""; }
-						echo '<button type="button" class="yellow" onclick="openPengalihan(\''.$r->ids.'\')" style="font-size: 10px" '.$disabled.'>PENGALIHAN</button>';
-					}
-					if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process=="") {
-						if($r->data_solve=="batal") { $disabled = "hidden"; } else { $disabled = ""; }
-						echo '<button type="button" class="yellow" style="font-size: 10px" '.$disabled.'>DONE ANDROID</button>';
-					}
-					if($r->data_solve!=="" && $r->data_solve!=="batal" && $r->cpc_process!=="") {
-						if($r->data_solve=="batal") { $disabled = "hidden"; } else { $disabled = ""; }
-						echo '<button type="button" class="green" style="font-size: 10px" '.$disabled.'>DONE</button>';
-					}
-				
 				echo '	</td>';
 				echo '</tr>';
 			}

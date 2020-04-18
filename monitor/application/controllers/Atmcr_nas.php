@@ -77,7 +77,8 @@ class atmcr_nas extends CI_Controller {
 				B.id as id_detail, 
 				B.updated_date
 					FROM cashtransit A
-					LEFT JOIN cashtransit_detail B ON(A.id=B.id_cashtransit) 
+					LEFT JOIN 
+					(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) B ON(A.id=B.id_cashtransit) 
 					LEFT JOIN master_branch C ON(A.branch=C.id) 
 					LEFT JOIN client D ON(B.id_bank=D.id)  
 		";
@@ -86,7 +87,11 @@ class atmcr_nas extends CI_Controller {
 		$param['column_order'] = array('B.id'); //field yang ada di table user
 		$param['column_search'] = array('A.action_date'); //field yang diizin untuk pencarian 
 		$param['order'] = array(array('B.id' => 'DESC'));
-		$param['where'] = array(array('B.cpc_process[!]' => ''), array('B.state' => 'ro_atm'), array('B.data_solve[!]' => ''));
+		$param['where'] = array(
+			array('B.cpc_process[!]' => ''), 
+			array('B.state' => 'ro_atm'), 
+			array('B.data_solve[!]' => '')
+		);
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;

@@ -96,7 +96,7 @@ class Jurnal extends CI_Controller {
 			$datas[$i]['no'] 			= $no; 			 
 			$datas[$i]['id'] 			= $row['id']; 			 
 			$datas[$i]['id_detail'] 	= $row['id_detail']; 
-			$datas[$i]['wsid'] 			= $row['wsid']; 		 
+			$datas[$i]['wsid'] 			= "(".$row['id_detail'].") ".$row['wsid']; 		 
 			$datas[$i]['tanggal'] 		= $row['tanggal']; 		 
 			$datas[$i]['catatan'] 		= $row['catatan']; 		 
 			$datas[$i]['keterangan'] 	= $row['keterangan']; 

@@ -71,9 +71,11 @@ class Cashprocessing extends CI_Controller {
 							cashtransit_detail 
 						LEFT JOIN 
 							client ON(cashtransit_detail.id_bank=client.id) 
+						LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
 						WHERE 
-							cashtransit_detail.id_cashtransit=id_ct AND 
-							cashtransit_detail.id NOT IN (SELECT id FROM runsheet_cashprocessing WHERE id_cashtransit=id_ct) 
+							cashtransit_detail.id_cashtransit=id_ct 
+							AND cashtransit_detail.id NOT IN (SELECT id FROM runsheet_cashprocessing WHERE id_cashtransit=id_ct) 
+							AND cashtransit_detail.data_solve!="batal"
 						GROUP BY 
 							cashtransit_detail.id_cashtransit
 					), 0
@@ -216,7 +218,7 @@ class Cashprocessing extends CI_Controller {
 					LEFt JOIN master_branch ON(master_branch.id=master_zone.id_branch)
 					LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
 					LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
-					WHERE cashtransit_detail.id_cashtransit='".$id."' AND cashtransit_detail.state='ro_atm' limit $offset,$rows";
+					WHERE cashtransit_detail.id_cashtransit='".$id."' AND  cashtransit_detail.data_solve!='batal' AND cashtransit_detail.state='ro_atm' limit $offset,$rows";
 		
 		// $result = $this->curl->simple_post(rest_api().'/run_operational/get_data',$data,array(CURLOPT_BUFFERSIZE => 10));
 		$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));

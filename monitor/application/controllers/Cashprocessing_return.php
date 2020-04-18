@@ -63,7 +63,19 @@ class Cashprocessing_return extends CI_Controller {
 				cashtransit.date, 
 				cashtransit.action_date, 
 				master_branch.name as branch,
-				IFNULL((SELECT COUNT(DISTINCT cashtransit_detail.id) FROM cashtransit_detail LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) WHERE cashtransit_detail.id_cashtransit=cashtransit.id AND cashtransit_detail.data_solve!='' AND cashtransit_detail.cpc_process='' GROUP BY cashtransit_detail.id_cashtransit), 0) as count 
+				IFNULL((
+					SELECT COUNT(DISTINCT cashtransit_detail.id) 
+					FROM cashtransit_detail 
+					LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) 
+					LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+					WHERE 
+						cashtransit_detail.id_cashtransit=cashtransit.id 
+						AND cashtransit_detail.data_solve!='' 
+						AND cashtransit_detail.data_solve!='batal' 
+						AND cashtransit_detail.cpc_process='' 
+						AND runsheet_cashprocessing.id IS NOT NULL 
+						GROUP BY cashtransit_detail.id_cashtransit
+				), 0) as count 
 					FROM cashtransit 
 					LEFT JOIN 
 					(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
@@ -77,6 +89,7 @@ class Cashprocessing_return extends CI_Controller {
 		$param['order'] = array(array('cashtransit.id' => 'DESC'));
 		$param['group'] = array('cashtransit.id');
 		$param['where'] = array(
+			array('cashtransit_detail.data_solve[!]' => ''), 
 			array('cashtransit_detail.data_solve[!]' => 'batal'), 
 			array('cashtransit.action_date[!]' => '')
 		);

@@ -231,7 +231,7 @@
 			"columnDefs": [
 				{
 					"render": function ( data, type, row ) {
-						if(data=="0000-00-00") {
+						if(data==null) {
 							return  "(Data Lama) "+formatDate(row['updated_date']);
 						} else {
 							return  formatDate(data);
