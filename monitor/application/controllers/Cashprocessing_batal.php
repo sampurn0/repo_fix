@@ -124,7 +124,8 @@ class Cashprocessing_batal extends CI_Controller {
 		);
 		$param['where'] = array(
 			array('cashtransit_detail.data_solve' => 'batal'),
-			array('cashtransit.action_date[!]' => '')
+			array('cashtransit.action_date[!]' => ''),
+			array('cashtransit_detail.unloading' => '1'),
 		);
 		
 		$data['param'] = json_encode($param);

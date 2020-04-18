@@ -135,7 +135,7 @@
 						?>
 								<table class="table">
 									<tr>
-										<th hidden>ACTION DATE</th>
+										<th>ID RUN</th>
 										<th>RUN NUMBER</th>
 										<th>NOMOR POLISI</th>
 										<th>CUSTODY STAFF</th>
@@ -143,7 +143,7 @@
 										<th>BANK / CLIENT</th>
 									</tr>
 									<tr>
-										<td hidden><?=date("d M Y", strtotime($d->action_date))?></td>
+										<td ><?=$d->id_cashtransit?></td>
 										<td>(H-<?=$d->h_min?>) RUN NUMBER <?=$d->run_number?></td>
 										<td><?=$d->police_number?></td>
 										<td>(<?=$d->id_karyawan?>) <?=$d->nama_custody?></td>
@@ -158,6 +158,7 @@
 											<thead>
 												<tr>
 													<th style="text-align: center" class="sticky-col first-col">No</th>
+													<th style="text-align: center">ID DETAIL</th>
 													<th style="text-align: center">Layanan</th>
 													<th style="text-align: center">ID ATM/NO BOC</th>
 													<th style="text-align: center">Lokasi</th>
@@ -177,6 +178,7 @@
 																  if($r->data_solve!=="batal" && $r->cpc_process!=="") { echo "style='color: green'"; }?>>-->
 														<tr>
 															<td class="sticky-col first-col"><?=$no?></td>
+															<td><?=$r->ids?></td>
 															<td><?=($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH")?></td>
 															<td style="text-align: center"><?=($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")")?></td>
 															<td><?=$r->lokasi_client?></td>
@@ -196,7 +198,7 @@
 																?>
 															</td>
 															<td style="text-align: center">
-																<?php if(($r->data_solve=="batal" && $r->cpc_process!=="") || ($r->data_solve=="" && $r->cpc_process=="")) { ?>
+																<?php if(($r->data_solve=="batal" && ($r->cpc_process!=="" OR $r->cpc_process=="")) || ($r->data_solve=="" && $r->cpc_process=="")) { ?>
 																	<button type="button" class="red" onclick="openBatal(
 																		'<?=$r->ids?>'
 																	)" style="font-size: 10px" <?php if($r->data_solve=="batal") { echo "disabled"; } ?>>BATAL</button>

@@ -794,7 +794,9 @@ class Cashprocessing extends CI_Controller {
 			
 			// PROSES JURNAL
 			$id					= strtoupper(trim($this->input->post('id')));
-			$id_bank = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"SELECT id_bank FROM cashtransit_detail WHERE id='$id'"), array(CURLOPT_BUFFERSIZE => 10)))->id_bank;
+			$id_bank = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"SELECT id_bank FROM 
+			(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+			WHERE id='$id'"), array(CURLOPT_BUFFERSIZE => 10)))->id_bank;
 			
 			$query = "SELECT * FROM (SELECT `id`, `id_cashtransit`, `id_bank`, `id_pengirim`, `id_penerima`, `no_boc`, `state`, `metode`, `jenis`, `denom`, `pcs_100000`, `pcs_50000`, `pcs_20000`, `pcs_10000`, `pcs_5000`, `pcs_2000`, `pcs_1000`, `pcs_coin`, `detail_uang`, `ctr`, `divert`, `total`, `date`, `data_solve`, `cpc_process`, `updated_date` FROM cashtransit_detail) AS cashtransit_detail LEFT JOIN runsheet_cashprocessing ON (runsheet_cashprocessing.id=cashtransit_detail.id) WHERE cashtransit_detail.id_bank='$id_bank' AND cashtransit_detail.id = (SELECT MAX(id) FROM cashtransit_detail WHERE id < $id AND id_bank='$id_bank')";
 			$prev = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
@@ -968,7 +970,8 @@ class Cashprocessing extends CI_Controller {
 				runsheet_cashprocessing.divert,
 				runsheet_cashprocessing.bag_seal,
 				runsheet_cashprocessing.bag_no
-			from cashtransit_detail 
+			from 
+				(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
 				LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
 				LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
 				LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 

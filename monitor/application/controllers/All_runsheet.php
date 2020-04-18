@@ -92,15 +92,18 @@ class All_runsheet extends CI_Controller {
 								client ON(cashtransit_detail.id_bank=client.id)
 							LEFT JOIN 
 								client_cit ON (IF(cashtransit_detail.id_pengirim=0, cashtransit_detail.id_penerima, cashtransit_detail.id_pengirim)=client_cit.id)
-							#LEFT JOIN
-							#	runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
+							LEFT JOIN
+								runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
 							LEFT JOIN
 								runsheet_security ON(runsheet_security.id_cashtransit=cashtransit_detail.id_cashtransit)
 							LEFT JOIN
 								runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
 							LEFT JOIN 
 								(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle ON(runsheet_security.police_number=vehicle.police_number) 
-					WHERE cashtransit.action_date LIKE '%".$date."%' AND cashtransit_detail.id_cashtransit='".$val."'
+					WHERE 
+						cashtransit.action_date LIKE '%".$date."%' 
+						AND cashtransit_detail.id_cashtransit='".$val."'
+						AND runsheet_cashprocessing.id IS NOT NULL
 			";
 			
 			$array = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
@@ -251,7 +254,7 @@ class All_runsheet extends CI_Controller {
 	
 	function save_batal() {
 		$id = $this->input->post('id');
-		$query = "UPDATE cashtransit_detail SET data_solve='batal' WHERE id='$id'";
+		$query = "UPDATE cashtransit_detail SET data_solve='batal', loading='1' WHERE id='$id'";
 		
 		// echo $query;
 		$result = $this->curl->simple_get(rest_api().'/select/query2', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10));
@@ -333,15 +336,18 @@ class All_runsheet extends CI_Controller {
 								client ON(cashtransit_detail.id_bank=client.id)
 							LEFT JOIN 
 								client_cit ON (IF(cashtransit_detail.id_pengirim=0, cashtransit_detail.id_penerima, cashtransit_detail.id_pengirim)=client_cit.id)
-							#LEFT JOIN
-							#	runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
+							LEFT JOIN
+								runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
 							LEFT JOIN
 								runsheet_security ON(runsheet_security.id_cashtransit=cashtransit_detail.id_cashtransit)
 							LEFT JOIN
 								runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
 							LEFT JOIN 
 								(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle ON(runsheet_security.police_number=vehicle.police_number) 
-					WHERE cashtransit.action_date LIKE '%".$date."%' AND cashtransit_detail.id_cashtransit='".$val."'
+					WHERE 
+						cashtransit.action_date LIKE '%".$date."%' 
+						AND cashtransit_detail.id_cashtransit='".$val."'
+						AND runsheet_cashprocessing.id IS NOT NULL
 			";
 			
 			$array = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
@@ -355,7 +361,7 @@ class All_runsheet extends CI_Controller {
 		foreach($data_run as $d) { 
 			echo '<table class="table">';
 			echo '	<tr>';
-			echo '		<th hidden>ACTION DATE</th>';
+			echo '		<th>ID RUN</th>';
 			echo '		<th>RUN NUMBER</th>';
 			echo '		<th>NOMOR POLISI</th>';
 			echo '		<th>CUSTODY STAFF</th>';
@@ -363,7 +369,7 @@ class All_runsheet extends CI_Controller {
 			echo '		<th>BANK / CLIENT</th>';
 			echo '	</tr>';
 			echo '	<tr>';
-			echo '		<td hidden>'.date("d M Y", strtotime($d->action_date)).'</td>';
+			echo '		<td>'.$d->id_cashtransit.'</td>';
 			echo '		<td>(H-'.$d->h_min.') RUN NUMBER '.$d->run_number.'</td>';
 			echo '		<td>'.$d->police_number.'</td>';
 			echo '		<td>('.$d->id_karyawan.') '.$d->nama_custody.'</td>';
@@ -378,6 +384,7 @@ class All_runsheet extends CI_Controller {
 			echo '			<thead>';
 			echo '				<tr>';
 			echo '					<th style="text-align: center" class="sticky-col first-col">No</th>';
+			echo '					<th style="text-align: center">ID DETAIL</th>';
 			echo '					<th style="text-align: center">Layanan</th>';
 			echo '					<th style="text-align: center">ID ATM/NO BOC</th>';
 			echo '					<th style="text-align: center">Lokasi</th>';
@@ -393,6 +400,7 @@ class All_runsheet extends CI_Controller {
 				$no++;
 				echo '<tr>';
 				echo '	<td class="sticky-col first-col">'.$no.'</td>';
+				echo '	<td>'.$r->ids.'</td>';
 				echo '	<td>'.($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH").'</td>';
 				echo '	<td style="text-align: center">'.($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")").'</td>';
 				echo '	<td>'.$r->lokasi_client.'</td>';
@@ -410,7 +418,7 @@ class All_runsheet extends CI_Controller {
 					}
 				echo '	</td>';
 				echo '	<td style="text-align: center">';
-					if(($r->data_solve=="batal" || $r->data_solve=="") && $r->cpc_process=="") {
+					if(($r->data_solve=="batal" && ($r->cpc_process!=="" OR $r->cpc_process=="")) || ($r->data_solve=="" && $r->cpc_process=="")) {
 						if($r->data_solve=="batal") { $disabled = "disabled"; } else { $disabled = ""; }
 						echo '<button type="button" class="red" onclick="openBatal(\''.$r->ids.'\')" style="font-size: 10px" '.$disabled.'>BATAL</button>';
 					}
