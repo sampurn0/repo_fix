@@ -40,7 +40,7 @@ class Cashprocessing_return extends CI_Controller {
 					FROM cashtransit 
 					LEFT JOIN (SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
 					LEFT JOIN master_branch ON(cashtransit.branch=master_branch.id) 
-					WHERE cashtransit_detail.data_solve!='batal'
+					WHERE cashtransit_detail.data_solve!='batal' 
 					GROUP BY cashtransit.id
 					ORDER BY cashtransit.id DESC";
 		
@@ -91,9 +91,9 @@ class Cashprocessing_return extends CI_Controller {
 		$param['where'] = array(
 			array('cashtransit_detail.data_solve[!]' => ''), 
 			array('cashtransit_detail.data_solve[!]' => 'batal'), 
-			array('cashtransit.action_date[!]' => '')
+			array('cashtransit.action_date[!]' => ''),
+			array('cashtransit_detail.unloading' => '1'),
 		);
-			// array('cashtransit_detail.unloading' => '1'),
 		
 		$data['param'] = json_encode($param);
 		$data['post'] = $_REQUEST;
