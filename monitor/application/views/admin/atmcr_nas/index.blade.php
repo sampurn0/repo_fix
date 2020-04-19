@@ -233,8 +233,12 @@
 			"columnDefs": [
 				{
 					"render": function ( data, type, row ) {
-						if(data==null) {
-							return  "(Data Lama) "+formatDate(row['updated_date']);
+						if(data===null) {
+							if(row['updated_date']===null) {
+								return  "(Data Lama)";								
+							} else {
+								return  "(Data Lama) "+formatDate(row['updated_date']);
+							}
 						} else {
 							return  formatDate(data);
 						}

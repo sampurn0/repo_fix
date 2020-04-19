@@ -45,8 +45,30 @@ class All_problem extends CI_Controller {
 		echo $row;
 	}
 	
+	function check_data2() {
+		$sql = "
+			SELECT 
+				COUNT(*) as cnt
+			FROM flm_trouble_ticket_slm
+			WHERE updated='true'";
+        $row = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)))->cnt;
+		
+		echo $row;
+	}
+	
 	function update_status() {
 		$sql = "UPDATE `flm_trouble_ticket` SET `updated`='false' WHERE 1";
+		$res = json_decode($this->curl->simple_get(rest_api().'/select/query2', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
+		
+		if ($res) {
+			echo "failed";
+		} else {
+			echo "success";
+		}
+	}
+	
+	function update_status2() {
+		$sql = "UPDATE `flm_trouble_ticket_slm` SET `updated`='false' WHERE 1";
 		$res = json_decode($this->curl->simple_get(rest_api().'/select/query2', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
 		
 		if ($res) {
@@ -88,17 +110,46 @@ class All_problem extends CI_Controller {
 		$list = array();
 		$i = 0;
 		foreach($row_statusflm as $r) {
-			
-			// $ary = array();
-			// foreach(json_decode($r->problem_type) as $arr) {
-				// // $ary[] = $db->query('SELECT nama_kategori FROM kategori WHERE id_kategori="'.$arr.'"')->row()->nama_kategori;
-				// $ary[] = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>'
-					// SELECT nama_sub_kategori FROM sub_kategori WHERE id_sub_kategori="'.$arr.'"
-				// '), array(CURLOPT_BUFFERSIZE => 10)))->nama_sub_kategori;
-			// }
-			
 			$list[$i]['id'] = $r->id;
-			$list[$i]['id_ticket'] = $r->id_ticket;
+			$list[$i]['id_ticket'] = $r->id_ticket." (FLM)";
+			$list[$i]['status_ticket'] = $r->status_ticket;
+			$list[$i]['bank'] = $r->bank;
+			$list[$i]['data_solve'] = $r->data_solve;
+			$list[$i]['entry_date'] = $r->entry_date;
+			$list[$i]['selisih1'] = $this->diff($r->entry_date, $r->accept_time);
+			$list[$i]['accept_time'] = $r->accept_time;
+			$list[$i]['selisih2'] = $this->diff($r->accept_time, $r->end_apply);
+			$list[$i]['end_apply'] = $r->end_apply;
+			$list[$i]['problem'] = $r->problem_type;
+			$list[$i]['wsid'] = $r->wsid;
+			$list[$i]['team'] = "(".$r->id_karyawan.") ".$r->custody;
+			$i++;
+		}
+		
+		$sql_statusslm = "
+			SELECT 
+				*, 
+				flm_trouble_ticket_slm.status as status_ticket,
+				flm_trouble_ticket_slm.id as id,
+				id_ticket,
+				bank,
+				data_solve,
+				entry_date,
+				accept_time,
+				end_apply,
+				problem_type,
+				(SELECT id_karyawan FROM karyawan LEFT JOIN teknisi ON(teknisi.nik=karyawan.nik) WHERE teknisi.id_teknisi=flm_trouble_ticket_slm.teknisi_1) as id_karyawan,
+				(SELECT nama FROM karyawan LEFT JOIN teknisi ON(teknisi.nik=karyawan.nik) WHERE teknisi.id_teknisi=flm_trouble_ticket_slm.teknisi_1) as custody
+			FROM (SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, data_solve, status, req_combi, updated  FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm 
+			LEFT JOIN client ON(flm_trouble_ticket_slm.id_bank=client.id) 
+			WHERE id_ticket NOT IN (SELECT id_ticket FROM slm_trouble_ticket)
+			AND entry_date LIKE '%".$date."%'
+			";
+        $row_statusslm = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql_statusslm), array(CURLOPT_BUFFERSIZE => 10)));
+		
+		foreach($row_statusslm as $r) {
+			$list[$i]['id'] = $r->id;
+			$list[$i]['id_ticket'] = $r->id_ticket." (SLM)";
 			$list[$i]['status_ticket'] = $r->status_ticket;
 			$list[$i]['bank'] = $r->bank;
 			$list[$i]['data_solve'] = $r->data_solve;

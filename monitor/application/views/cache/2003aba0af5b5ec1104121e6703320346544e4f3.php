@@ -174,6 +174,7 @@
 		console.log(jq3412().jquery);
 		
 		setInterval(get_data_table, 1000);
+		setInterval(get_data2_table, 1000);
 			
 		jq341.get("<?=base_url()?>all_problem/show_table", function(response){
 			jq341('#content_table div').remove();
@@ -185,6 +186,23 @@
 				if(response>0) {
 					console.log("UPDATED");
 					jq341.get("<?=base_url()?>all_problem/update_status", function(response){
+						console.log(response)
+						if(response=="success") {
+							jq341.get("<?=base_url()?>all_problem/show_table", function(response){
+								jq341('#content_table div').remove();
+								jq341('#content_table').html(response);
+							});
+						}
+					});
+				}
+			});		
+		}
+				
+		function get_data2_table() {
+			jq341.get("<?=base_url()?>all_problem/check_data2", function(response){
+				if(response>0) {
+					console.log("UPDATED");
+					jq341.get("<?=base_url()?>all_problem/update_status2", function(response){
 						console.log(response)
 						if(response=="success") {
 							jq341.get("<?=base_url()?>all_problem/show_table", function(response){
