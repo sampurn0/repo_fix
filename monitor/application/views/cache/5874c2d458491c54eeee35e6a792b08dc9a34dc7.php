@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width" />
-    <title>B.I.M.A V.1.1</title>
+    <title>B.I.M.A V2.0</title>
     <link href="<?=base_url()?>depend/css/reset.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url()?>depend/css/layout.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url()?>depend/css/themes.css" rel="stylesheet" type="text/css">

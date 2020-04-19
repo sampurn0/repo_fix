@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width" />
-    <title>B.I.M.A V.1.1</title>
+    <title>B.I.M.A V2.0</title>
     <link href="<?=base_url()?>depend/css/reset.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url()?>depend/css/layout.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url()?>depend/css/themes.css" rel="stylesheet" type="text/css">
@@ -127,7 +127,7 @@
 </head>
 
 <body id="theme-default" class="full_block">
-    <div class="se-pre-con"></div>
+	<div class="se-pre-con"></div>
     <div id="actionsBox" class="actionsBox">
 		<div id="actionsBoxMenu" class="menu">
 			<span id="cntBoxMenu">0</span>
@@ -156,8 +156,8 @@
 			<ul>
 				<li class="zoom"><a href="<?=base_url()?>dashboard" title="Dashboard"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/dash.png" width="45" height="45"></a></li>
 				<li class="zoom"><a href="<?=base_url()?>all_runsheet" title="All Run Sheet"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/report.png" width="45" height="45"></a></li>
-				<li class="zoom"><a href="<?=base_url()?>all_problem" title="All Problem Ticket"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/history.png" width="45" height="45"></a></li>
-				<li class="zoom"><a href="#" title="Calendar"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/newjob.png" width="45" height="45"></a></li>
+				<li class="zoom"><a href="<?=base_url()?>all_problem" title="All Problem Ticket"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/newjob.png" width="45" height="45"></a></li>
+				<li class="zoom"><a href="<?=base_url()?>all_interval" title="All Interval"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/history.png" width="45" height="45"></a></li>
 				<li class="zoom"><a href="#" title="Directory System"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/dir.png" width="45" height="45"></a></li>
 				<li class="zoom"><a href="#" title="Userguide"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/userguide.png" width="45" height="45"></a></li>
 				<li class="zoom"><a href="#" title="Settings"><img style="float: left; margin: 10px 0px 0px 10px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/setting.png" width="45" height="45"></a></li>
@@ -165,6 +165,7 @@
 				</li>
 			</ul>
 		</div>
+		
 		<div id="sidebar">
 			<div id="secondary_nav">
 				<ul id="sidenav" class="accordion_mnu collapsible orange_f">
@@ -480,6 +481,7 @@
 					<li <?php if($active_menu=="barcode_batch" 
 								|| $active_menu=="barcode_generates"
 								|| $active_menu=="inventory"
+								|| $active_menu=="logistic_in_use"
 								|| $active_menu=="merk_mesin"
 								|| $active_menu=="seal"
 								|| $active_menu=="bag"
@@ -494,6 +496,11 @@
 							<li>
 								<a class="<?=($active_menu == "inventory" ? 'active' : '')?>" href="<?=base_url()?>inventory">
 									<span class="list-icon">&nbsp;</span>Supplies & Sparepart
+								</a>
+							</li>
+							<li>
+								<a class="<?=($active_menu == "logistic_in_use" ? 'active' : '')?>" href="<?=base_url()?>logistic_in_use/show">
+									<span class="list-icon">&nbsp;</span>Seal In Use
 								</a>
 							</li>
 							<li>
@@ -731,7 +738,6 @@
 		</div>
 
 	</div>
-	
     <div id="container">
         <div id="header" class="dark_d">
 			<div class="header_left">

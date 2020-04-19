@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
-	<title>B.I.M.A</title>
+	<title>B.I.M.A V2.0</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link href="<?=base_url()?>assets/constellation/assets/css/mini74d5.css?files=reset,common,form,standard,special-pages" rel="stylesheet" type="text/css">
@@ -27,7 +27,7 @@
 				</p>
 			</div>
 			<div class="block-content">
-			<h1>Login System</h1>
+			<h1>Login System, BIMA V2.0</h1>
 			
 			<div class="block-header">
 				<p class="button no-margin" style="margin: 30px 0px 0px 0px; background-image: linear-gradient(to right, #434343 0%, black 100%);">
