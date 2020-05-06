@@ -181,6 +181,7 @@ class Plan extends REST_Controller {
 						runsheet_cashprocessing.pcs_1000, 
 						runsheet_cashprocessing.pcs_coin, 
 						runsheet_cashprocessing.bag_seal, 
+						runsheet_cashprocessing.bag_seal_return, 
 						runsheet_cashprocessing.bag_no, 
 						runsheet_cashprocessing.detail_uang, 
 						runsheet_security.police_number, 
