@@ -286,6 +286,7 @@ class Cashprocessing extends CI_Controller {
 			$items[$i]['total'] = $row->total;
 			$items[$i]['nominal'] = (100000*$row->s100k)+(50000*$row->s50k)+(20000*$row->s20k)+(10000*$row->s10k)+(5000*$row->s5k)+(2000*$row->s2k)+(1000*$row->s1k)+(1*$row->coin);
 			$items[$i]['bag_seal'] = $row->bag_seal;
+			$items[$i]['bag_seal_return'] = $row->bag_seal_return;
 			$items[$i]['bag_no'] = $row->bag_no;
 			$items[$i]['t_bag'] = $row->t_bag;
 			$i++;
@@ -495,7 +496,7 @@ class Cashprocessing extends CI_Controller {
 			$cart_4_seal		= trim($this->input->post('cart_4_seal'));
 			$divert				= trim($this->input->post('divert'));
 			$bag_seal			= trim($this->input->post('bag_seal'));
-			// $bag_seal_return			= trim($this->input->post('bag_seal_return'));
+			$bag_seal_return			= trim($this->input->post('bag_seal_return'));
 			$bag_no				= trim($this->input->post('bag_no'));
 			$t_bag				= trim($this->input->post('t_bag'));
 			$nominal			= strtoupper(trim($this->input->post('nominal')));
@@ -515,7 +516,7 @@ class Cashprocessing extends CI_Controller {
 			$data['cart_4_seal'] = ($cart_4_seal!=="") ? $cart_4_seal : "";
 			$data['divert'] = $divert;
 			$data['bag_seal'] = $bag_seal;
-			// $data['bag_seal_return'] = $bag_seal_return;
+			$data['bag_seal_return'] = $bag_seal_return;
 			$data['bag_no'] = $bag_no;
 			$data['t_bag'] = $t_bag;
 			
@@ -538,7 +539,7 @@ class Cashprocessing extends CI_Controller {
 			if(!empty($cart_4_seal)) { array_push($update_seal, $cart_4_seal); } 
 			if(!empty($divert)) { array_push($update_seal, $divert); } 
 			if(!empty($bag_seal)) { array_push($update_seal, $bag_seal); } 
-			// if(!empty($bag_seal_return)) { array_push($update_seal, $bag_seal_return); } 
+			if(!empty($bag_seal_return)) { array_push($update_seal, $bag_seal_return); } 
 			if(!empty($t_bag)) { array_push($update_seal, $t_bag); } 
 			
 			foreach($update_seal as $seal) {
