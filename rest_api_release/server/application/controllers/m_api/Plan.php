@@ -306,7 +306,7 @@ class Plan extends REST_Controller {
 			$list[$key]['s1k'] = $r['pcs_1000'];
 			$list[$key]['coin'] = $r['pcs_coin'];
 			$list[$key]['bag_seal'] = $r['bag_seal'];
-			$list[$key]['bag_seal_return'] = $r['bag_seal_return'];
+			$list[$key]['bag_seal_return'] = $r['bag_seal_return']; 
 			$list[$key]['bag_no'] = $r['bag_no'];
 			
 			
