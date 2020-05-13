@@ -387,6 +387,7 @@ class Logistic_in_use extends CI_Controller {
 			
 			$datas[$i]['ids'] 			= $r['ids']; 			
 			$datas[$i]['lokasi'] 			= $r['lokasi']; 	
+			$datas[$i]['date'] 			= $r['date']; 	
 			
 			$file_pointer = realpath(__DIR__ . '/../../upload/qrcode').'/'.$r['wsid'].'.png';
 			if (file_exists($file_pointer)) {	
@@ -607,25 +608,25 @@ class Logistic_in_use extends CI_Controller {
 			
 			if(gettype($r['bag_seal_return'])!=="NULL" AND $r['bag_seal_return']!=="") {
 				if(strpos($r['bag_seal_return'],';')!==false){
-					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_seal_return'])[0].'.png';
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_big').'/'.explode(";", $r['bag_seal_return'])[0].'.png';
 					if (file_exists($file_pointer)) {
 					}else {
 						$qrCode = new QrCode(explode(";", $r['bag_seal_return'])[0]);
 						$qrCode->setSize(300);
-						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.explode(";", $r['bag_seal_return'])[0].'.png');
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_big').'/'.explode(";", $r['bag_seal_return'])[0].'.png');
 					}
 					
-					$datas[$i]['bag_seal_return'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.explode(";", $r['bag_seal_return'])[0].'.png" width="80" height="80"></img><br>'.$r['bag_seal_return'];
+					$datas[$i]['bag_seal_return'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_big/'.explode(";", $r['bag_seal_return'])[0].'.png" width="80" height="80"></img><br>'.$r['bag_seal_return'];
 				} else {
-					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['bag_seal_return'].'.png';
+					$file_pointer = realpath(__DIR__ . '/../../upload/qrcode_big').'/'.$r['bag_seal_return'].'.png';
 					if (file_exists($file_pointer)) {
 					}else {
 						$qrCode = new QrCode($r['bag_seal_return']);
 						$qrCode->setSize(300);
-						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_bag').'/'.$r['bag_seal_return'].'.png');
+						$qrCode->writeFile(realpath(__DIR__ . '/../../upload/qrcode_big').'/'.$r['bag_seal_return'].'.png');
 					}
 					
-					$datas[$i]['bag_seal_return'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_bag/'.$r['bag_seal_return'].'.png" width="80" height="80"></img><br>'.$r['bag_seal_return'];
+					$datas[$i]['bag_seal_return'] = '<center><img style="margin-top: 18px" src="'.base_url().'upload/qrcode_big/'.$r['bag_seal_return'].'.png" width="80" height="80"></img><br>'.$r['bag_seal_return'];
 				}		
 			} else {
 				$datas[$i]['bag_seal_return'] 			= $r['bag_seal_return']; 	

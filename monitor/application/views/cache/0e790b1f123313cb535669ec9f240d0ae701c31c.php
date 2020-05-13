@@ -32,37 +32,37 @@
 			<tr>
 				<td>BRANCH</td>
 				<td>:</td>
-				<td><input name="bank" id="nama_branch" class="easyui-validatebox easyui-textbox nama_branch<?=$index?>" disabled="disabled"></input></td>
+				<td><input name="bank" id="nama_branch" class="easyui-validatebox easyui-textbox nama_branch" disabled="disabled"></input></td>
 			</tr>
 			<tr>
 				<td>GA</td>
 				<td>:</td>
-				<td><input name="sektor" id="nama_ga" class="easyui-validatebox easyui-textbox nama_ga<?=$index?>" disabled="disabled"></input></td>
+				<td><input name="sektor" id="nama_ga" class="easyui-validatebox easyui-textbox nama_ga" disabled="disabled"></input></td>
 			</tr>
 			<tr>
 				<td>BANK</td>
 				<td>:</td>
-				<td><input name="bank" id="nama_bank" class="easyui-validatebox easyui-textbox nama_bank<?=$index?>" disabled="disabled"></input></td>
+				<td><input name="bank" id="nama_bank" class="easyui-validatebox easyui-textbox nama_bank" disabled="disabled"></input></td>
 			</tr>
 			<tr>
 				<td>ACT</td>
 				<td>:</td>
-				<td><input name="act" id="nama_act" class="easyui-validatebox easyui-textbox nama_act<?=$index?>" disabled="disabled"></input></td>
+				<td><input name="act" id="nama_act" class="easyui-validatebox easyui-textbox nama_act" disabled="disabled"></input></td>
 			</tr>
 			<tr>
 				<td>BRAND</td>
 				<td>:</td>
-				<td><input name="brand" id="nama_brand" class="easyui-validatebox easyui-textbox nama_brand<?=$index?>" disabled="disabled"></input></td>
+				<td><input name="brand" id="nama_brand" class="easyui-validatebox easyui-textbox nama_brand" disabled="disabled"></input></td>
 			</tr>
 			<tr>
 				<td>MODEL</td>
 				<td>:</td>
-				<td><input name="model" id="nama_model" class="easyui-validatebox easyui-textbox nama_model<?=$index?>" disabled="disabled"></input></td>
+				<td><input name="model" id="nama_model" class="easyui-validatebox easyui-textbox nama_model" disabled="disabled"></input></td>
 			</tr>
 			<tr>
 				<td>LOCATION</td>
 				<td>:</td>
-				<td><input name="lokasi" id="nama_location" class="easyui-validatebox easyui-textbox nama_location<?=$index?>" disabled="disabled"></input></td>
+				<td><input name="lokasi" id="nama_location" class="easyui-validatebox easyui-textbox nama_location" disabled="disabled"></input></td>
 			</tr>
 			
 		</table>
@@ -78,7 +78,7 @@
 				<td><input name="lokasi" id="nama_lokasi" class="easyui-validatebox easyui-textbox"></input></td>
 			</tr>	
 		</table>-->
-		<table class="dv-table3<?=$index?>" style="float:left;border:1px solid #ccc;padding:5px;margin-top:5px;" hidden>
+		<table class="dv-table3<?=$index?>" style="float:left;border:1px solid #ccc;padding:5px;margin-top:5px;">
 			<tr>
 				<td>TOTAL CART</td>
 				<td>:</td>
@@ -90,14 +90,12 @@
 				<td>DENOM VALUE</td>
 				<td>:</td>
 				<td>
-					<input name="pcs_100000" id="denom_100000_<?=$index?>" data-options="prompt:'100K'" class="easyui-validatebox easyui-textbox" value=""></input>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td></td>
-				<td>
-					<input name="pcs_50000" id="denom_50000_<?=$index?>" data-options="prompt:'50K'" class="easyui-validatebox easyui-textbox" value=""></input>
+					<div id="hide_100000">
+						<input name="pcs_100000" id="denom_100000_<?=$index?>" data-options="prompt:'100K'" class="easyui-validatebox easyui-textbox" value=""></input>
+					</div>
+					<div id="hide_50000">
+						<input name="pcs_50000" id="denom_50000_<?=$index?>" data-options="prompt:'50K'" class="easyui-validatebox easyui-textbox" value=""></input>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -109,10 +107,6 @@
 				</td>
 			</tr>
 		</table>
-		
-		<span id="keterangan<?=$index?>" style="padding: 20px; color: #e87333"></span><br>
-		<span id="info<?=$index?>" style="padding: 20px; color: #e87333"></span><br>
-		<span id="saran<?=$index?>" style="padding: 20px; color: #e87333"></span>
 	</div>
 	<!--<div style="padding:5px 0;text-align:right;padding-right:30px">
 		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="save1(this)">Save</a>
@@ -185,79 +179,75 @@
 	
 	var id_ct = "<?=$id?>";
 	var id_bank = "<?=$id_bank?>";
-	if(id_bank!==undefined) {
-		$.ajax({
-			url: '<?php echo base_url().'cashreplenish/get_data_client2'?>', 
-			data: {id_ct: id_ct, id_bank: id_bank}, 
-			success: function(result){
-				console.log(result);
-				result = JSON.parse(result);
-				
-				$(".dv-table3<?=$index?>").find("tr:not(:last)").remove();
-				$(".nama_branch<?=$index?>").textbox('setValue', result.branch);
-				$(".nama_ga<?=$index?>").textbox('setValue', result.ga);
-				$(".nama_bank<?=$index?>").textbox('setValue', result.bank);
-				$(".nama_act<?=$index?>").textbox('setValue', result.act);
-				$(".nama_brand<?=$index?>").textbox('setValue', result.brand);
-				$(".nama_model<?=$index?>").textbox('setValue', result.model);
-				$(".nama_location<?=$index?>").textbox('setValue', result.location);
-				// $("#keterangan").text(result.keterangan);
-				
-				// $('table.dv-table3 tr').remove();
-				if(result.denom=="100000") {
-					denom = "100K";
-					val_denom = result.pcs_100000;
-					if(result.ctr==null) {
-						ctr = "";
-					} else {
-						ctr = result.ctr;
-					}
+	if(id_bank!==null) {
+		// alert(id_ct+" "+id_bank)
+		$.ajax({url: '<?php echo base_url().'cashreplenish/get_data_client2'?>', data: {id_ct: id_ct, id_bank: id_bank}, success: function(result){
+			console.log(result);
+			result = JSON.parse(result);
+			
+			$(".nama_branch").textbox('setValue', result.branch);
+			$(".nama_ga").textbox('setValue', result.ga);
+			$(".nama_bank").textbox('setValue', result.bank);
+			$(".nama_act").textbox('setValue', result.act);
+			$(".nama_brand").textbox('setValue', result.brand);
+			$(".nama_model").textbox('setValue', result.model);
+			$(".nama_location").textbox('setValue', result.location);
+			
+			// $('table.dv-table3 tr').remove();
+			$(".dv-table3<?=$index?>").hide();
+			if(result.denom=="100000") {
+				denom = "100K";
+				val_denom = result.pcs_100000;
+				if(result.ctr==null) {
+					ctr = "";
 				} else {
-					denom = "50K";
-					val_denom = result.pcs_50000;
-					if(result.ctr==null) {
-						ctr = "";
-					} else {
-						ctr = result.ctr;
-					}
+					ctr = result.ctr;
 				}
-				
-				var row1 = '';
-				var row2 = '';
-				if(result.act=="ATM") {
-					var row3 = '<tr>'+
-								'<td>TOTAL CART</td>'+
-								'<td>:</td>'+
-								'<td><input name="ctr" class="easyui-validatebox tb" value="'+ctr+'" disabled="disabled"></input></td>'+
-								'</tr>';
-				} else if(result.act=="CRM") {
-					var row3 = '<tr>'+
-								'<td>TOTAL CART</td>'+
-								'<td>:</td>'+
-								'<td><input name="ctr" class="easyui-validatebox tb" value="5"></input></td>'+
-								'</tr>';
-				} else if(result.act=="CDM") {
-					var row3 = '<tr>'+
-								'<td>TOTAL CART</td>'+
-								'<td>:</td>'+
-								'<td><input name="ctr" class="easyui-validatebox tb" value="4"></input></td>'+
-								'</tr>';
+			} else {
+				denom = "50K";
+				val_denom = result.pcs_50000;
+				if(result.ctr==null) {
+					ctr = "";
+				} else {
+					ctr = result.ctr;
 				}
-				
-				if(result.act=="ATM") {
-					row3 +=  '<tr>'+
-								'<td>DENOM '+denom+'</td>'+
-								'<td>:</td>'+
-								'<td><input name="pcs_'+result.denom+'" class="easyui-validatebox tb" value="'+val_denom+'" disabled="disabled"></input></td>'+
-							'</tr>';
-				}
-				$('table.dv-table1').append(row1);
-				$('table.dv-table2').append(row2);
-				$(row3).insertBefore(".dv-table3<?=$index?> tr:first");
-				
-				$('.tb').textbox();
 			}
-		});
+			
+			var row1 = '';
+			var row2 = '';
+			if(result.act=="ATM") {
+				var row3 = '<tr>'+
+							'<td>TOTAL CART</td>'+
+							'<td>:</td>'+
+							'<td><input name="ctr" class="easyui-validatebox tb" value="'+ctr+'"></input></td>'+
+							'</tr>';
+			} else if(result.act=="CRM") {
+				var row3 = '<tr>'+
+							'<td>TOTAL CART</td>'+
+							'<td>:</td>'+
+							'<td><input name="ctr" class="easyui-validatebox tb" value="5"></input></td>'+
+							'</tr>';
+			} else if(result.act=="CDM") {
+				var row3 = '<tr>'+
+							'<td>TOTAL CART</td>'+
+							'<td>:</td>'+
+							'<td><input name="ctr" class="easyui-validatebox tb" value="4"></input></td>'+
+							'</tr>';
+			}
+			
+			if(result.act=="ATM") {
+				row3 +=  '<tr>'+
+							'<td>DENOM '+denom+'</td>'+
+							'<td>:</td>'+
+							'<td><input name="pcs_'+result.denom+'" class="easyui-validatebox tb" value="'+val_denom+'"></input></td>'+
+						'</tr>';
+			}
+			$('table.dv-table1').append(row1);
+			$('table.dv-table2').append(row2);
+			$(row3).insertBefore(".dv-table3<?=$index?> tr:first");
+			
+			$('.tb').textbox();
+		}});
 	}
 	
 	jq341(document).ready(function()
@@ -286,6 +276,7 @@
 				}
 			}
 		}).on('select2:select', function (evt) {
+			$(".dv-table3<?=$index?>").show();
 			var id = jq341(".run_sheet_number<?=$index?> option:selected").val();
 			// alert(id);
 			
@@ -294,26 +285,16 @@
 				console.log(result);
 				
 				// alert(result.act);
-				
-				$(".dv-table3<?=$index?>").show();
-				
-				$(".dv-table3<?=$index?>").find("tr:not(:last)").remove();
-				$(".nama_branch<?=$index?>").textbox('setValue', result.branch);
-				$(".nama_ga<?=$index?>").textbox('setValue', result.ga);
-				$(".nama_bank<?=$index?>").textbox('setValue', result.bank);
-				$(".nama_act<?=$index?>").textbox('setValue', result.act);
-				$(".nama_brand<?=$index?>").textbox('setValue', result.brand);
-				$(".nama_model<?=$index?>").textbox('setValue', result.model);
-				$(".nama_location<?=$index?>").textbox('setValue', result.location);
-				if(result.keterangan!==undefined) {
-					$("#keterangan<?=$index?>").text(result.keterangan);
-					$("#info<?=$index?>").text(result.info);
-					$("#saran<?=$index?>").text(result.saran);
-				} else {
-					$("#keterangan<?=$index?>").text("");
-				}
+				$(".nama_branch").textbox('setValue', result.branch);
+				$(".nama_ga").textbox('setValue', result.ga);
+				$(".nama_bank").textbox('setValue', result.bank);
+				$(".nama_act").textbox('setValue', result.act);
+				$(".nama_brand").textbox('setValue', result.brand);
+				$(".nama_model").textbox('setValue', result.model);
+				$(".nama_location").textbox('setValue', result.location);
 				
 				// $('table.dv-table3 tr').remove();
+				// $(".dv-table3<?=$index?>").find("tr:not(:last)").remove();
 				if(result.denom=="100000") {
 					denom = "100K";
 				} else {
@@ -337,62 +318,68 @@
 						$("#denom_100000_<?=$index?>").textbox('setValue', val_denom);
 						$("#denom_100000_<?=$index?>").textbox({disabled: false});
 						$("#denom_50000_<?=$index?>").textbox({disabled: true});
+						$("#hide_50000").hide();
+						$("#hide_100000").show();
+						// alert('100000');
 					} else {
 						$("#denom_50000_<?=$index?>").textbox('setValue', val_denom);
 						$("#denom_50000_<?=$index?>").textbox({disabled: false});
 						$("#denom_100000_<?=$index?>").textbox({disabled: true});
+						$("#hide_100000").hide();
+						$("#hide_50000").show();
+						// alert('50000');
 					}
-					var row3 = '<tr>'+
-								'<td>TOTAL CART</td>'+
-								'<td>:</td>'+
-								'<td>'+
-								'<input type="hidden" name="ctr" class="easyui-validatebox tb" value="'+ctr+'"></input>'+
-								'<input id="myInput_<?=$index?>" class="easyui-validatebox tb" value="'+ctr+'"  disabled="disabled"></input>'+
-								'</td>'+
-								'</tr>';
+					// var row3 = '<tr>'+
+								// '<td>TOTAL CART</td>'+
+								// '<td>:</td>'+
+								// '<td>'+
+								// '<input type="hidden" name="ctr" class="easyui-validatebox tb" value="'+ctr+'"></input>'+
+								// '<input id="myInput_<?=$index?>" class="easyui-validatebox tb" value="'+ctr+'"></input>'+
+								// '</td>'+
+								// '</tr>';
 				} else if(result.act=="CRM") {
 					$("#ctr_<?=$index?>").textbox('setValue', '5');
 					$("#denom_100000_<?=$index?>").textbox('setValue', '');
 					$("#denom_50000_<?=$index?>").textbox('setValue', '');
 					$("#denom_100000_<?=$index?>").textbox({disabled: true});
 					$("#denom_50000_<?=$index?>").textbox({disabled: true});
-					var row3 = '<tr>'+
-								'<td>TOTAL CART</td>'+
-								'<td>:</td>'+
-								'<td>'+
-								'<input type="hidden" name="ctr" class="easyui-validatebox tb" value="5"></input>'+
-								'<input class="easyui-validatebox tb" value="5" disabled="disabled"></input>'+
-								'</td>'+
-								'</tr>';
+					// var row3 = '<tr>'+
+								// '<td>TOTAL CART</td>'+
+								// '<td>:</td>'+
+								// '<td>'+
+								// '<input type="hidden" name="ctr" class="easyui-validatebox tb" value="5"></input>'+
+								// '<input class="easyui-validatebox tb" value="5" disabled="disabled"></input>'+
+								// '</td>'+
+								// '</tr>';
 				} else if(result.act=="CDM") {
 					$("#ctr_<?=$index?>").textbox('setValue', '4');
 					$("#denom_100000_<?=$index?>").textbox('setValue', '');
 					$("#denom_50000_<?=$index?>").textbox('setValue', '');
 					$("#denom_100000_<?=$index?>").textbox({disabled: true});
 					$("#denom_50000_<?=$index?>").textbox({disabled: true});
-					var row3 = '<tr>'+
-								'<td>TOTAL CART</td>'+
-								'<td>:</td>'+
-								'<td>'+
-								'<input type="hidden" name="ctr" class="easyui-validatebox tb" value="4"></input>'+
-								'<input class="easyui-validatebox tb" value="4" disabled="disabled"></input>'+
-								'</td>'+
-								'</tr>';
+					// var row3 = '<tr>'+
+								// '<td>TOTAL CART</td>'+
+								// '<td>:</td>'+
+								// '<td>'+
+								// '<input type="hidden" name="ctr" class="easyui-validatebox tb" value="4"></input>'+
+								// '<input class="easyui-validatebox tb" value="4" disabled="disabled"></input>'+
+								// '</td>'+
+								// '</tr>';
 				}
 				
 				if(result.act=="ATM") {
-					row3 +=  '<tr>'+
-								'<td>DENOM '+denom+'</td>'+
-								'<td>:</td>'+
-								'<td>'+
-								'<input type="hidden" name="pcs_'+result.denom+'" class="easyui-validatebox tb" value="'+val_denom+'"></input>'+
-								'<input class="easyui-validatebox tb" value="'+val_denom+'" disabled="disabled"></input>'+
-								'</td>'+
-							'</tr>';
+					// row3 +=  '<tr>'+
+								// '<td>DENOM '+denom+'</td>'+
+								// '<td>:</td>'+
+								// '<td>'+
+								// '<input type="hidden" name="pcs_'+result.denom+'" class="easyui-validatebox tb" value="'+val_denom+'"></input>'+
+								// '<input class="easyui-validatebox tb" value="'+val_denom+'" disabled="disabled"></input>'+
+								// '</td>'+
+							// '</tr>';
 				}
 				$('table.dv-table1').append(row1);
 				$('table.dv-table2').append(row2);
-				$(row3).insertBefore(".dv-table3<?=$index?> tr:first");
+				// $(row3).insertBefore(".dv-table3<?=$index?> tr:first");
 				
 				$('.tb').textbox();
 				

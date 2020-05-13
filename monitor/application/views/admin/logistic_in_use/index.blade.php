@@ -51,6 +51,7 @@
 									<th>BAG SEAL</th>
 									<th>BAG NUMBER</th>
 									<th>BAG SEAL RETURN</th>
+									<th>DATE</th>
 								</tr>
 							</thead>
 						</table>
@@ -177,6 +178,10 @@
 						"className": "text-number",
 						"targets": 11,
 						"searchable": false
+					},
+					{
+						"targets": 12,
+						"searchable": false
 					}
 				],
 				"order": [[ 0, "desc" ]],
@@ -193,6 +198,7 @@
 					{"data": "bag_seal"},
 					{"data": "bag_no"},
 					{"data": "bag_seal_return"},
+					{"data": "date"},
 				]
 			});
 		});
