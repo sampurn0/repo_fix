@@ -80,7 +80,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'ptbijakc_root2' : 'root'),
 	'password' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'lopilopi123qwe123' : ''),
-	'database' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'ptbijakc_bima' : 'rtms2019_release2'),
+	'database' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'ptbijakc_bima_fix' : 'rtms2019_release2'),
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
