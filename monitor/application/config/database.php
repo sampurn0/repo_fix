@@ -76,9 +76,9 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'rtms2019_release2',
+	'username' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'ptbijakc_root2' : 'root'),
+	'password' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'lopilopi123qwe123' : ''),
+	'database' => (get_domain($actual_link)=='pt-bijak.co.id' ? 'ptbijakc_bima_fix' : 'rtms2019_release2'),
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
