@@ -27,7 +27,7 @@
 				</p>
 			</div>
 			<div class="block-content">
-			<h1>Login System, BIMA V2.0</h1>
+			<h1>Login System, BIMA V2.6</h1>
 			
 			<div class="block-header">
 				<p class="button no-margin" style="margin: 30px 0px 0px 0px; background-image: linear-gradient(to right, #434343 0%, black 100%);">
