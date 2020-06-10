@@ -432,7 +432,7 @@
 											$("#cart_3_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#cart_4_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#divert_atm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" })
 												.done(function( data ) {
 													console.log(data);
 													if(data==-1) {
@@ -440,9 +440,11 @@
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_1_seal_atm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -456,17 +458,18 @@
 											$("#cart_3_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#cart_4_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#divert_atm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_2_seal_atm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -480,17 +483,18 @@
 											$("#cart_3_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#cart_4_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#divert_atm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_3_seal_atm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -504,17 +508,18 @@
 											$("#cart_3_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#cart_4_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#divert_atm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_4_seal_atm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -528,17 +533,18 @@
 											$("#cart_3_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#cart_4_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#divert_atm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#divert_atm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -1055,17 +1061,18 @@
 											$("#cart_4_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#cart_5_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#divert_crm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_1_seal_crm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -1080,17 +1087,18 @@
 											$("#cart_4_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#cart_5_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#divert_crm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_2_seal_crm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -1105,17 +1113,18 @@
 											$("#cart_4_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#cart_5_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#divert_crm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_3_seal_crm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -1130,17 +1139,18 @@
 											$("#cart_4_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#cart_5_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#divert_crm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_4_seal_crm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -1155,17 +1165,18 @@
 											$("#cart_4_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#cart_5_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#divert_crm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#cart_5_seal_crm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -1180,17 +1191,18 @@
 											$("#cart_4_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#cart_5_seal_crm_<?=$index?>").val()!==barcode && 
 											$("#divert_crm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
 													} else {
 														if(data==0) {
 															jq341.notify("Seal "+barcode+", sudah terpakai!", "error");
-														} else {
+														} else if(data==1) {
 															jq341.notify("Seal "+barcode+", siap digunakan!", "success");
 															$("#divert_crm_<?=$index?>").textbox('setValue', barcode);
+														} else {
+															alert(data);
 														}
 													}
 												}
@@ -1621,8 +1633,7 @@
 											$("#cart_5_seal_cdm_<?=$index?>").val()!==barcode && 
 											$("#divert_cdm_<?=$index?>").val()!==barcode) {
 											// $("#cart_1_seal_cdm_<?=$index?>").textbox('setValue', barcode);
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
@@ -1647,8 +1658,7 @@
 											$("#cart_5_seal_cdm_<?=$index?>").val()!==barcode && 
 											$("#divert_cdm_<?=$index?>").val()!==barcode) {
 											// $("#cart_2_seal_cdm_<?=$index?>").textbox('setValue', barcode);
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
@@ -1673,8 +1683,7 @@
 											$("#cart_5_seal_cdm_<?=$index?>").val()!==barcode && 
 											$("#divert_cdm_<?=$index?>").val()!==barcode) {
 											// $("#cart_3_seal_cdm_<?=$index?>").textbox('setValue', barcode);
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
@@ -1699,8 +1708,7 @@
 											$("#cart_5_seal_cdm_<?=$index?>").val()!==barcode && 
 											$("#divert_cdm_<?=$index?>").val()!==barcode) {
 											// $("#cart_4_seal_cdm_<?=$index?>").textbox('setValue', barcode);
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
@@ -1725,8 +1733,7 @@
 											$("#cart_5_seal_cdm_<?=$index?>").val()!==barcode && 
 											$("#divert_cdm_<?=$index?>").val()!==barcode) {
 											// $("#cart_5_seal_cdm_<?=$index?>").textbox('setValue', barcode);
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
@@ -1751,8 +1758,7 @@
 											$("#cart_5_seal_cdm_<?=$index?>").val()!==barcode && 
 											$("#divert_cdm_<?=$index?>").val()!==barcode) {
 											// $("#divert_cdm_<?=$index?>").textbox('setValue', barcode);
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
-												.done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");

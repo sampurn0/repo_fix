@@ -1462,6 +1462,7 @@ class Cashprocessing extends CI_Controller {
 	
 	public function check_seal() {
 		$kode = $this->input->post('value');
+		$id_bank = $this->input->post('id_bank');
 		
 		$count = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"SELECT count(*) as cnt FROM master_seal WHERE kode='$kode'"), array(CURLOPT_BUFFERSIZE => 10)));
 		if($count->cnt==0) {
@@ -1472,7 +1473,30 @@ class Cashprocessing extends CI_Controller {
 			if($count->cnt==0) {
 				echo 0;
 			} else {
-				echo 1;
+				$type_cassette = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"
+					SELECT type_cassette FROM cpc_prepared WHERE seal='".$kode."'
+				"), array(CURLOPT_BUFFERSIZE => 10)))->type_cassette;
+				
+				$type_mesin = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"
+					SELECT type_mesin FROM client WHERE id='".$id_bank."'
+				"), array(CURLOPT_BUFFERSIZE => 10)))->type_mesin;
+				
+				$type = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"
+					SELECT type FROM client WHERE id='".$id_bank."'
+				"), array(CURLOPT_BUFFERSIZE => 10)))->type;
+				
+				// echo $prep." ".$type;
+				if($type!="CDM") {
+					if($type_mesin!=$type_cassette) {
+						echo "INVALID\n";
+						echo "TYPE MESIN ATM  : \t".$type_mesin."\n";
+						echo "TYPE PREPARED  : \t".$type_cassette."\n";
+					} else {
+						echo 1;
+					}
+				} else {
+					echo 1;
+				}
 			}
 		}
 	}

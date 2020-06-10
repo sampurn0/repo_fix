@@ -210,9 +210,11 @@
 						<label>TYPE MESIN</label>
 						<select name="type_cassette" class="type_cassette full-width">
 							<option value=""> - SELECT TYPE MESIN - </option>
-							<option VALUE="WINCORD"> WINCORD </option>
-							<option VALUE="YOSUNG"> YOSUNG </option>
-							<option VALUE="NCR"> NCR </option>
+							<?php 
+							    foreach($merk_mesin as $r) {
+							        echo '<option VALUE="'.$r->merk.'"> '.$r->merk.' </option>';
+							    }
+							?>
 						</select>
 					</p>
 					<p class="pilih_mesin" hidden>
@@ -566,7 +568,7 @@
 			var content = $(orig).clone().show();
 			
 			$.confirm({
-				title: 'Info!',
+				title: 'Info Edit!',
 				content: content,
 				contentLoaded: function(data, status, xhr){
 					// this.setContentAppend(' <b>' + status);
@@ -577,15 +579,29 @@
 						seal = this.$content.find('.seal').val();
 						bank = this.$content.find('.bank').val();
 						denom = this.$content.find('.denom').val();
+						type_cassette = this.$content.find('.type_cassette').val();
 						type = this.$content.find('.type').val();
 						cashier = this.$content.find('.cashier').val();
 						table = this.$content.find('.table').val();
 						value = this.$content.find('.value').val();
 						
+						// var data = {
+							// id: id,
+							// seal: seal,
+							// bank: bank,
+							// denom: denom,
+							// type: type,
+							// cashier: cashier,
+							// table: table,
+							// value: value
+						// };
+						
 						var data = {
+							id: id,
 							seal: seal,
 							bank: bank,
 							denom: denom,
+							type_cassette: type_cassette,
 							type: type,
 							cashier: cashier,
 							table: table,
@@ -593,12 +609,13 @@
 						};
 						
 						$.ajax({
-							url: '<?=base_url()?>cpc_prepared/save_data',
+							url: '<?=base_url()?>cpc_prepared/update_data',
 							dataType: 'html',
 							type: 'POST',
 							data: data,
 							success: function(data) {
 								// console.log(data);
+								// alert(data);
 								if(data=="success") {
 									window.location.reload();
 								} else {

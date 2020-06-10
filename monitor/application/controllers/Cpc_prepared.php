@@ -21,6 +21,8 @@ class Cpc_prepared extends CI_Controller {
     public function index() {    
 		$this->data['active_menu'] = "cpc_prepared";
 		
+		$sql = "SELECT * FROM merk_mesin ";
+		$this->data['merk_mesin'] = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
 		
 		$query = "SELECT * FROM cpc_prepared WHERE tanggal='".date("Y-m-d")."'";
 		$this->data['data_prepared'] = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
@@ -188,7 +190,6 @@ class Cpc_prepared extends CI_Controller {
 		if($num->cnt==0) {
 			$table = "cpc_prepared";
 			$result = $this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
-			
 			if($result) {
 				echo "success";
 			} else {
@@ -203,6 +204,30 @@ class Cpc_prepared extends CI_Controller {
 			} else {
 				echo "failed";
 			}
+		}
+	}
+	
+	public function update_data() {
+		$data = array();
+		$data['id'] = $_REQUEST['id'];
+		$data['tanggal'] = date("Y-m-d");
+		$data['bank'] = $_REQUEST['bank'];
+		$data['denom'] = $_REQUEST['denom'];
+		$data['value'] = str_replace(",", "", $_REQUEST['value']);
+		$data['seal'] = $_REQUEST['seal'];
+		$data['date_time'] = date("Y-m-d H:i:s");
+		$data['type_cassette'] = $_REQUEST['type_cassette'];
+		$data['type'] = $_REQUEST['type'];
+		$data['no_table'] = $_REQUEST['table'];
+		$data['nama'] = $_REQUEST['cashier'];
+		$data['status'] = "ready";
+		
+		$table = "cpc_prepared";
+		$result = $this->curl->simple_get(rest_api().'/select/update', array('table'=>$table, 'data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
+		if($result) {
+			echo "success";
+		} else {
+			echo "failed";
 		}
 	}
 	
