@@ -64,6 +64,7 @@ class Unload extends REST_Controller {
 					WHERE
 						(data_solve != '' AND (cpc_process = '' OR cpc_process = 'pengisian')) AND unloading = '0'
 					GROUP BY cashtransit.id_cashtransit
+					ORDER BY cashtransit.id_cashtransit DESC
 		";
 
 		$query = $this->db->query($sql)->result_array();
