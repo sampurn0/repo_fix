@@ -90,9 +90,12 @@ class Auth extends REST_Controller {
 		
 		$result = array();
 		if ($num_rows > 0) {
-			$this->db->where('username', $username);
-			$this->db->where('password', $password);
-			$this->db->update('user', array('token' => $token));
+			// $this->db->where('username', $username);
+			// $this->db->where('password', $password);
+			// $this->db->update('user', array('token' => $token));
+			
+			$sql = "UPDATE user SET token='$token' WHERE username='$username' AND password='$password'";
+			$this->db->query($sql);
 			
 			$user = array(
 				"id"=>$query['id_user'], 
