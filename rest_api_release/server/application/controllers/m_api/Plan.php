@@ -71,7 +71,7 @@ class Plan extends REST_Controller {
 						AND cashtransit.action_date <= '".date('Y-m-d')."'
 						
 					GROUP BY cashtransit.id_cashtransit
-					ORDER BY cashtransit.id_cashtransit ASC
+					ORDER BY cashtransit.id_cashtransit DESC
 		";
 
 		$query = $this->db->query($sql)->result_array();
