@@ -1027,6 +1027,30 @@ class Cit extends REST_Controller {
 		echo json_encode($result);
 	}
 	
+	function getmerkmesin_get() {
+		$sql = "
+			SELECT * FROM merk_mesin ORDER BY merk ASC
+		";
+		
+		$query = $this->db->query($sql)->result_array();
+		
+		// echo "<pre>";
+		// print_r($query);
+		
+		$list = array();
+		$key=0;
+		foreach($query as $r) {
+			$list[$key]['id'] = $r['merk'];
+			$list[$key]['merk'] = $r['merk'];
+			
+			$key++;
+		}
+		
+		$result['data'] = $list;
+		
+		echo json_encode($result);
+	}
+	
 	function custom_echo($x, $length) {
 		if(strlen($x)<=$length) {
 			return $x;

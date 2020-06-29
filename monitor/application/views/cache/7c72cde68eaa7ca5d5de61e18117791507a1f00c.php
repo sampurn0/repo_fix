@@ -109,6 +109,22 @@
 					<br>
 					<br>
 					<table class="display t01">
+						<?php 
+							echo "<tr>";
+							foreach($data_mesin as $r) {
+								echo "<td>".$r->type_mesin."</td>";
+							}
+							echo "</tr>";
+							echo "<tr>";
+							foreach($data_mesin as $r) {
+								echo "<td>".$r->catridge."</td>";
+							}
+							echo "</tr>";
+						?>
+					</table>
+					<br>
+					<br>
+					<table class="display t01">
 						<thead>
 							<tr>
 								<th width="80">

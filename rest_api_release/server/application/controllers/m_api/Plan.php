@@ -836,5 +836,55 @@ class Plan extends REST_Controller {
 			$this->db->update("jurnal", $data_jurnal);
 		}
 	}
+	
+	function dashboard_ho_get() {
+		$id_user = $this->input->get('id_user');
+	
+		$sql = "SELECT detail_ho.* FROM detail_ho 
+			LEFT JOIN client_ho ON(client_ho.id_detail=detail_ho.id)
+			WHERE detail_ho.custodian='$id_user' AND client_ho.status='onprogress' GROUP BY detail_ho.id
+		";
+		
+		$query = $this->db->query($sql)->result_array();
+		
+		echo json_encode($query);
+	}
+	
+	function data_handover_get() {
+		$id_user = $this->input->get('id_user');
+	
+		$sql = "SELECT * FROM detail_ho 
+			LEFT JOIN client_ho ON(client_ho.id_detail=detail_ho.id)
+			WHERE detail_ho.custodian='$id_user' AND client_ho.status='onprogress'
+		";
+		
+		$query = $this->db->query($sql)->result_array();
+		
+		echo json_encode($query);
+	}
+	
+	function getmerkmesin_get() {
+		$sql = "
+			SELECT * FROM merk_mesin ORDER BY merk ASC
+		";
+		
+		$query = $this->db->query($sql)->result_array();
+		
+		// echo "<pre>";
+		// print_r($query);
+		
+		$list = array();
+		$key=0;
+		foreach($query as $r) {
+			$list[$key]['id'] = $r['merk'];
+			$list[$key]['merk'] = $r['merk'];
+			
+			$key++;
+		}
+		
+		$result['data'] = $list;
+		
+		echo json_encode($result);
+	}
 }
 
