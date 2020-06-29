@@ -82,13 +82,54 @@ class Seal extends REST_Controller {
 	
 	function update_receipt_get() {
 		$kode = $this->input->get('kode');
-		$update = $this->db->query("UPDATE master_receipt SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$kode'");
+		$id_detail = $this->input->get('id_detail');
 		
-		if ($update) {
-			$result['data'] = "success";
+		$row_seal = $this->db->query("SELECT * FROM master_receipt WHERE UPPER(kode) = BINARY(kode) AND kode='$kode' AND status='available'")->num_rows();
+		if($row_seal>0) {
+			$this->db->query("UPDATE runsheet_cashprocessing SET receipt_roll='$kode' WHERE id='$id_detail'");
+			$update = $this->db->query("UPDATE master_receipt SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$kode'");
+			if ($update) {
+				$result['data'] = "success";
+			} else {
+				$result['data'] = "failed";
+			}
 		} else {
-			$result['data'] = "failed";
+			$result['data'] = "Already Used";
 		}
+		// $update = $this->db->query("UPDATE master_receipt SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$kode'");
+		
+		// if ($update) {
+			// $result['data'] = "success";
+		// } else {
+			// $result['data'] = "failed";
+		// }
+		
+		echo json_encode($result);
+	}
+	
+	function update_receipt_flm_get() {
+		$kode = $this->input->get('kode');
+		$id_detail = $this->input->get('id_detail');
+		
+		$row_seal = $this->db->query("SELECT * FROM master_receipt WHERE UPPER(kode) = BINARY(kode) AND kode='$kode' AND status='available'")->num_rows();
+		if($row_seal>0) {
+			$this->db->query("UPDATE flm_trouble_ticket SET receipt_roll2='$kode' WHERE id='$id_detail'");
+			$update = $this->db->query("UPDATE master_receipt SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$kode'");
+			if ($update) {
+				$result['data'] = "success";
+			} else {
+				$result['data'] = "failed";
+			}
+		} else {
+			$result['data'] = "Already Used";
+		}
+		// $update = $this->db->query("UPDATE master_receipt SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$kode'");
+		
+		// if ($update) {
+			// $result['data'] = "success";
+		// } else {
+			// $result['data'] = "failed";
+		// }
 		
 		echo json_encode($result);
 	}

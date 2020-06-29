@@ -167,6 +167,7 @@ class Flm extends REST_Controller {
 			$list[$key]['guard'] 			= $r['guard'];
 			$list[$key]['status'] 			= $r['status'];
 			$list[$key]['data_solve'] 		= $r['data_solve'];
+			$list[$key]['foto_selfie'] 		= $r['foto_selfie'];
 			$list[$key]['images1'] 			= $r['images1'];
 			$list[$key]['images2'] 			= $r['images2'];
 			$list[$key]['images3'] 			= $r['images3'];
@@ -207,6 +208,7 @@ class Flm extends REST_Controller {
 			$list[$key]['guard'] 			= $r['guard'];
 			$list[$key]['status'] 			= $r['status'];
 			$list[$key]['data_solve'] 		= $r['data_solve'];
+			$list[$key]['foto_selfie'] 		= $r['foto_selfie'];
 			$list[$key]['images1'] 			= $r['images1'];
 			$list[$key]['images2'] 			= $r['images2'];
 			$list[$key]['images3'] 			= $r['images3'];
@@ -806,6 +808,7 @@ class Flm extends REST_Controller {
 			$data = array();
 			if($r['status']!="")		{ $data['status']			= $r['status']; }
 			if($r['data_solve']!="")	{ $data['data_solve']		= $r['data_solve']; }
+			if($r['foto_selfie']!="")	{ $data['foto_selfie']		= $r['foto_selfie']; }
 			if($r['images1']!="")		{ $data['images1']			= $r['images1']; }
 			if($r['images2']!="")		{ $data['images2']			= $r['images2']; }
 			if($r['images3']!="")		{ $data['images3']			= $r['images3']; }

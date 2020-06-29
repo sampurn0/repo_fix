@@ -69,9 +69,10 @@ class Plan extends REST_Controller {
 						AND cashtransit_detail.data_solve = '' 
 						AND cashtransit_detail.unloading = '0' 
 						AND cashtransit.action_date <= '".date('Y-m-d')."'
+						AND runsheet_cashprocessing.id_runsheet_cashprocessing IS NOT NULL
 						
 					GROUP BY cashtransit.id_cashtransit
-					ORDER BY cashtransit.id_cashtransit DESC
+					ORDER BY cashtransit_detail.id DESC
 		";
 
 		$query = $this->db->query($sql)->result_array();

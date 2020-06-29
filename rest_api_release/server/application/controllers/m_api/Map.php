@@ -20,10 +20,13 @@ class Map extends REST_Controller {
 	
 	public function index_get() {
 		echo "HAHAHAHA1";
-	}		public function index_post() {
+	}
+	
+	public function index_post() {
 		$data = $this->input->post('data');
 		$id_user = $this->input->post('id_user');
-		$json = json_decode($data, true);		// echo "time : ".$json['time']."<br>";
+		$json = json_decode($data, true);
+		// echo "time : ".$json['time']."<br>";
 		// echo "latitude : ".$json['lat']."<br>";
 		// echo "longitude : ".$json['lon']."<br>";
 		// echo "accuracy : ".$json['acy']."<br>";
@@ -43,7 +46,8 @@ class Map extends REST_Controller {
             echo json_encode($data);
         } else {
             echo json_encode(array('status' => 'fail'));
-        }	}
+        }
+	}
 	
 	function update_location_get() {
 		$id_user = $this->input->get('id_user');
