@@ -38,6 +38,7 @@ class Master_vehicle extends REST_Controller {
 	function index_post() {
         $data = array(
                     'type'          		 => $this->post('type'),
+                    'jenis'          		 => $this->post('jenis'),
                     'police_number'          => $this->post('police_number'),
                     'km_status'              => $this->post('km_status')
 				);
@@ -55,6 +56,7 @@ class Master_vehicle extends REST_Controller {
         $data = array(
 					'id'          	 		 => $this->put('id'),
                     'type'          		 => $this->put('type'),
+                    'jenis'          		 => $this->put('jenis'),
                     'police_number'          => $this->put('police_number'),
                     'km_status'              => $this->put('km_status')
 				);

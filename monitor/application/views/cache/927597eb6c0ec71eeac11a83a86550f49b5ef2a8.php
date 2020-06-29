@@ -1,6 +1,4 @@
-@extends('layouts.master')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 	<!-- Always visible control bar -->
 	<div id="control-bar" class="grey-bg clearfix"><div class="container_12">
 	
@@ -55,4 +53,5 @@
 		<div class="clear"></div>
 		
 	</article>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
