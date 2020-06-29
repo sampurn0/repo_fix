@@ -112,4 +112,11 @@ class Auth extends REST_Controller {
 		
 		echo json_encode($result);
 	}
+	
+	function logout_get() {
+		$username = $this->input->get('username');
+		
+		$sql = "UPDATE user SET token='' WHERE username='$username'";
+		$this->db->query($sql);
+	}
 }
