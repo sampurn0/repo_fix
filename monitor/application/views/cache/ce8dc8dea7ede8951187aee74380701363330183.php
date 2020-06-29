@@ -583,7 +583,7 @@
 									map_3 = initialize_3();
 									google.maps.event.trigger(map_3, 'resize');
 									
-									$.get("<?=base_url()?>maps/get_marker", function(response){
+									$.get("<?=base_url()?>maps/get_marker_flm", function(response){
 										$.each(JSON.parse(response), function(key, data) {
 											var latlng = JSON.parse(data.latlng);
 											var datas = [data.nik, Number(latlng.lat), Number(latlng.lng), 1, data.nama];
@@ -603,7 +603,7 @@
 									setInterval(refreshMap_3, 2000);
 				
 									function refreshMap_3() {
-										$.get("<?=base_url()?>maps/get_marker", function(response){
+										$.get("<?=base_url()?>maps/get_marker_flm", function(response){
 											$.each(JSON.parse(response), function(key, data) {
 												// var latlng = JSON.parse(data.latlng);
 												// marker = {lat: Number(latlng.lat), lng: Number(latlng.lng)};

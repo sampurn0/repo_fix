@@ -124,6 +124,7 @@ class Vehicle extends CI_Controller {
 			
 		$this->data['id'] = $id;		
 		$this->data['type'] = $row->type;
+		$this->data['jenis'] = $row->jenis;
 		$this->data['police_number'] = $row->police_number;
 		$this->data['km_status'] = $row->km_status;
 		
@@ -148,6 +149,7 @@ class Vehicle extends CI_Controller {
 	function update() {
 		$id = strtoupper(trim($this->input->post('id')));
 		$type = strtoupper(trim($this->input->post('type')));
+		$jenis = strtoupper(trim($this->input->post('jenis')));
 		$police_number = strtoupper(trim($this->input->post('police_number')));
 		$km_status = strtoupper(trim($this->input->post('km_status')));
 		// $driver = strtoupper(trim($this->input->post('id_driver')));
@@ -158,6 +160,7 @@ class Vehicle extends CI_Controller {
 
 		$data['id'] = $id;
 		$data['type'] = $type;
+		$data['jenis'] = $jenis;
 		$data['police_number'] = $police_number;
 		$data['km_status'] = $km_status;
 		// $data['driver'] = $driver;

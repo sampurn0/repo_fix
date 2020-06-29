@@ -12,6 +12,7 @@
 </style>
 <form method="post">
 	<div>
+		<input name="act" id="nama_act" type="hidden" class="easyui-validatebox easyui-textbox nama_act">
 		<table class="dv-table1" style="float:left;border:1px solid #ccc;padding:5px;margin-top:5px;">
 			<tr>
 				<td>ID</td>
@@ -341,8 +342,8 @@
 					$("#ctr_<?=$index?>").textbox('setValue', '5');
 					$("#denom_100000_<?=$index?>").textbox('setValue', '');
 					$("#denom_50000_<?=$index?>").textbox('setValue', '');
-					$("#denom_100000_<?=$index?>").textbox({disabled: true});
-					$("#denom_50000_<?=$index?>").textbox({disabled: true});
+					$("#denom_100000_<?=$index?>").textbox({disabled: false});
+					$("#denom_50000_<?=$index?>").textbox({disabled: false});
 					// var row3 = '<tr>'+
 								// '<td>TOTAL CART</td>'+
 								// '<td>:</td>'+

@@ -452,6 +452,8 @@ class Cashreplenish extends CI_Controller {
 	}
 	
 	function save_data() {
+		$act = strtoupper(trim($this->input->post('act')));
+		
 		$data['id_cashtransit']		= strtoupper(trim($this->input->post('id_cashtransit')));
 		$data['id_bank']			= strtoupper(trim($this->input->post('id_bank')));
 		$data['state'] 				= "ro_atm";
@@ -460,7 +462,12 @@ class Cashreplenish extends CI_Controller {
 		$data['pcs_100000']			= intval(strtoupper(trim($this->input->post('pcs_100000'))));
 		$data['pcs_50000']			= intval(strtoupper(trim($this->input->post('pcs_50000'))));
 		// $data['total'] 				= ($data['pcs_100000']!="")?(100000*$data['pcs_100000'])*$data['ctr'] : (50000*$data['pcs_50000'])*$data['ctr'];
-		$data['total'] 				= ($data['pcs_100000']!="")?(100000*$data['pcs_100000']) : (50000*$data['pcs_50000']);
+		
+		if($act=="CRM") {
+			$data['total'] 				= (100000*$data['pcs_100000']) + (50000*$data['pcs_50000']);
+		} else {
+			$data['total'] 				= ($data['pcs_100000']!="")?(100000*$data['pcs_100000']) : (50000*$data['pcs_50000']);
+		}
 		
 		$table = "cashtransit_detail";
 		$res = $this->curl->simple_get(rest_api().'/select/insert', array('table'=>$table, 'data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
@@ -491,7 +498,7 @@ class Cashreplenish extends CI_Controller {
 		$data['pcs_100000']			= intval(strtoupper(trim($this->input->post('pcs_100000'))));
 		$data['pcs_50000']			= intval(strtoupper(trim($this->input->post('pcs_50000'))));
 		// $data['total'] 				= ($data['pcs_100000']!="")?(100000*$data['pcs_100000'])*$data['ctr'] : (50000*$data['pcs_50000'])*$data['ctr'];
-		$data['total'] 				= ($data['pcs_100000']!="")?(100000*$data['pcs_100000']) : (50000*$data['pcs_50000']);
+		$data['total'] 				= ($data['pcs_100000']!="") ? (100000*$data['pcs_100000']) : (50000*$data['pcs_50000']);
 		
 		$table = "cashtransit_detail";
 		$res = $this->curl->simple_get(rest_api().'/select/update', array('table'=>$table, 'data'=>$data), array(CURLOPT_BUFFERSIZE => 10));

@@ -62,7 +62,7 @@
 								$no++;
 							?>
 							<tr>
-								<td><?php echo $row->type;?></td>
+								<td><?php echo strtoupper($row->jenis);?></td>
 								<td><?php echo $row->type;?></td>
 								<td><?php echo $row->police_number;?></td>
 								<td><?php echo $row->km_status;?></td>

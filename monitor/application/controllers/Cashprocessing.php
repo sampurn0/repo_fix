@@ -241,7 +241,11 @@ class Cashprocessing extends CI_Controller {
 			$items[$i]['denom'] = $row->denom;
 			$items[$i]['brand'] = $row->vendor;
 			$items[$i]['model'] = $row->type_mesin;
-			$items[$i]['detail_denom'] = 
+			
+			if($row->act=="CRM") {
+				$items[$i]['detail_denom'] = '100K : '.number_format($row->pcs_100000, 0, ',', ',').'<br>'.'50K : '.number_format($row->pcs_50000, 0, ',', ',');
+			} else {
+				$items[$i]['detail_denom'] = 
 										(
 											$row->pcs_100000!=0 ? '100K : '.number_format($row->pcs_100000, 0, ',', ',') : (
 												$row->pcs_50000!=0 ? '50K : '.number_format($row->pcs_50000, 0, ',', ',') : (
@@ -255,6 +259,8 @@ class Cashprocessing extends CI_Controller {
 												)
 											)
 										);
+			}
+			
 			$items[$i]['pcs_100000'] = $row->pcs_100000;
 			$items[$i]['pcs_50000'] = $row->pcs_50000;
 			$items[$i]['pcs_20000'] = $row->pcs_20000;
