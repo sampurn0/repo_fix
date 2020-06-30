@@ -353,16 +353,6 @@
 								</a>
 							</li>
 							<li>
-								<a class="<?=($active_menu == "handover" ? 'active' : '')?>" href="<?=base_url()?>handover_in">
-									<span class="list-icon">&nbsp;</span>Hand-Over (HO-Incoming)
-								</a>
-							</li>
-							<li>
-								<a class="<?=($active_menu == "handover_out" ? 'active' : '')?>" href="<?=base_url()?>handover_out">
-									<span class="list-icon">&nbsp;	</span>Hand-Over (HO-Outgoing)
-								</a>
-							</li>
-							<li>
 								<img style="float: left; margin: 8px 3px 0px 8px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/navigation-000-white.png" width="20" height="20">
 								<br>
 								<b style="font-size: 12px; color:#ffffff; margin: 0px 0px 0px 0px;"> Data Planning H-0</b><span class="down_arrow">&nbsp;</span>
@@ -379,14 +369,22 @@
 									<span class="list-icon">&nbsp;</span>Cash Replanish (CR)
 								</a>
 							</li>
+							
 							<li>
-								<a class="<?=($active_menu == "handover3" ? 'active' : '')?>" href="<?=base_url()?>handover3">
+								<img style="float: left; margin: 8px 3px 0px 8px;" src="<?=base_url()?>assets/constellation/assets/images/icons/fugue/navigation-000-white.png" width="20" height="20">
+								<br>
+								<b style="font-size: 12px; color:#ffffff; margin: 0px 0px 0px 0px;"> Data Handover </b><span class="down_arrow">&nbsp;</span>
+								<br>
+								<br>
+							</li>
+							<li>
+								<a class="<?=($active_menu == "handover" ? 'active' : '')?>" href="<?=base_url()?>handover_in">
 									<span class="list-icon">&nbsp;</span>Hand-Over (HO-Incoming)
 								</a>
 							</li>
 							<li>
-								<a class="<?=($active_menu == "handover4" ? 'active' : '')?>" href="<?=base_url()?>handover4">
-									<span class="list-icon">&nbsp;</span>Hand-Over (HO-Outgoing)
+								<a class="<?=($active_menu == "handover_out" ? 'active' : '')?>" href="<?=base_url()?>handover_out">
+									<span class="list-icon">&nbsp;	</span>Hand-Over (HO-Outgoing)
 								</a>
 							</li>
 							<li>
