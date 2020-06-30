@@ -121,4 +121,12 @@ class Auth extends REST_Controller {
 		$sql = "UPDATE user SET token='' WHERE username='$username'";
 		$this->db->query($sql);
 	}
+	
+	function update_location_get() {
+		$username = $this->input->get('username');
+		$latlng = $this->input->get('latlng');
+		
+		$sql = "UPDATE user SET latlng='$latlng' WHERE username='$username'";
+		$this->db->query($sql);
+	}
 }
