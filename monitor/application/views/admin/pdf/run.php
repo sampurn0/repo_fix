@@ -1,7 +1,7 @@
 <html>
     <head>
         <style>
-            @page { margin: 0px; size: 22cm 14cm portrait; }
+            @page { margin: 0px; size: 21cm 29.5cm portrait; }
         
             @font-face {
                 font-family: "aaaaa";
@@ -385,7 +385,7 @@
 						
 						<td style="width: 60px">SEAL BAG(CSO)</td>
 						<td style="width: 10px">:</td>
-						<td><?=(isset($bag_seal_return) ? $bag_seal_return : "No Data")?></td>
+						<td></td>
 					</tr>
 				</table>
 				
