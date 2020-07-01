@@ -225,7 +225,8 @@
 								<th data-options="field:'wsid',width:90">ID</th>
 								<!--<th data-options="field:'branch',width:100">BRANCH</th>-->
 								<th data-options="field:'runsheet',width:90">GA</th>
-								<th data-options="field:'bank',width:180">BANK</th>
+								<th data-options="field:'bank',width:140">BANK</th>
+								<th data-options="field:'model',width:150">TYPE</th>
 								<th data-options="field:'act',width:90">ACT</th>
 								<!--<th data-options="field:'brand',width:140">BRAND</th>-->
 								<!--<th data-options="field:'model',width:140">MODEL</th>-->
@@ -256,19 +257,7 @@
 					<h1>Data Input Runsheet Cashtransit</h1>
 					<br>
 					<table id="dg2" class="easyui-datagrid" title="Cash Transit <?=$branch?>" style="width:100%;height:550px"
-						data-options="
-							rownumbers:true,
-							singleSelect:true,
-							url:'<?=base_url()?>cashprocessing_cit/get_data/<?=$id?>',
-							method:'get',
-							rowStyler: function(index,row){
-								console.table(row);
-								if (row.id_process!=null){
-									return 'background-color:#e6efff;color:black;font-weight:normal;';
-								} else {
-									return 'background-color:#ffe48d;color:black;font-weight:normal;';
-								}
-							}" toolbar="#toolbar" pagination="true">
+						data-options="rownumbers:true,singleSelect:true,url:'<?=base_url()?>cashprocessing_cit/get_data/<?=$id?>',method:'get'" toolbar="#toolbar2" pagination="true">
 						<thead>
 							<tr>
 								<th data-options="field:'id',width:50" rowspan="2">ID</th>
