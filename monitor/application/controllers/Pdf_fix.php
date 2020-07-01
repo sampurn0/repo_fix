@@ -72,7 +72,7 @@ class Pdf_fix extends CI_Controller {
 						LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
 							WHERE 
 								cashtransit_detail.id_cashtransit='$id_ct' AND 
-								IFNULL(client.sektor, client_cit.sektor)='$id_ga' AND
+								#IFNULL(client.sektor, client_cit.sektor)='$id_ga' AND
 								cashtransit_detail.state='ro_atm' AND
 								runsheet_cashprocessing.id IS NOT NULL";
 								
