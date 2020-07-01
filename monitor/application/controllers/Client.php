@@ -58,6 +58,18 @@ class Client extends CI_Controller {
 		
         return view('admin/client/index', $this->data);
     }
+	
+	public function server_processing() {
+		$param['table'] = 'client'; //nama tabel dari database
+		$param['column_order'] = array('id', 'wsid', 'lokasi'); //field yang ada di table user
+		$param['column_search'] = array('id','wsid','lokasi'); //field yang diizin untuk pencarian 
+		$param['order'] = array('id' => 'asc');
+		
+		$data['param'] = json_encode($param);
+		$data['post'] = $_REQUEST;
+		
+		echo $this->curl->simple_get(rest_api().'/select/datatables3', array('data'=>$data), array(CURLOPT_BUFFERSIZE => 10));
+	}
 
     public function add() {
         $this->data['active_menu'] = "client";
@@ -198,7 +210,7 @@ class Client extends CI_Controller {
 		$this->data['id_cabang'] 		= $row->cabang;
 		$this->data['cabang'] 			= json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>"SELECT * FROM master_branch WHERE id='".$row->cabang."'"), array(CURLOPT_BUFFERSIZE => 10)))->name;
 		$this->data['type'] 			= strtoupper($det_ho->type);
-		$this->data['type_mesin'] 		= $dat_ho[0]->jumlah;
+		$this->data['type_mesin'] 		= ($row->type_mesin=="" ? $dat_ho[0]->jumlah : $row->type_mesin);
 		$this->data['jam_operasional'] 	= $row->jam_operasional;
 		// $this->data['durasi'] 			= $row->durasi;
 		$this->data['vendor'] 			= $row->vendor;
@@ -252,8 +264,8 @@ class Client extends CI_Controller {
 	}
 	
 	function update() {
-		echo "<pre>";
-		print_r($_REQUEST);
+// 		echo "<pre>";
+// 		print_r($_REQUEST);
 		
 		$id 				= strtoupper(trim($this->input->post('id')));
 		
