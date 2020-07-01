@@ -269,7 +269,25 @@ class All_runsheet extends CI_Controller {
 		$date = $this->input->post('date');
 		
 		$query = "
-			SELECT *, cashtransit.id as id_cashtransit FROM cashtransit
+			SELECT *, cashtransit.id as id_cashtransit,
+				IFNULL(client.bank, client_cit.nama_client) AS nama_client, 
+				IFNULL(client.lokasi, client_cit.alamat) AS lokasi_client,
+				IFNULL((
+					SELECT id_karyawan
+					FROM karyawan
+					WHERE karyawan.nik = runsheet_operational.custodian_1
+				), '') AS id_karyawan, 
+				IFNULL((
+					SELECT nama
+					FROM karyawan
+					WHERE karyawan.nik = runsheet_operational.custodian_1
+				), '') AS nama_custody, 
+				IFNULL((
+					SELECT nama
+					FROM karyawan
+					WHERE karyawan.nik = runsheet_security.security_1
+				), '') AS nama_security
+			FROM cashtransit
 				LEFT JOIN
 					(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date,data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) 
 					AS cashtransit_detail ON(cashtransit_detail.id_cashtransit=cashtransit.id)
