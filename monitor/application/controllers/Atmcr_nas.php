@@ -323,160 +323,269 @@ class atmcr_nas extends CI_Controller {
 				
 				$terbilang = ucwords($this->terbilang(($ttl_all1)*1000));
 				
-				$postArr = json_decode($data->data_seal, true);
-				$postArr = array_map('array_filter', $postArr);
-				$postArr = array_filter($postArr);
-				
-				// echo "<pre>";
-				// print_r($postArr);
-				
-				$total_value = 0;
-				foreach ($postArr as $item) {
-					$total_value += $item['50'];
-					$total_value += $item['100'];
-				}
-				
-				if($row->cpc_process!=="pengisian") {
-					$ttl_seal1 = ($this->searchArrayValueByKey($postArr['seal1'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal1'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal1'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal1'], "100")) * 100000 : 0);
-					$ttl_seal2 = ($this->searchArrayValueByKey($postArr['seal2'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal2'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal2'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal2'], "100")) * 100000 : 0);
-					$ttl_seal3 = ($this->searchArrayValueByKey($postArr['seal3'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal3'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal3'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal3'], "100")) * 100000 : 0);
-					$ttl_seal4 = ($this->searchArrayValueByKey($postArr['seal4'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal4'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal4'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal4'], "100")) * 100000 : 0);
-					$ttl_seal5 = ($this->searchArrayValueByKey($postArr['seal5'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal5'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal5'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal5'], "100")) * 100000 : 0);
-					$ttl_divert = ($this->searchArrayValueByKey($postArr['divert'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['divert'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['divert'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['divert'], "100")) * 100000 : 0);
+				if($data->data_seal!==null) {
+					$postArr = json_decode($data->data_seal, true);
+					$postArr = array_map('array_filter', $postArr);
+					$postArr = array_filter($postArr);
 					
-					if(isset($postArr['tbag'])) {
-						$ttl_tbag = ($this->searchArrayValueByKey($postArr['tbag'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['tbag'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['tbag'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['tbag'], "100")) * 100000 : 0);
+					// echo "<pre>";
+					// print_r($postArr);
+					
+					$total_value = 0;
+					foreach ($postArr as $item) {
+						$total_value += $item['50'];
+						$total_value += $item['100'];
 					}
-
-					$total_all = $ttl_seal1+$ttl_seal2+$ttl_seal3+$ttl_seal4+$ttl_seal5+$ttl_divert;
 					
-					$tbag_html = '';
-					if(!empty($data->t_bag)) {
-						$tbag_html = '
-							<tr>
-								<td align="center"></td>
-								<td>T-BAG</td>
-								<td align="center"></td>
-								<td align="center">'.$row->t_bag.'</td>
-								<td></td>
-								<td></td>
-								<td align="center">'.$data->t_bag.'</td>
-								<td align="left">'.($this->searchArrayValueByKey($postArr['tbag'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['tbag'], "50"))."</span>" : "").' '.(count($postArr['tbag']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['tbag'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['tbag'], "100"))."</span>" : "").' '.(count($postArr['tbag']) > 1 ? "<br>" : "").'</td>
-								<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_tbag, 0, ".", ".").'</span></td>
-							</tr>
-						';
+					if($row->cpc_process!=="pengisian") {
+						$ttl_seal1 = ($this->searchArrayValueByKey($postArr['seal1'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal1'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal1'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal1'], "100")) * 100000 : 0);
+						$ttl_seal2 = ($this->searchArrayValueByKey($postArr['seal2'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal2'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal2'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal2'], "100")) * 100000 : 0);
+						$ttl_seal3 = ($this->searchArrayValueByKey($postArr['seal3'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal3'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal3'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal3'], "100")) * 100000 : 0);
+						$ttl_seal4 = ($this->searchArrayValueByKey($postArr['seal4'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal4'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal4'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal4'], "100")) * 100000 : 0);
+						$ttl_seal5 = ($this->searchArrayValueByKey($postArr['seal5'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['seal5'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['seal5'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['seal5'], "100")) * 100000 : 0);
+						$ttl_divert = ($this->searchArrayValueByKey($postArr['divert'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['divert'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['divert'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['divert'], "100")) * 100000 : 0);
 						
-						$total_all = $ttl_seal1+$ttl_seal2+$ttl_seal3+$ttl_seal4+$ttl_seal5+$ttl_divert+$ttl_tbag;
-					} else {
-						$total_all = $ttl_seal1+$ttl_seal2+$ttl_seal3+$ttl_seal4+$ttl_seal5+$ttl_divert;
-					}
+						if(isset($postArr['tbag'])) {
+							$ttl_tbag = ($this->searchArrayValueByKey($postArr['tbag'], "50")!==false ? intval($this->searchArrayValueByKey($postArr['tbag'], "50")) * 50000 : 0) + ($this->searchArrayValueByKey($postArr['tbag'], "100")!==false ? intval($this->searchArrayValueByKey($postArr['tbag'], "100")) * 100000 : 0);
+						}
 
-					$inner_content_html = '
-						<table style="width: 100%; font-size: 10px;" border="1" class="sixth">
-							<thead>
+						$total_all = $ttl_seal1+$ttl_seal2+$ttl_seal3+$ttl_seal4+$ttl_seal5+$ttl_divert;
+						
+						$tbag_html = '';
+						if(!empty($data->t_bag)) {
+							$tbag_html = '
 								<tr>
-									<td rowspan="2" align="center" width="20px">CSST</td>
-									<td rowspan="2" align="center">DENOM</td>
-									<td rowspan="2" align="center">TOTAL</td>
-									<td rowspan="2" align="center">SEAL PREPARE</td>
-									<td colspan="2" align="center">STATUS</td>
-									<td rowspan="2" align="center">SEAL RETURN</td>
-									<td rowspan="2" align="center">VALUE</td>
-									<td rowspan="2" align="center">TOTAL RETURN</td>
-								</tr>
-								<tr>
-									<td width="20" align="center">PENGALIHAN</td>
-									<td width="20" align="center">CANCEL</td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td align="center">1</td>
-									<td align="left">
-										<span class="alignleft">'.number_format(($denom_1*1000), 0, ",",".").'</span>
-										<span class="alignright">'.$value_1.'</span>
-									</td>
-									<td align="center">'.$ttl_1.'</td>
-									<td align="center">'.$seal_1.'</td>
-									<td></td>
-									<td></td>
-									<td align="center">'.explode(";", $data->cart_1_seal)[0].'</td>
-									<td align="left">'.($this->searchArrayValueByKey($postArr['seal1'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal1'], "50"))."</span>" : "").' '.(count($postArr['seal1']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal1'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal1'], "100"))."</span>" : "").' '.(count($postArr['seal1']) > 1 ? "<br>" : "").'</td>
-									<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal1, 0, ".", ".").'</span></td>
-								</tr>
-								<tr>
-									<td align="center">2</td>
-									<td align="left">
-										<span class="alignleft">'.number_format(($denom_2*1000), 0, ",",".").'</span>
-										<span class="alignright">'.$value_2.'</span>
-									</td>
-									<td align="center">'.$ttl_2.'</td>
-									<td align="center">'.$seal_2.'</td>
-									<td></td>
-									<td></td>
-									<td align="center">'.explode(";", $data->cart_2_seal)[0].'</td>
-									<td align="left">'.($this->searchArrayValueByKey($postArr['seal2'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal2'], "50"))."</span>" : "").' '.(count($postArr['seal2']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal2'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal2'], "100"))."</span>" : "").' '.(count($postArr['seal2']) > 1 ? "<br>" : "").'</td>
-									<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal2, 0, ".", ".").'</span></td>
-								</tr>
-								<tr>
-									<td align="center">3</td>
-									<td align="left">
-										<span class="alignleft">'.number_format(($denom_3*1000), 0, ",",".").'</span>
-										<span class="alignright">'.$value_3.'</span>
-									</td>
-									<td align="center">'.$ttl_3.'</td>
-									<td align="center">'.$seal_3.'</td>
-									<td></td>
-									<td></td>
-									<td align="center">'.explode(";", $data->cart_3_seal)[0].'</td>
-									<td align="left">'.($this->searchArrayValueByKey($postArr['seal3'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal3'], "50"))."</span>" : "").' '.(count($postArr['seal3']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal3'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal3'], "100"))."</span>" : "").' '.(count($postArr['seal3']) > 1 ? "<br>" : "").'</td>
-									<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal3, 0, ".", ".").'</span></td>
-								</tr>
-								<tr>
-									<td align="center">4</td>
-									<td align="left">
-										<span class="alignleft">'.number_format(($denom_4*1000), 0, ",",".").'</span>
-										<span class="alignright">'.$value_4.'</span>
-									</td>
-									<td align="center">'.$ttl_4.'</td>
-									<td align="center">'.$seal_4.'</td>
-									<td></td>
-									<td></td>
-									<td align="center">'.explode(";", $data->cart_4_seal)[0].'</td>
-									<td align="left">'.($this->searchArrayValueByKey($postArr['seal4'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal4'], "50"))."</span>" : "").' '.(count($postArr['seal4']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal4'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal4'], "100"))."</span>" : "").' '.(count($postArr['seal4']) > 1 ? "<br>" : "").'</td>
-									<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal4, 0, ".", ".").'</span></td>
-								</tr>
-								<tr>
-									<td align="center">5</td>
 									<td align="center"></td>
+									<td>T-BAG</td>
 									<td align="center"></td>
-									<td align="center">'.$seal_5.'</td>
+									<td align="center">'.$row->t_bag.'</td>
 									<td></td>
 									<td></td>
-									<td align="center">'.explode(";", $data->cart_5_seal)[0].'</td>
-									<td align="left">'.($this->searchArrayValueByKey($postArr['seal5'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal5'], "50"))."</span>" : "").' '.(count($postArr['seal5']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal5'], "100")!=="" ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal5'], "100"))."</span>" : "").' '.(count($postArr['seal5']) > 1 ? "<br>" : "").'</td>
-									<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal5, 0, ".", ".").'</span></td>
+									<td align="center">'.$data->t_bag.'</td>
+									<td align="left">'.($this->searchArrayValueByKey($postArr['tbag'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['tbag'], "50"))."</span>" : "").' '.(count($postArr['tbag']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['tbag'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['tbag'], "100"))."</span>" : "").' '.(count($postArr['tbag']) > 1 ? "<br>" : "").'</td>
+									<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_tbag, 0, ".", ".").'</span></td>
 								</tr>
-								<tr>
-									<td align="center">6</td>
-									<td>DIVERT</td>
-									<td align="center"></td>
-									<td align="center">'.$row->divert.'</td>
-									<td></td>
-									<td></td>
-									<td align="center">'.$data->div_seal.'</td>
-									<td align="left">'.($this->searchArrayValueByKey($postArr['divert'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['divert'], "50"))."</span>" : "").' '.(count($postArr['divert']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['divert'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['divert'], "100"))."</span>" : "").' '.(count($postArr['divert']) > 1 ? "<br>" : "").'</td>
-									<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_divert, 0, ".", ".").'</span></td>
-								</tr>
-								'.$tbag_html.'
-								<tr>
-									<td colspan="7" id="noborder"></td>
-									<td align="center">'.number_format($total_value, 0, ",",".").'</td>
-									<td align="left">Rp. <span class="alignright">'.number_format($total_all, 0, ",", ".").'</td>
-								</tr>
-							</tbody>
-						</table>
-					';
+							';
+							
+							$total_all = $ttl_seal1+$ttl_seal2+$ttl_seal3+$ttl_seal4+$ttl_seal5+$ttl_divert+$ttl_tbag;
+						} else {
+							$total_all = $ttl_seal1+$ttl_seal2+$ttl_seal3+$ttl_seal4+$ttl_seal5+$ttl_divert;
+						}
+
+						$inner_content_html = '
+							<table style="width: 100%; font-size: 10px;" border="1" class="sixth">
+								<thead>
+									<tr>
+										<td rowspan="2" align="center" width="20px">CSST</td>
+										<td rowspan="2" align="center">DENOM</td>
+										<td rowspan="2" align="center">TOTAL</td>
+										<td rowspan="2" align="center">SEAL PREPARE</td>
+										<td colspan="2" align="center">STATUS</td>
+										<td rowspan="2" align="center">SEAL RETURN</td>
+										<td rowspan="2" align="center">VALUE</td>
+										<td rowspan="2" align="center">TOTAL RETURN</td>
+									</tr>
+									<tr>
+										<td width="20" align="center">PENGALIHAN</td>
+										<td width="20" align="center">CANCEL</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td align="center">1</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_1*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_1.'</span>
+										</td>
+										<td align="center">'.$ttl_1.'</td>
+										<td align="center">'.$seal_1.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.explode(";", $data->cart_1_seal)[0].'</td>
+										<td align="left">'.($this->searchArrayValueByKey($postArr['seal1'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal1'], "50"))."</span>" : "").' '.(count($postArr['seal1']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal1'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal1'], "100"))."</span>" : "").' '.(count($postArr['seal1']) > 1 ? "<br>" : "").'</td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal1, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">2</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_2*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_2.'</span>
+										</td>
+										<td align="center">'.$ttl_2.'</td>
+										<td align="center">'.$seal_2.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.explode(";", $data->cart_2_seal)[0].'</td>
+										<td align="left">'.($this->searchArrayValueByKey($postArr['seal2'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal2'], "50"))."</span>" : "").' '.(count($postArr['seal2']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal2'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal2'], "100"))."</span>" : "").' '.(count($postArr['seal2']) > 1 ? "<br>" : "").'</td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal2, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">3</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_3*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_3.'</span>
+										</td>
+										<td align="center">'.$ttl_3.'</td>
+										<td align="center">'.$seal_3.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.explode(";", $data->cart_3_seal)[0].'</td>
+										<td align="left">'.($this->searchArrayValueByKey($postArr['seal3'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal3'], "50"))."</span>" : "").' '.(count($postArr['seal3']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal3'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal3'], "100"))."</span>" : "").' '.(count($postArr['seal3']) > 1 ? "<br>" : "").'</td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal3, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">4</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_4*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_4.'</span>
+										</td>
+										<td align="center">'.$ttl_4.'</td>
+										<td align="center">'.$seal_4.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.explode(";", $data->cart_4_seal)[0].'</td>
+										<td align="left">'.($this->searchArrayValueByKey($postArr['seal4'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal4'], "50"))."</span>" : "").' '.(count($postArr['seal4']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal4'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal4'], "100"))."</span>" : "").' '.(count($postArr['seal4']) > 1 ? "<br>" : "").'</td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal4, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">5</td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td align="center">'.$seal_5.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.explode(";", $data->cart_5_seal)[0].'</td>
+										<td align="left">'.($this->searchArrayValueByKey($postArr['seal5'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal5'], "50"))."</span>" : "").' '.(count($postArr['seal5']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['seal5'], "100")!=="" ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['seal5'], "100"))."</span>" : "").' '.(count($postArr['seal5']) > 1 ? "<br>" : "").'</td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal5, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">6</td>
+										<td>DIVERT</td>
+										<td align="center"></td>
+										<td align="center">'.$row->divert.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.$data->div_seal.'</td>
+										<td align="left">'.($this->searchArrayValueByKey($postArr['divert'], "50")!==false ? '50 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['divert'], "50"))."</span>" : "").' '.(count($postArr['divert']) > 1 ? "<br>" : "").' '.($this->searchArrayValueByKey($postArr['divert'], "100")!==false ? '100 : <span class="alignright">'.intval($this->searchArrayValueByKey($postArr['divert'], "100"))."</span>" : "").' '.(count($postArr['divert']) > 1 ? "<br>" : "").'</td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_divert, 0, ".", ".").'</span></td>
+									</tr>
+									'.$tbag_html.'
+									<tr>
+										<td colspan="7" id="noborder"></td>
+										<td align="center">'.number_format($total_value, 0, ",",".").'</td>
+										<td align="left">Rp. <span class="alignright">'.number_format($total_all, 0, ",", ".").'</td>
+									</tr>
+								</tbody>
+							</table>
+						';
+					} else {
+						$inner_content_html = '
+							<table style="width: 100%; font-size: 10px;" border="1" class="sixth">
+								<thead>
+									<tr>
+										<td rowspan="2" align="center" width="20px">CSST</td>
+										<td rowspan="2" align="center">DENOM</td>
+										<td rowspan="2" align="center">TOTAL</td>
+										<td rowspan="2" align="center">SEAL PREPARE</td>
+										<td colspan="2" align="center">STATUS</td>
+										<td rowspan="2" align="center">SEAL RETURN</td>
+										<td rowspan="2" align="center">VALUE</td>
+										<td rowspan="2" align="center">TOTAL RETURN</td>
+									</tr>
+									<tr>
+										<td width="20" align="center">PENGALIHAN</td>
+										<td width="20" align="center">CANCEL</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td align="center">1</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_1*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_1.'</span>
+										</td>
+										<td align="center">'.$ttl_1.'</td>
+										<td align="center">'.$seal_1.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.$data->cart_1_seal.'</td>
+										<td align="left"></td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal1, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">2</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_2*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_2.'</span>
+										</td>
+										<td align="center">'.$ttl_2.'</td>
+										<td align="center">'.$seal_2.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.$data->cart_2_seal.'</td>
+										<td align="left"></td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal2, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">3</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_3*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_3.'</span>
+										</td>
+										<td align="center">'.$ttl_3.'</td>
+										<td align="center">'.$seal_3.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.$data->cart_3_seal.'</td>
+										<td align="left"></td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal3, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">4</td>
+										<td align="left">
+											<span class="alignleft">'.number_format(($denom_4*1000), 0, ",",".").'</span>
+											<span class="alignright">'.$value_4.'</span>
+										</td>
+										<td align="center">'.$ttl_4.'</td>
+										<td align="center">'.$seal_4.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.$data->cart_4_seal.'</td>
+										<td align="left"></td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal4, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">5</td>
+										<td align="center"></td>
+										<td align="center"></td>
+										<td align="center">'.$seal_5.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.$data->cart_5_seal.'</td>
+										<td align="left"></td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_seal5, 0, ".", ".").'</span></td>
+									</tr>
+									<tr>
+										<td align="center">6</td>
+										<td>DIVERT</td>
+										<td align="center"></td>
+										<td align="center">'.$row->divert.'</td>
+										<td></td>
+										<td></td>
+										<td align="center">'.$data->div_seal.'</td>
+										<td align="left"></td>
+										<td align="left"><span class="alignleft">Rp.</span> <span class="alignright">'.number_format($ttl_divert, 0, ".", ".").'</span></td>
+									</tr>
+									'.$tbag_html.'
+									<tr>
+										<td colspan="7" id="noborder"></td>
+										<td align="center">'.number_format($total_value, 0, ",",".").'</td>
+										<td align="left">Rp. <span class="alignright">'.number_format($total_all, 0, ",", ".").'</td>
+									</tr>
+								</tbody>
+							</table>
+						';
+					}
 				} else {
 					$inner_content_html = '
 						<table style="width: 100%; font-size: 10px;" border="1" class="sixth">

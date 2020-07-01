@@ -986,6 +986,11 @@
 								<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="bag_seal" id="bag_seal_crm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
 							</tr>
 							<tr>
+								<td>BIG SEAL RETURN</td>
+								<td>:</td>
+								<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="bag_seal_return" id="bag_seal_return_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
+							</tr>
+							<tr>
 								<td>BAG NO</td>
 								<td>:</td>
 								<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="bag_no" id="bag_no_crm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
@@ -1556,6 +1561,11 @@
 								<td>BIG SEAL</td>
 								<td>:</td>
 								<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="bag_seal" id="bag_seal_cdm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
+							</tr>
+							<tr>
+								<td>BIG SEAL RETURN</td>
+								<td>:</td>
+								<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="bag_seal_return" id="bag_seal_return_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
 							</tr>
 							<tr>
 								<td>BAG NO</td>
