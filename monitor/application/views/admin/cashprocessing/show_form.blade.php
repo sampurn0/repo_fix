@@ -1803,7 +1803,7 @@
 											$("#cart_5_seal_cdm_<?=$index?>").val()!==barcode && 
 											$("#divert_cdm_<?=$index?>").val()!==barcode) {
 											// $("#cart_5_seal_cdm_<?=$index?>").textbox('setValue', barcode);
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>", divert: true }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
