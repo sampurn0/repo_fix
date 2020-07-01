@@ -294,6 +294,7 @@ class All_runsheet extends CI_Controller {
 		$tess = function($val){
 			$query = "
 				SELECT *, 
+					cashtransit_detail.total as totalss,
 					cashtransit_detail.id as ids,
 					runsheet_cashprocessing.id as ids2,
 					IFNULL(client.bank, client_cit.nama_client) AS nama_client, 
@@ -389,7 +390,7 @@ class All_runsheet extends CI_Controller {
 				echo '	<td style="text-align: center">'.($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")").'</td>';
 				echo '	<td>'.$r->lokasi_client.'</td>';
 				echo '	<td>'.number_format($r->denom, 0, ',', '.').'</td>';
-				echo '	<td>'.number_format($r->total, 0, ',', '.').'</td>';
+				echo '	<td>'.number_format($r->totalss, 0, ',', '.').'</td>';
 				echo '	<td style="text-align: center">';
 					if($r->loading=="1" && $r->data_solve=="" && $r->cpc_process=="") {
 						echo "done loading";
