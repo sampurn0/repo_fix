@@ -99,6 +99,9 @@
 		
 		<?php 
 			$r = get_object_vars($row);
+			$cpc = json_decode($r['cpc_process']);
+			
+			// print_r($cpc);
 			
 			
 			$data = json_decode($r['data_solve']);
@@ -125,12 +128,12 @@
 			<tr>
 				<td>BIG SEAL</td>
 				<td>:</td>
-				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="" id="bag_seal_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
+				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="" value="<?=$cpc->bag_seal?>" id="bag_seal_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
 			</tr>
 			<tr>
 				<td>BAG NO</td>
 				<td>:</td>
-				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="" id="bag_no_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
+				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="" value="<?=$cpc->bag_no?>" id="bag_no_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
 			</tr>	
 			<tr>
 				<td>CASHIER</td>
@@ -138,18 +141,19 @@
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<select name="cashier" class="easyui-validatebox cashier" required="true">
 						<option value="">- select cashier -</option>
+						<option value="<?=$cpc->cashier?>"><?=$nama_kasir($cpc->cashier)?></option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<td>NO. MEJA</td>
 				<td>:</td>
-				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="nomeja" id="nomeja<?=$index?>" style="height: 28px" class="easyui-validatebox tb" required="true"></input></td>
+				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="nomeja" value="<?=$cpc->nomeja?>" id="nomeja<?=$index?>" style="height: 28px" class="easyui-validatebox tb" required="true"></input></td>
 			</tr>
 			<tr>
 				<td>JAM PROSES</td>
 				<td>:</td>
-				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="jamproses" id="jamproses<?=$index?>" style="height: 28px" class="easyui-validatebox tb" required="true"></input></td>
+				<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="jamproses" value="<?=$cpc->jamproses?>" id="jamproses<?=$index?>" style="height: 28px" class="easyui-validatebox tb" required="true"></input></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -213,6 +217,9 @@
 				}
 			});
 			
+			jq341('.cashier').val("<?=$cpc->cashier?>");
+			jq341('.cashier').select2().trigger('change');
+			
 			jq341('.cashier').select2({
 				tokenSeparators: [','],
 				width: '100%',
@@ -249,7 +256,7 @@
 				
 				for(var i=1; i<=cart; i++) {
 					if(i==1) {
-						cart_1_no = "<?=$r['cart_1_no']?>";
+						cart_1_no = "<?=$cpc->cart_1_no?>";
 						cart_1_seal = "<?=$data->cart_1_seal?>";
 						
 						row1 +=   '<tr>'+
@@ -261,11 +268,11 @@
 						row2 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
 							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value=""  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>"  type="text" required="true"></td>'+
+							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_1_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>"  type="text" required="true"></td>'+
 							  '</tr>';
 					}
 					if(i==2) {
-						cart_2_no = "<?=$r['cart_2_no']?>";
+						cart_2_no = "<?=$cpc->cart_2_no?>";
 						cart_2_seal = "<?=$data->cart_2_seal?>";
 						
 						row1 +=   '<tr>'+
@@ -277,11 +284,11 @@
 						row2 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
 							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value=""  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
+							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_2_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
 							  '</tr>';
 					}
 					if(i==3) {
-						cart_3_no = "<?=$r['cart_3_no']?>";
+						cart_3_no = "<?=$cpc->cart_3_no?>";
 						cart_3_seal = "<?=$data->cart_3_seal?>";
 						
 						row1 +=   '<tr>'+
@@ -293,11 +300,11 @@
 						row2 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
 							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value=""  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
+							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_3_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
 							  '</tr>';
 					}
 					if(i==4) {
-						cart_4_no = "<?=$r['cart_4_no']?>";
+						cart_4_no = "<?=$cpc->cart_4_no?>";
 						cart_4_seal = "<?=$data->cart_4_seal?>";
 						
 						row1 +=   '<tr>'+
@@ -309,13 +316,14 @@
 						row2 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
 							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value=""  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
+							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_4_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
 							  '</tr>';
 					}
 					
 					
 				}
 				
+				div_no = "<?=$cpc->div_no?>";
 				div_value = "<?=$data->div_seal?>";
 				row1 +=   '<tr>'+
 						  '<td style="border: 0px">DIV</td>'+
@@ -326,12 +334,12 @@
 				row2 +=   '<tr>'+
 						  '<td style="border: 0px">DIV VALUE</td>'+
 						  '<td style="border: 0px">:</td>'+
-						  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="div_val" style="height: 28px" value=""  class="easyui-validatebox tb" id="div_val<?=$index?>" type="text" required="true"></td>'+
+						  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="div_val" style="height: 28px" value="'+div_no+'"  class="easyui-validatebox tb" id="div_val<?=$index?>" type="text" required="true"></td>'+
 						  '</tr>'+
 						  '<tr>'+
 						  '<td style="border: 0px">TOTAL</td>'+
 						  '<td style="border: 0px">:</td>'+
-						  '<td style="border: 0px; padding: 10px 15px 5px 0px; text-align: right; font-weight: bold; color: blue"><div id="grand_total"></div></td>'+
+						  '<td style="border: 0px; padding: 10px 15px 5px 0px; text-align: right; font-weight: bold; color: blue"><div id="grand_total_<?=$index?>" class="grand_total"></div></td>'+
 						  '</tr>';
 					
 				t_bag_value = "<?=$data->t_bag?>";
@@ -345,7 +353,7 @@
 					row2 +=   '<tr>'+
 							  '<td style="border: 0px">T-BAG VALUE</td>'+
 							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="t_bag" style="height: 28px" value=""  class="easyui-validatebox tb" id="t_bag<?=$index?>" type="text" required="true"></td>'+
+							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="t_bag" style="height: 28px" value="0"  class="easyui-validatebox tb" id="t_bag<?=$index?>" type="text"></td>'+
 							  '</tr>';
 				}
 				
@@ -359,8 +367,8 @@
 				
 				var total = 0;
 				
-				
-				if(parseInt("<?=$r['ctr']?>")>=1) {
+				// alert(parseInt("<?=$ctr?>"));
+				if(parseInt("<?=$ctr?>")>=1) {
 					$('#cart_1_val<?=$index?>').textbox({
 						onChange: function(){
 							var cart1 = 0;
@@ -369,16 +377,16 @@
 							var cart4 = 0;
 							var divert = 0;
 							
-							if(parseInt("<?=$r['ctr']?>")==1) {
+							if(parseInt("<?=$ctr?>")==1) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==2) {
+							} else if(parseInt("<?=$ctr?>")==2) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==3) {
+							} else if(parseInt("<?=$ctr?>")==3) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==4) {
+							} else if(parseInt("<?=$ctr?>")==4) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
@@ -388,12 +396,39 @@
 							
 							total = cart1+cart2+cart3+cart4+divert;
 							// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
-							$("#grand_total").html(formatNumber(total));
+							$("#grand_total_<?=$index?>").html(formatNumber(total));
 						}
 					});
+					
+					var cart1 = 0;
+					var cart2 = 0;
+					var cart3 = 0;
+					var cart4 = 0;
+					var divert = 0;
+					
+					if(parseInt("<?=$ctr?>")==1) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==2) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==3) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==4) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart4 =  parseInt($('#cart_4_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					}
+					divert =  parseInt($('#div_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					
+					total = cart1+cart2+cart3+cart4+divert;
+					// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
+					$("#grand_total_<?=$index?>").html(formatNumber(total));
 				}
 				
-				if(parseInt("<?=$r['ctr']?>")>=2) {
+				if(parseInt("<?=$ctr?>")>=2) {
 					$('#cart_2_val<?=$index?>').textbox({
 						onChange: function(){
 							var cart1 = 0;
@@ -402,16 +437,16 @@
 							var cart4 = 0;
 							var divert = 0;
 							
-							if(parseInt("<?=$r['ctr']?>")==1) {
+							if(parseInt("<?=$ctr?>")==1) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==2) {
+							} else if(parseInt("<?=$ctr?>")==2) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==3) {
+							} else if(parseInt("<?=$ctr?>")==3) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==4) {
+							} else if(parseInt("<?=$ctr?>")==4) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
@@ -421,12 +456,39 @@
 							
 							total = cart1+cart2+cart3+cart4+divert;
 							// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
-							$("#grand_total").html(formatNumber(total));
+							$("#grand_total_<?=$index?>").html(formatNumber(total));
 						}
 					});
+					
+					var cart1 = 0;
+					var cart2 = 0;
+					var cart3 = 0;
+					var cart4 = 0;
+					var divert = 0;
+					
+					if(parseInt("<?=$ctr?>")==1) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==2) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==3) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==4) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart4 =  parseInt($('#cart_4_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					}
+					divert =  parseInt($('#div_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					
+					total = cart1+cart2+cart3+cart4+divert;
+					// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
+					$("#grand_total_<?=$index?>").html(formatNumber(total));
 				}
 				
-				if(parseInt("<?=$r['ctr']?>")>=3) {
+				if(parseInt("<?=$ctr?>")>=3) {
 					$('#cart_3_val<?=$index?>').textbox({
 						onChange: function(){
 							var cart1 = 0;
@@ -435,16 +497,16 @@
 							var cart4 = 0;
 							var divert = 0;
 							
-							if(parseInt("<?=$r['ctr']?>")==1) {
+							if(parseInt("<?=$ctr?>")==1) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==2) {
+							} else if(parseInt("<?=$ctr?>")==2) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==3) {
+							} else if(parseInt("<?=$ctr?>")==3) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==4) {
+							} else if(parseInt("<?=$ctr?>")==4) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
@@ -454,12 +516,39 @@
 							
 							total = cart1+cart2+cart3+cart4+divert;
 							// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
-							$("#grand_total").html(formatNumber(total));
+							$("#grand_total_<?=$index?>").html(formatNumber(total));
 						}
 					});
+					
+					var cart1 = 0;
+					var cart2 = 0;
+					var cart3 = 0;
+					var cart4 = 0;
+					var divert = 0;
+					
+					if(parseInt("<?=$ctr?>")==1) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==2) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==3) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==4) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart4 =  parseInt($('#cart_4_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					}
+					divert =  parseInt($('#div_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					
+					total = cart1+cart2+cart3+cart4+divert;
+					// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
+					$("#grand_total_<?=$index?>").html(formatNumber(total));
 				}
 				
-				if(parseInt("<?=$r['ctr']?>")>=4) {
+				if(parseInt("<?=$ctr?>")>=4) {
 					$('#cart_4_val<?=$index?>').textbox({
 						onChange: function(){
 							var cart1 = 0;
@@ -468,16 +557,16 @@
 							var cart4 = 0;
 							var divert = 0;
 							
-							if(parseInt("<?=$r['ctr']?>")==1) {
+							if(parseInt("<?=$ctr?>")==1) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==2) {
+							} else if(parseInt("<?=$ctr?>")==2) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==3) {
+							} else if(parseInt("<?=$ctr?>")==3) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==4) {
+							} else if(parseInt("<?=$ctr?>")==4) {
 								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
@@ -487,41 +576,68 @@
 							
 							total = cart1+cart2+cart3+cart4+divert;
 							// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
-							$("#grand_total").html(formatNumber(total));
+							$("#grand_total_<?=$index?>").html(formatNumber(total));
 						}
 					});
+					
+					var cart1 = 0;
+					var cart2 = 0;
+					var cart3 = 0;
+					var cart4 = 0;
+					var divert = 0;
+					
+					if(parseInt("<?=$ctr?>")==1) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==2) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==3) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					} else if(parseInt("<?=$ctr?>")==4) {
+						cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						cart4 =  parseInt($('#cart_4_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					}
+					divert =  parseInt($('#div_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+					
+					total = cart1+cart2+cart3+cart4+divert;
+					// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
+					$("#grand_total_<?=$index?>").html(formatNumber(total));
 				}
 				
 				$('#div_val<?=$index?>').textbox({
-						onChange: function(){
-							var cart1 = 0;
-							var cart2 = 0;
-							var cart3 = 0;
-							var cart4 = 0;
-							var divert = 0;
-							
-							if(parseInt("<?=$r['ctr']?>")==1) {
-								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==2) {
-								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==3) {
-								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							} else if(parseInt("<?=$r['ctr']?>")==4) {
-								cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-								cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-								cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-								cart4 =  parseInt($('#cart_4_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							}
-							divert =  parseInt($('#div_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
-							
-							total = cart1+cart2+cart3+cart4+divert;
-							// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
-							$("#grand_total").html(formatNumber(total));
+					onChange: function(){
+						var cart1 = 0;
+						var cart2 = 0;
+						var cart3 = 0;
+						var cart4 = 0;
+						var divert = 0;
+						
+						if(parseInt("<?=$ctr?>")==1) {
+							cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						} else if(parseInt("<?=$ctr?>")==2) {
+							cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+							cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						} else if(parseInt("<?=$ctr?>")==3) {
+							cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+							cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+							cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						} else if(parseInt("<?=$ctr?>")==4) {
+							cart1 =  parseInt($('#cart_1_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+							cart2 =  parseInt($('#cart_2_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+							cart3 =  parseInt($('#cart_3_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+							cart4 =  parseInt($('#cart_4_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
 						}
-					});
+						divert =  parseInt($('#div_val<?=$index?>').textbox('getValue')) * parseInt("<?=$r['denom']?>") || 0;
+						
+						total = cart1+cart2+cart3+cart4+divert;
+						// alert(cart1+" "+cart2+" "+cart3+" "+cart4+" "+divert);
+						$("#grand_total_<?=$index?>").html(formatNumber(total));
+					}
+				});
 			});
 	
 			function formatNumber(num) {

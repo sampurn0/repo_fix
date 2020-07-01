@@ -103,10 +103,12 @@
 			
 			$data = json_decode($r['data_solve']);
 			
-			$ctr  = intval($data->cart_1_seal=="" ? 0 : 1) + 
-					intval($data->cart_2_seal=="" ? 0 : 1) + 
-					intval($data->cart_3_seal=="" ? 0 : 1) + 
-					intval($data->cart_4_seal=="" ? 0 : 1);
+			// $ctr  = intval($data->cart_1_seal=="" ? 0 : 1) + 
+					// intval($data->cart_2_seal=="" ? 0 : 1) + 
+					// intval($data->cart_3_seal=="" ? 0 : 1) + 
+					// intval($data->cart_4_seal=="" ? 0 : 1);
+			
+			$ctr  = 4;
 					
 			// print_r($data);
 		?>
@@ -120,46 +122,53 @@
 		</table>
 		
 		<table class="dv-table3_<?=$index?>" style="float:left;border:0px solid #ccc;padding:5px;margin-top:5px;width:auto">
-			<tr>
+			<tr class="data_seal_1">
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<input name="seal_1_100" style="width: 66px; height: 28px;" value="" data-options="prompt:'100K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_1_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_1_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" class="easyui-validatebox tb" type="text">
 				</td>
 			</tr>
-			<tr>
+			<tr class="data_seal_2">
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<input name="seal_2_100" style="width: 66px; height: 28px;" value="" data-options="prompt:'100K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_2_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_2_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" class="easyui-validatebox tb" type="text">
 				</td>
 			</tr>
-			<tr>
+			<tr class="data_seal_3">
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<input name="seal_3_100" style="width: 66px; height: 28px;" value="" data-options="prompt:'100K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_3_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_3_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" class="easyui-validatebox tb" type="text">
 				</td>
 			</tr>
-			<tr>
+			<tr class="data_seal_4">
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<input name="seal_4_100" style="width: 66px; height: 28px;" value="" data-options="prompt:'100K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_4_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="seal_4_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" class="easyui-validatebox tb" type="text">
 				</td>
 			</tr>
-			<tr>
+			<tr class="data_seal_5">
+				<td style="border: 0px; padding: 10px 15px 5px 0px">
+					<input name="seal_5_100" style="width: 66px; height: 28px;" value="" data-options="prompt:'100K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
+					<input name="seal_5_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
+					<input name="seal_5_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" class="easyui-validatebox tb" type="text">
+				</td>
+			</tr>
+			<tr class="data_div">
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<input name="div_100" style="width: 66px; height: 28px;" value="" data-options="prompt:'100K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="div_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
 					<input name="div_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" class="easyui-validatebox tb" type="text">
 				</td>
 			</tr>
-			<tr>
+			<tr class="data_tbag">
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<input name="tbag_100" style="width: 66px; height: 28px;" value="" data-options="prompt:'100K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
-					<input name="tbag_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 100k" class="easyui-validatebox tb" type="text">
-					<input name="tbag_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" class="easyui-validatebox tb" type="text">
+					<input name="tbag_50" style="width: 66px; height: 28px;" value="" data-options="prompt:'50K'" placeholder="Denom 50k" class="easyui-validatebox tb" type="text">
+					<input name="tbag_20" style="width: 66px; height: 28px;" value="" data-options="prompt:'20K'" placeholder="Denom 20k" class="easyui-validatebox tb" type="text">
 				</td>
 			</tr>
 		</table>
@@ -282,12 +291,21 @@
 				$('table.dv-table1_<?=$index?> tr').remove();
 				// $('table.dv-table2_<?=$index?> tr').remove();
 				var cart = parseInt("<?=$ctr?>");
+				// alert(cart);
 				var row1 = '';
 				var row2 = '';
+				
+				$(".data_seal_1").hide();
+				$(".data_seal_2").hide();
+				$(".data_seal_3").hide();
+				$(".data_seal_4").hide();
+				$(".data_seal_5").hide();
+				// $(".data_div").hide();
 				
 				
 				for(var i=1; i<=cart; i++) {
 					if(i==1) {
+						$(".data_seal_1").show();
 						cart_1_no = "<?=$r['cart_1_no']?>";
 						cart_1_seal = "<?=$data->cart_1_seal?>";
 						
@@ -304,6 +322,7 @@
 							  '</tr>';
 					}
 					if(i==2) {
+						$(".data_seal_2").show();
 						cart_2_no = "<?=$r['cart_2_no']?>";
 						cart_2_seal = "<?=$data->cart_2_seal?>";
 						
@@ -320,6 +339,7 @@
 							  '</tr>';
 					}
 					if(i==3) {
+						$(".data_seal_3").show();
 						cart_3_no = "<?=$r['cart_3_no']?>";
 						cart_3_seal = "<?=$data->cart_3_seal?>";
 						
@@ -336,6 +356,7 @@
 							  '</tr>';
 					}
 					if(i==4) {
+						$(".data_seal_4").show();
 						cart_4_no = "<?=$r['cart_4_no']?>";
 						cart_4_seal = "<?=$data->cart_4_seal?>";
 						
@@ -352,6 +373,7 @@
 							  '</tr>';
 					}
 					if(i==5) {
+						$(".data_seal_5").show();
 						cart_5_seal = "<?=$data->cart_5_seal?>";
 						
 						row1 +=   '<tr>'+
@@ -385,17 +407,20 @@
 						  
 				t_bag_value = "<?=$data->t_bag?>";
 				if(t_bag_value!=="") {
-					row1 +=   '<tr>'+
-							  '<td style="border: 0px">T-BAG</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="divert" style="height: 28px;" value="'+t_bag_value+'" class="easyui-validatebox tb" type="text"></td>'+
-							  '</tr>';
+					$(".data_tbag").hide();
+					// row1 +=   '<tr>'+
+							  // '<td style="border: 0px">T-BAG</td>'+
+							  // '<td style="border: 0px">:</td>'+
+							  // '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="divert" style="height: 28px;" value="'+t_bag_value+'" class="easyui-validatebox tb" type="text"></td>'+
+							  // '</tr>';
 				
-					row2 +=   '<tr>'+
-							  '<td style="border: 0px">T-BAG VALUE</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="t_bag" style="height: 28px" value=""  class="easyui-validatebox tb" id="t_bag<?=$index?>" type="text" required="true"></td>'+
-							  '</tr>';
+					// row2 +=   '<tr>'+
+							  // '<td style="border: 0px">T-BAG VALUE</td>'+
+							  // '<td style="border: 0px">:</td>'+
+							  // '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="t_bag" style="height: 28px" value=""  class="easyui-validatebox tb" id="t_bag<?=$index?>" type="text" required="true"></td>'+
+							  // '</tr>';
+				} else {
+					$(".data_tbag").hide();
 				}
 				
 				$(".cart_total").textbox('setValue', cart);
