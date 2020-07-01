@@ -269,44 +269,25 @@ class All_runsheet extends CI_Controller {
 		$date = $this->input->post('date');
 		
 		$query = "
-			SELECT *, 
-				cashtransit.run_number as run_number,
-				IFNULL(client.bank, client_cit.nama_client) AS nama_client, 
-				IFNULL(client.lokasi, client_cit.alamat) AS lokasi_client,
-				IFNULL((
-					SELECT id_karyawan
-					FROM karyawan
-					WHERE karyawan.nik = runsheet_operational.custodian_1
-				), '') AS id_karyawan, 
-				IFNULL((
-					SELECT nama
-					FROM karyawan
-					WHERE karyawan.nik = runsheet_operational.custodian_1
-				), '') AS nama_custody, 
-				IFNULL((
-					SELECT nama
-					FROM karyawan
-					WHERE karyawan.nik = runsheet_security.security_1
-				), '') AS nama_security
-				FROM 
-					cashtransit_detail
-						LEFT JOIN 
-							cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id)
-						LEFT JOIN 
-							master_branch ON(cashtransit.branch=master_branch.id)
-						LEFT JOIN
-							client ON(cashtransit_detail.id_bank=client.id)
-						LEFT JOIN 
-							client_cit ON (IF(cashtransit_detail.id_pengirim=0, cashtransit_detail.id_penerima, cashtransit_detail.id_pengirim)=client_cit.id)
-						LEFT JOIN
-							runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
-						LEFT JOIN
-							runsheet_security ON(runsheet_security.id_cashtransit=cashtransit_detail.id_cashtransit)
-						LEFT JOIN
-							runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
-						LEFT JOIN 
-							(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle ON(runsheet_security.police_number=vehicle.police_number) 
-				WHERE cashtransit.action_date LIKE '%".$date."%'
+			SELECT *, cashtransit.id as id_cashtransit FROM cashtransit
+				LEFT JOIN
+					(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date,data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) 
+					AS cashtransit_detail ON(cashtransit_detail.id_cashtransit=cashtransit.id)
+				LEFT JOIN 
+					master_branch ON(cashtransit.branch=master_branch.id)
+				LEFT JOIN
+					client ON(cashtransit_detail.id_bank=client.id)
+				LEFT JOIN 
+					client_cit ON (IF(cashtransit_detail.id_pengirim=0, cashtransit_detail.id_penerima, cashtransit_detail.id_pengirim)=client_cit.id)
+				LEFT JOIN
+					runsheet_cashprocessing ON(runsheet_cashprocessing.id=cashtransit_detail.id)
+				LEFT JOIN
+					runsheet_security ON(runsheet_security.id_cashtransit=cashtransit_detail.id_cashtransit)
+				LEFT JOIN
+					runsheet_operational ON(runsheet_operational.id_cashtransit=cashtransit_detail.id_cashtransit)
+				LEFT JOIN 
+					(SELECT police_number, type as type_kendaraan FROM vehicle) AS vehicle   ON(runsheet_security.police_number=vehicle.police_number) 
+				WHERE cashtransit.action_date LIKE '%".$date."%' 
 				GROUP BY cashtransit_detail.id_cashtransit
 		";
 		
@@ -357,8 +338,11 @@ class All_runsheet extends CI_Controller {
 		
 		$data_run = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
 		
+		
 		echo '<div>';
 		foreach($data_run as $d) { 
+			
+			$id_karyawan = isset($d->id_karyawan) ? "(".$d->id_karyawan.")" : "";
 			echo '<table class="table">';
 			echo '	<tr>';
 			echo '		<th>ID RUN</th>';
@@ -372,7 +356,7 @@ class All_runsheet extends CI_Controller {
 			echo '		<td>'.$d->id_cashtransit.'</td>';
 			echo '		<td>(H-'.$d->h_min.') RUN NUMBER '.$d->run_number.'</td>';
 			echo '		<td>'.$d->police_number.'</td>';
-			echo '		<td>('.$d->id_karyawan.') '.$d->nama_custody.'</td>';
+			echo '		<td>'.$id_karyawan.' '.$d->nama_custody.'</td>';
 			echo '		<td>'.$d->nama_security.'</td>';
 			echo '		<td>'.$d->nama_client.'</td>';
 			echo '	</tr>';

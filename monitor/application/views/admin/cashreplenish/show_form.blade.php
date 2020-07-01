@@ -81,6 +81,13 @@
 		</table>-->
 		<table class="dv-table3<?=$index?>" style="float:left;border:1px solid #ccc;padding:5px;margin-top:5px;">
 			<tr>
+				<td>DENOM</td>
+				<td>:</td>
+				<td>
+					<input name="denom" id="nama_denom" class="easyui-validatebox easyui-textbox nama_denom" disabled="disabled"></input>
+				</td>
+			</tr>
+			<tr>
 				<td>TOTAL CART</td>
 				<td>:</td>
 				<td>
@@ -91,10 +98,10 @@
 				<td>DENOM VALUE</td>
 				<td>:</td>
 				<td>
-					<div id="hide_100000">
+					<div id="">
 						<input name="pcs_100000" id="denom_100000_<?=$index?>" data-options="prompt:'100K'" class="easyui-validatebox easyui-textbox" value=""></input>
 					</div>
-					<div id="hide_50000">
+					<div id="">
 						<input name="pcs_50000" id="denom_50000_<?=$index?>" data-options="prompt:'50K'" class="easyui-validatebox easyui-textbox" value=""></input>
 					</div>
 				</td>
@@ -193,6 +200,7 @@
 			$(".nama_brand").textbox('setValue', result.brand);
 			$(".nama_model").textbox('setValue', result.model);
 			$(".nama_location").textbox('setValue', result.location);
+			$(".nama_denom").textbox('setValue', result.denom);
 			
 			// $('table.dv-table3 tr').remove();
 			$(".dv-table3<?=$index?>").hide();
@@ -293,6 +301,7 @@
 				$(".nama_brand").textbox('setValue', result.brand);
 				$(".nama_model").textbox('setValue', result.model);
 				$(".nama_location").textbox('setValue', result.location);
+				$(".nama_denom").textbox('setValue', result.denom);
 				
 				// $('table.dv-table3 tr').remove();
 				// $(".dv-table3<?=$index?>").find("tr:not(:last)").remove();

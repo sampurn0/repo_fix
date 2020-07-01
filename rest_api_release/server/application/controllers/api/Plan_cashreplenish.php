@@ -75,7 +75,8 @@ class Plan_cashreplenish extends REST_Controller {
 // 		$sql = "SELECT * FROM client WHERE client.id NOT IN (SELECT id_bank FROM cashtransit_detail WHERE cashtransit_detail.id_cashtransit='$id_cashtransit') AND client.cabang IN (SELECT branch FROM cashtransit WHERE id='$id_cashtransit')";
 		$sql = "SELECT * FROM client WHERE client.cabang IN (SELECT branch FROM cashtransit WHERE id='$id_cashtransit')";
 		$sql = "SELECT * FROM client";
-		$sql = "SELECT * FROM client WHERE client.wsid LIKE '%$search%' AND client.cabang IN (SELECT branch FROM cashtransit WHERE id='$id_cashtransit')";
+		// $sql = "SELECT * FROM client WHERE client.wsid LIKE '%$search%' AND client.cabang IN (SELECT branch FROM cashtransit WHERE id='$id_cashtransit')";
+		$sql = "SELECT * FROM client WHERE client.wsid LIKE '%$search%'";
 		
 		$result = $this->db->query($sql);
 		
