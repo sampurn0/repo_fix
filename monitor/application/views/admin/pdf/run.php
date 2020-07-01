@@ -385,7 +385,7 @@
 						
 						<td style="width: 60px">SEAL BAG(CSO)</td>
 						<td style="width: 10px">:</td>
-						<td></td>
+						<td><?=(isset($bag_seal_return) ? $bag_seal_return : "No Data")?></td>
 					</tr>
 				</table>
 				

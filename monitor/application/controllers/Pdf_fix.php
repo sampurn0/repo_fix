@@ -205,6 +205,7 @@ class Pdf_fix extends CI_Controller {
 			#$lists[$key]['t_bag'] = $row->t_bag;
 			$lists[$key]['bag_no'] = $row->bag_no;
 			$lists[$key]['bag_seal'] = $row->bag_seal;
+			$lists[$key]['bag_seal_return'] = $row->bag_seal_return;
 			
 			
 			$lists[$key]['data'][] = array(
