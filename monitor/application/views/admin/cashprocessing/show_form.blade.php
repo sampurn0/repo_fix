@@ -238,7 +238,7 @@
 						if(barcode.indexOf(".") != -1){
 							$("#bag_no_cit_<?=$index?>").textbox('setValue', barcode);
 						}
-						if(barcode.indexOf("A") != -1){
+						if(barcode.indexOf("A") != -1 || barcode.indexOf("B") != -1){
 							// $("#bag_seal_cdm_<?=$index?>").textbox('setValue', barcode);
 							$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
 								.done(function( data ) {
@@ -377,7 +377,7 @@
 										}
 									);
 								}
-								if(barcode.indexOf("A") != -1){
+								if(barcode.indexOf("A") != -1 || barcode.indexOf("B") != -1){
 									if($("#bag_seal_atm_<?=$index?>").val()=="") {
 										if($("#bag_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#bag_seal_return_atm_<?=$index?>").val()!==barcode) {
@@ -533,7 +533,7 @@
 											$("#cart_3_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#cart_4_seal_atm_<?=$index?>").val()!==barcode && 
 											$("#divert_atm_<?=$index?>").val()!==barcode) {
-											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>" }).done(function( data ) {
+											$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode, id_bank: "<?=$row->id_bank?>", divert: true }).done(function( data ) {
 													console.log(data);
 													if(data==-1) {
 														jq341.notify("Seal "+barcode+", tidak dikenal!", "error");
@@ -1040,7 +1040,7 @@
 								if(barcode.indexOf(".") != -1){
 									$("#bag_no_crm_<?=$index?>").textbox('setValue', barcode);
 								}
-								if(barcode.indexOf("A") != -1){
+								if(barcode.indexOf("A") != -1 || barcode.indexOf("B") != -1){
 									// $("#bag_seal_crm_<?=$index?>").textbox('setValue', barcode);
 									$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
 										.done(function( data ) {
@@ -1616,7 +1616,7 @@
 								if(barcode.indexOf(".") != -1){
 									$("#bag_no_cdm_<?=$index?>").textbox('setValue', barcode);
 								}
-								if(barcode.indexOf("A") != -1){
+								if(barcode.indexOf("A") != -1 || barcode.indexOf("B") != -1){
 									// $("#bag_seal_cdm_<?=$index?>").textbox('setValue', barcode);
 									$.post('<?php echo base_url().'cashprocessing/check_seal'?>', { value: barcode })
 										.done(function( data ) {
