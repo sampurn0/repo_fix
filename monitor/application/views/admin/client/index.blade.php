@@ -250,7 +250,7 @@
 						</table>-->
 				</div>
 			</div>
-		</section>
+		</section> 
 	
 		<div class="clear"></div>
 		
