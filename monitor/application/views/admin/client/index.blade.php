@@ -1,7 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-	<style type="text/css">
+	<script src="<?=base_url()?>constellation/assets/equipment/jquery-3.4.1.min.js"></script>
+	<link href="<?=base_url()?>constellation/assets/equipment/select2.min.css" rel="stylesheet" />
+	<script src="<?=base_url()?>constellation/assets/equipment/select2.min.js"></script>
+
+	
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>depend/jquery-confirm/css/jquery-confirm.css"/>
+	<script type="text/javascript" src="<?=base_url()?>depend/jquery-confirm/js/jquery-confirm.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>/assets/datatables/datatables.min.css"/>
+ 
+	<script type="text/javascript" src="<?=base_url()?>/assets/datatables/datatables.min.js"></script>
+	
+	<style>
 		form{
 			margin:0;
 			padding:0;
@@ -22,16 +34,30 @@
 			-webkit-box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
 			box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
 		}
+		.jconfirm .jconfirm-holder {
+			max-height: 100%;
+			padding: 54px 450px;
+				padding-top: 54px;
+				padding-bottom: 54px;
+		}
+		#preview {
+			float: right; 
+			height: 803px; 
+			width: 100%; 
+			border: 1px solid #666; 
+			-moz-box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
+			-webkit-box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
+			box-shadow: 0px 0px 6px rgba(0,0,0,0.5);
+		}
+		.dataTables_filter {
+			width: 40%;
+			float: left !important;
+			text-align: left !important;
+		}
+		.dataTables_length {
+			float: right !important;
+		}
 	</style>
-	
-	<script type="text/javascript" src="<?=base_url()?>assets/easyui/jquery-1.6.min.js"></script>
-	<script type="text/javascript" src="<?=base_url()?>assets/easyui/jquery.easyui.min.js"></script>
-	
-	
-	<script src="<?=base_url()?>assets/select2/jquery-3.4.1.min.js"></script>
-	<link href="<?=base_url()?>assets/select2/select2.min.css" rel="stylesheet" />
-	<script src="<?=base_url()?>assets/select2/select2.min.js"></script>
-	
 	<!-- Content -->
 	<article class="container_12">
 		
@@ -69,7 +95,7 @@
 					<h6><?=ucwords(str_replace("_", " ", $active_menu))?> Data</h6>
 				</div>
 				<div class="widget_content">
-					<div class="block-border"><form class="block-content form" id="table_form" method="post" action="#">
+					<!--<div class="block-border"><form class="block-content form" id="table_form" method="post" action="#">
 						
 						<fieldset>
 							<legend>Data Client / Bank</legend>
@@ -96,8 +122,8 @@
 								</p>
 							</div>
 						</fieldset>
-					</div>
-					<table class="display">
+					</div>-->
+					<table id="example" class="display" style="width:100%">
 						<thead>
 							<tr>
 								<th>
@@ -105,6 +131,63 @@
 								</th>
 								<th>
 									Bank
+								</th>
+								<th>
+									Type
+								</th>
+								<th>
+									Actual
+								</th>
+								<th>
+									Tanggal H/O
+								</th>
+								<?php if($session->userdata['level']=="LEVEL1") { ?>
+									<th>
+										Action
+									</th>
+								<?php } ?>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>
+									ID
+								</th>
+								<th>
+									Bank
+								</th>
+								<th>
+									Type
+								</th>
+								<th>
+									Actual
+								</th>
+								<th>
+									Tanggal H/O
+								</th>
+								<?php if($session->userdata['level']=="LEVEL1") { ?>
+									<th>
+										Action
+									</th>
+								<?php } ?>
+							</tr>
+						</tfoot>
+					</table>
+					
+					<!--<table class="display">
+						<thead>
+							<tr>
+								<th>
+									ID
+								</th>
+								<th>
+									Bank
+								</th>
+								<th>
+									Type
+								</th>
+								<th>
+									Actual
 								</th>
 								<th>
 									Logo Bank
@@ -117,15 +200,6 @@
 								</th>
 								<th>
 									Tanggal H/O
-								</th>
-								<th>
-									Tanggal Isi
-								</th>
-								<th>
-									Actual
-								</th>
-								<th>
-									Status
 								</th>
 								<?php if($session->userdata['level']=="LEVEL1") { ?>
 									<th>
@@ -143,6 +217,8 @@
 							<tr>
 								<td><?php echo $row->wsid;?></td>
 								<td><?php echo $row->bank;?></td>
+								<td><?php echo $row->type_mesin;?></td>
+								<td><?php echo $row->type;?></td>
 								<td>
 									<?php 
 										if($row->picture!=="") {
@@ -159,9 +235,6 @@
 								<td><img src="<?=base_url()?>upload/qrcode/<?php echo $row->wsid;?>.png" width="100" height="100"></img></td>
 								<td><?php echo $row->kode_zone." (".$row->name_branch.")";?></td>
 								<td><?php echo $row->tgl_ho;?></td>
-								<td><?php echo $row->tgl_isi;?></td>
-								<td><?php echo $row->type;?></td>
-								<td><?php echo $row->type;?></td>
 								<?php if($session->userdata['level']=="LEVEL1") { ?>
 									<td>
 										<span><a onClick="window.location.href='<?php echo base_url();?>client/summary/<?php echo $row->wsid;?>'" href="#" title="Detail">Detail</a></span>
@@ -174,7 +247,7 @@
 								endforeach; 
 							?>
 						</tbody>
-						</table>
+						</table>-->
 				</div>
 			</div>
 		</section>
@@ -199,6 +272,26 @@
 		$(document).on('click', '#close_preview', function(){ 
 			$(".preview_pdf").hide();
 			$(".preview_table").show();
+		});
+		
+		jq341 = jQuery.noConflict(true);
+		console.log( "<h3>After $.noConflict(true)</h3>" );
+		console.log( "2nd loaded jQuery version (jq162): " + jq341.fn.jquery + "<br>" );
+		
+		jq341('#example').DataTable({
+			serverSide: true,
+			ajax: {
+				url: '<?=base_url()?>client/server_processing',
+				dataFilter: function(data){
+					console.log(data);
+					var json = jQuery.parseJSON( data );
+					json.recordsTotal = json.recordsTotal;
+					json.recordsFiltered = json.recordsFiltered;
+					json.data = json.data;
+
+					return JSON.stringify( json ); // return JSON string
+				}
+			}
 		});
 	</script>
 @endsection

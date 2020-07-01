@@ -1,7 +1,7 @@
 <html>
     <head>
         <style>
-            @page { margin: 0px; size: 21cm 29.5cm portrait; }
+            @page { margin: 0px; size: 22cm 14cm portrait; }
         
             @font-face {
                 font-family: "aaaaa";
