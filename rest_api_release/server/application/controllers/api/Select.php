@@ -74,6 +74,16 @@ class Select extends REST_Controller {
         }
 	}
 	
+	function insert_get_id_get() {
+		$table = $this->input->get('table');
+		$data = $this->input->get('data');
+		
+		// print_r($table);
+		// print_r($data);
+		$insert = $this->db->insert($table, $data);
+		echo $this->db->insert_id();
+	}
+	
 	function update_seal_get() {
 		$table = $this->input->get('table');
 		$where = $this->input->get('where');
@@ -210,6 +220,17 @@ class Select extends REST_Controller {
         $query = $this->db->get();
         return $query->result();
     }
+    
+    function get_datatables3()
+    {
+        $post = $this->input->get('data')['post']; 
+        $this->_get_datatables_query();
+        if($post['length'] != -1)
+        $this->db->limit($post['length'], $post['start']);
+		// $this->db->order_by('tanggal', 'desc');
+        $query = $this->db->get();
+        return $query->result();
+    }
  
     function count_filtered()
     {
@@ -275,6 +296,44 @@ class Select extends REST_Controller {
             $row[] = $field->nama;
             $row[] = strtoupper($field->status);
             $row[] = '<div id="id" hidden>'.$field->id.'</div><span><a class="button" id="detail_preview" href="#" title="Print">Print</a></span>';
+ 
+            $data[] = $row;
+        }
+ 
+        $output = array(
+            "draw" => $post['draw'],
+            "recordsTotal" => $this->count_all(),
+            "recordsFiltered" => $this->count_filtered(),
+            "data" => $data,
+        );
+        //output dalam format JSON
+        echo json_encode($output);
+	}
+	
+	function datatables3_get() {
+	    $post = $this->input->get('data')['post']; 
+		$param = json_decode($this->input->get('data')['param'], true); 
+	    $list = $this->get_datatables3();
+		
+		$base_url = "";
+		
+	    $data = array();
+        $no = $post['start'];
+        foreach ($list as $field) {
+            $no++;
+            $row = array();
+            // $row[] = $no;
+            $row[] = $field->wsid;
+            $row[] = $field->bank;
+            $row[] = $field->type_mesin;
+            $row[] = $field->type;
+            $row[] = $field->tgl_ho;
+            $row[] = '
+				<span><a onClick="window.location.href=\''.$base_url.'client/summary/'.$field->wsid.'\'" href="#" title="Detail">Detail</a></span>
+				<span><a class="action-icons c-edit" onClick="window.location.href=\''.$base_url.'client/edit/'.$field->id.'\'" href="#" title="Edit">Edit</a></span>
+				
+				<span><a class="action-icons c-delete" onClick="openDelete(\''.$field->id.'\', \''.$base_url.'client/delete\')" href="#" title="delete">Delete</a></span>
+			';
  
             $data[] = $row;
         }
