@@ -270,6 +270,7 @@ class All_runsheet extends CI_Controller {
 		
 		$query = "
 			SELECT *, cashtransit.id as id_cashtransit,
+				cashtransit.run_number as runs,
 				IFNULL(client.bank, client_cit.nama_client) AS nama_client, 
 				IFNULL(client.lokasi, client_cit.alamat) AS lokasi_client,
 				IFNULL((
@@ -373,7 +374,7 @@ class All_runsheet extends CI_Controller {
 			echo '	</tr>';
 			echo '	<tr>';
 			echo '		<td>'.$d->id_cashtransit.'</td>';
-			echo '		<td>(H-'.$d->h_min.') RUN NUMBER '.$d->run_number.'</td>';
+			echo '		<td>(H-'.$d->h_min.') RUN NUMBER '.$d->runs.'</td>';
 			echo '		<td>'.$d->police_number.'</td>';
 			echo '		<td>'.$id_karyawan.' '.$d->nama_custody.'</td>';
 			echo '		<td>'.$d->nama_security.'</td>';
