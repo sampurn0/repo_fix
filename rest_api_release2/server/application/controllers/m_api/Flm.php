@@ -626,11 +626,20 @@ class Flm extends REST_Controller {
 			$list[$key]['model'] = $r['model'];
 			$list[$key]['lokasi'] = $r['lokasi'];
 			
-			$problem = array();
+			$problem1 = array();
+			$problem2 = array();
 			foreach(json_decode($r['problem_type']) as $p) {
-				$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+				$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_kategori;
+						
+				$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_sub_kategori;
 			}
-			$list[$key]['problem_type'] = implode(', ', $problem);;
+			
+			$problem = '<ol>';
+			$problem .= '<li>' . implode('</li><li>', explode(", ", $r['problem_type'])).'</li>';
+			$problem .= '</ol>';
+			
+			$list[$key]['problem_type'] = $problem;
+			$list[$key]['problem_kategori'] = implode(', ', $problem1);
 			$list[$key]['time'] = $r['time'];
 			$key++;
 		}

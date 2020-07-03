@@ -227,14 +227,13 @@ class Flm extends REST_Controller {
 	
 	function dataflm_get() {
 		$id_user = $this->input->get('id_user');
-		$id_teknisi = $this->db->select('id_teknisi')->from('teknisi')->where('nik', $id_user)->limit(1)->get()->row()->id_teknisi;
 		
 		
 		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
 			(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 			LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 			LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
-			WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL
+			WHERE teknisi_1='$id_user' OR accept_time IS NULL
 		";
 		
 		$query = $this->db->query($sql)->result_array();
@@ -272,7 +271,7 @@ class Flm extends REST_Controller {
 			(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
 			LEFT JOIN client ON(client.id=flm_trouble_ticket_slm.id_bank)
 			LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
-			WHERE teknisi_1='$id_teknisi' AND accept_time IS NULL
+			WHERE teknisi_1='$id_user' OR accept_time IS NULL
 		";
 		
 		$query = $this->db->query($sql)->result_array();
@@ -627,11 +626,20 @@ class Flm extends REST_Controller {
 			$list[$key]['model'] = $r['model'];
 			$list[$key]['lokasi'] = $r['lokasi'];
 			
-			$problem = array();
+			$problem1 = array();
+			$problem2 = array();
 			foreach(json_decode($r['problem_type']) as $p) {
-				$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+				$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_kategori;
+						
+				$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_sub_kategori;
 			}
-			$list[$key]['problem_type'] = implode(', ', $problem);;
+			
+			$problem = '<ol>';
+			$problem .= '<li>' . implode('</li><li>', explode(", ", $r['problem_type'])).'</li>';
+			$problem .= '</ol>';
+			
+			$list[$key]['problem_type'] = $problem;
+			$list[$key]['problem_kategori'] = implode(', ', $problem1);
 			$list[$key]['time'] = $r['time'];
 			$key++;
 		}
