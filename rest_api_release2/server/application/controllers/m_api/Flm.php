@@ -497,6 +497,8 @@ class Flm extends REST_Controller {
 					LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 					WHERE flm_trouble_ticket.id_ticket='$id_ticket'
 				";
+				
+				echo $sql;
 					
 				$query = $this->db->query($sql)->result_array();
 					
