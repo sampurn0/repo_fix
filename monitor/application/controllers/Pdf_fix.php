@@ -330,7 +330,7 @@ class Pdf_fix extends CI_Controller {
                     ) 
 				WHERE 
 					cashtransit_detail.id_cashtransit='$id_ct' AND 
-					IFNULL(client.sektor, client_cit.sektor)='$id_ga' AND
+					#IFNULL(client.sektor, client_cit.sektor)='$id_ga' AND
 					cashtransit_detail.state='ro_cit'";
 		
 		$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
