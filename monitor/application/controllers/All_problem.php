@@ -122,6 +122,7 @@ class All_problem extends CI_Controller {
 			$list[$i]['end_apply'] = $r->end_apply;
 			$list[$i]['problem'] = $r->problem_type;
 			$list[$i]['wsid'] = $r->wsid;
+			$list[$i]['lokasi'] = $r->lokasi;
 			$list[$i]['team'] = "(".$r->id_karyawan.") ".$r->custody;
 			$i++;
 		}
@@ -218,6 +219,11 @@ class All_problem extends CI_Controller {
 								<td>Bank</td>
 								<td> : </td>
 								<td>('.$d['wsid'].') '.$d['bank'].'</td>
+							</tr>
+							<tr>
+								<td>Lokasi</td>
+								<td> : </td>
+								<td>'.$d['lokasi'].'</td>
 							</tr>
 							<tr>
 								<td>Problem</td>

@@ -227,6 +227,7 @@ class Flm extends REST_Controller {
 	
 	function dataflm_get() {
 		$id_user = $this->input->get('id_user');
+		$id_teknisi = $this->db->select('id_teknisi')->from('teknisi')->where('nik', $id_user)->limit(1)->get()->row()->id_teknisi;
 		
 		
 		$sql = "SELECT *, client.sektor as ga, client.vendor as brand, client.type_mesin as model FROM 
