@@ -498,7 +498,7 @@ class Flm extends REST_Controller {
 					WHERE flm_trouble_ticket.id_ticket='$id_ticket'
 				";
 				
-				echo $sql;
+				echo $sql."<br>";
 					
 				$query = $this->db->query($sql)->result_array();
 					
@@ -526,6 +526,9 @@ class Flm extends REST_Controller {
 						
 						$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'")->row()->nama_sub_kategori;
 						
+						echo "SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'<br>";
+						
+						echo "SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'<br>";
 					}
 					
 					$problem = '<ol>';
