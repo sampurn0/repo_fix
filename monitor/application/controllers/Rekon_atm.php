@@ -898,7 +898,7 @@ class Rekon_atm extends CI_Controller {
 						*,
 						cashtransit_detail.ctr as ctr
 							FROM 
-								(SELECT id, date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
+								cashtransit_detail
 									LEFT JOIN 
 										cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id)
 									LEFT JOIN 
@@ -1080,7 +1080,7 @@ class Rekon_atm extends CI_Controller {
 					'wsid' => $row->wsid,
 					'lokasi' => $row->lokasi,
 					'type' => $row->type,
-					'tanggal' => ($row->date==null ? "" : date("Y-m-d", strtotime($data_solve->last_clear))),
+					'tanggal' => ($data2->last_clear==null ? "" : date("Y-m-d", strtotime($data2->last_clear))),
 					'time' => ($row2->updated_date==null ? "" : date("H:i", strtotime($row2->updated_date))),
 					'ctr' => $ctr2,
 					'T50' => $t50,
