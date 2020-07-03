@@ -255,7 +255,7 @@ class Flm extends REST_Controller {
 			
 			// $problem = array();
 			// foreach(json_decode($r['problem_type']) as $p) {
-				// $problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('nama_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+				// $problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
 			// }
 			
 			$problem = '<ol>';
@@ -340,7 +340,7 @@ class Flm extends REST_Controller {
 					
 					$problem = array();
 					foreach(json_decode($r['problem_type']) as $p) {
-						$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('nama_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+						$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
 					}
 					$list[$key]['problem_type'] = implode(', ', $problem);;
 					$list[$key]['time'] = $r['time'];
@@ -384,7 +384,7 @@ class Flm extends REST_Controller {
 					
 					$problem = array();
 					foreach(json_decode($r['problem_type']) as $p) {
-						$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('nama_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+						$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
 					}
 					$list[$key]['problem_type'] = implode(', ', $problem);;
 					$list[$key]['time'] = $r['time'];
@@ -497,8 +497,6 @@ class Flm extends REST_Controller {
 					LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
 					WHERE flm_trouble_ticket.id_ticket='$id_ticket'
 				";
-				
-				echo $sql."<br>";
 					
 				$query = $this->db->query($sql)->result_array();
 					
@@ -518,7 +516,15 @@ class Flm extends REST_Controller {
 					
 					
 					$problem1 = array();
-					$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='".$r['problem_type']."'")->row()->nama_kategori;
+					$problem2 = array();
+					foreach(json_decode($r['problem_type']) as $p) {
+						// $problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+						
+						$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_kategori;
+						
+						$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_sub_kategori;
+						
+					}
 					
 					$problem = '<ol>';
 					$problem .= '<li>' . implode('</li><li>', explode(", ", $r['problem_type'])).'</li>';
@@ -569,11 +575,11 @@ class Flm extends REST_Controller {
 					$problem1 = array();
 					$problem2 = array();
 					foreach(json_decode($r['problem_type']) as $p) {
-						// $problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('nama_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+						// $problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
 						
-						$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'")->row()->nama_kategori;
+						$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_kategori;
 						
-						$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'")->row()->nama_sub_kategori;
+						$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE id_sub_kategori='$p'")->row()->nama_sub_kategori;
 						
 					}
 					
@@ -621,12 +627,7 @@ class Flm extends REST_Controller {
 			$list[$key]['lokasi'] = $r['lokasi'];
 			
 			$problem1 = array();
-			$problem2 = array();
-			foreach(json_decode($r['problem_type']) as $p) {
-				$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'")->row()->nama_kategori;
-						
-				$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'")->row()->nama_sub_kategori;
-			}
+			$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='".$r['problem_type']."'")->row()->nama_kategori;
 			
 			$problem = '<ol>';
 			$problem .= '<li>' . implode('</li><li>', explode(", ", $r['problem_type'])).'</li>';
@@ -679,7 +680,7 @@ class Flm extends REST_Controller {
 				
 				$problem = array();
 				foreach(json_decode($r['problem_type']) as $p) {
-					$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('nama_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
+					$problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('id_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
 				}
 				$list[$key]['problem_type'] = implode(', ', $problem);;
 				$list[$key]['time'] = $r['time'];
