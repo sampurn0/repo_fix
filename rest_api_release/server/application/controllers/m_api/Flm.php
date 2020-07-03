@@ -234,7 +234,7 @@ class Flm extends REST_Controller {
 			(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket) AS flm_trouble_ticket
 			LEFT JOIN client ON(client.id=flm_trouble_ticket.id_bank)
 			LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
-			WHERE teknisi_1='$id_user' OR accept_time IS NULL
+			WHERE teknisi_1='$id_teknisi' OR accept_time IS NULL
 		";
 		
 		$query = $this->db->query($sql)->result_array();
@@ -272,7 +272,7 @@ class Flm extends REST_Controller {
 			(SELECT id, id_ticket, ticket_client, id_bank, problem_type, entry_date, email_date, time, down_time, accept_time, run_time, action_time, arrival_date, start_scan, end_apply, teknisi_1, teknisi_2, guard, status, data_solve, req_combi, updated FROM flm_trouble_ticket_slm) AS flm_trouble_ticket_slm
 			LEFT JOIN client ON(client.id=flm_trouble_ticket_slm.id_bank)
 			LEFT JOIN master_branch as branch ON(branch.id=client.cabang)
-			WHERE teknisi_1='$id_user' OR accept_time IS NULL
+			WHERE teknisi_1='$id_teknisi' OR accept_time IS NULL
 		";
 		
 		$query = $this->db->query($sql)->result_array();
