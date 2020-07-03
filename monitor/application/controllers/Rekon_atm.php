@@ -442,7 +442,7 @@ class Rekon_atm extends CI_Controller {
 					cashtransit_detail.ctr as ctr2,
 					(cashtransit_detail.ctr-(SELECT count(*) FROM run_status_cancel WHERE id_detail=cashtransit_detail.id)) as ctr
 						FROM 
-							(SELECT id, date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
+							(SELECT id, date, updated_date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
 								LEFT JOIN 
 									cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id)
 								LEFT JOIN 
@@ -456,8 +456,7 @@ class Rekon_atm extends CI_Controller {
 										cashtransit_detail.state='ro_atm' AND 
 										cashtransit_detail.data_solve!='' AND
 										client.type!='CDM' AND 
-										#cashtransit_detail.date LIKE '%".$datessss."%'
-										runsheet_cashprocessing.updated_date_cpc LIKE '%".$datessss."%'
+										cashtransit_detail.updated_date LIKE '%".$datessss."%'
 		";
 		
 		$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
@@ -475,7 +474,7 @@ class Rekon_atm extends CI_Controller {
 						*,
 						cashtransit_detail.ctr as ctr
 							FROM 
-								cashtransit_detail
+								(SELECT id, date, updated_date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
 									LEFT JOIN 
 										cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id)
 									LEFT JOIN 
@@ -591,7 +590,7 @@ class Rekon_atm extends CI_Controller {
 						'lokasi' => $row->lokasi,
 						'type' => $row->type,
 						// 'tanggal' => ($data2->last_clear==null ? "" : date("Y-m-d", strtotime($data2->last_clear))),
-						'tanggal' => ($row->date==null ? "" : date("Y-m-d", strtotime($data_solve->last_clear))),
+						'tanggal' => ($row->date==null ? "" : date("Y-m-d", strtotime($row2->updated_date_cpc))),
 						'time' => ($row2->updated_date==null ? "" : date("H:i", strtotime($row2->updated_date))),
 						'ctr' => intval($row2->ctr),
 						'total' => ($ctr*(intval($row2->pcs_50000)!==0 ? $row2->pcs_50000 : $row2->pcs_100000)*(intval($row2->pcs_50000)!==0 ? 50 : 100)),
@@ -657,7 +656,7 @@ class Rekon_atm extends CI_Controller {
 					'wsid' => $row->wsid,
 					'lokasi' => $row->lokasi,
 					'type' => $row->type,
-					'tanggal' => ($data2->last_clear==null ? "" : date("Y-m-d", strtotime($data2->last_clear))),
+					'tanggal' => ($row->date==null ? "" : date("Y-m-d", strtotime($row2->updated_date_cpc))),
 					'time' => ($row2->updated_date==null ? "" : date("H:i", strtotime($row2->updated_date))),
 					'ctr' => $ctr2,
 					'T50' => $t50,
@@ -765,7 +764,7 @@ class Rekon_atm extends CI_Controller {
 							B.date LIKE '%".$date."%' AND
 							B.id IN (
 								SELECT MAX(id)
-								FROM cashtransit_detail
+								FROM (SELECT id, date, updated_date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
 								WHERE state='ro_atm' AND data_solve!=''
 								GROUP BY id_bank
 							) 
@@ -866,7 +865,7 @@ class Rekon_atm extends CI_Controller {
 					*,
 					cashtransit_detail.ctr as ctr
 						FROM 
-							(SELECT id, date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
+							(SELECT id, date, updated_date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
 								LEFT JOIN 
 									cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id)
 								LEFT JOIN 
@@ -880,7 +879,7 @@ class Rekon_atm extends CI_Controller {
 										cashtransit_detail.state='ro_atm' AND 
 										cashtransit_detail.data_solve!='' AND
 										client.type!='CDM' AND 
-										cashtransit_detail.date LIKE '%".date("Y-m-d")."%'
+										cashtransit_detail.updated_date LIKE '%".date('Y-m-d')."%'
 		";
 		
 		$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
@@ -898,7 +897,7 @@ class Rekon_atm extends CI_Controller {
 						*,
 						cashtransit_detail.ctr as ctr
 							FROM 
-								cashtransit_detail
+								(SELECT id, date, updated_date, id_cashtransit, id_bank, ctr, state, data_solve, cpc_process FROM cashtransit_detail) AS cashtransit_detail
 									LEFT JOIN 
 										cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id)
 									LEFT JOIN 
@@ -1014,7 +1013,7 @@ class Rekon_atm extends CI_Controller {
 						'lokasi' => $row->lokasi,
 						'type' => $row->type,
 						// 'tanggal' => ($data2->last_clear==null ? "" : date("Y-m-d", strtotime($data2->last_clear))),
-						'tanggal' => ($row->date==null ? "" : date("Y-m-d", strtotime($data_solve->last_clear))),
+						'tanggal' => ($row->date==null ? "" : date("Y-m-d", strtotime($row2->updated_date_cpc))),
 						'time' => ($row2->updated_date==null ? "" : date("H:i", strtotime($row2->updated_date))),
 						'ctr' => intval($row2->ctr),
 						'total' => ($ctr*(intval($row2->pcs_50000)!==0 ? $row2->pcs_50000 : $row2->pcs_100000)*(intval($row2->pcs_50000)!==0 ? 50 : 100)),
@@ -1080,7 +1079,7 @@ class Rekon_atm extends CI_Controller {
 					'wsid' => $row->wsid,
 					'lokasi' => $row->lokasi,
 					'type' => $row->type,
-					'tanggal' => ($data2->last_clear==null ? "" : date("Y-m-d", strtotime($data2->last_clear))),
+					'tanggal' => ($row->date==null ? "" : date("Y-m-d", strtotime($row2->updated_date_cpc))),
 					'time' => ($row2->updated_date==null ? "" : date("H:i", strtotime($row2->updated_date))),
 					'ctr' => $ctr2,
 					'T50' => $t50,
