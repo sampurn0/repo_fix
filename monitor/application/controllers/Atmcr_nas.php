@@ -325,8 +325,8 @@ class atmcr_nas extends CI_Controller {
 				
 				if($data->data_seal!==null) {
 					$postArr = json_decode($data->data_seal, true);
-					$postArr = array_map('array_filter', $postArr);
-					$postArr = array_filter($postArr);
+					// $postArr = array_map('array_filter', $postArr);
+					// $postArr = array_filter($postArr);
 					
 					// echo "<pre>";
 					// print_r($postArr);
@@ -1232,6 +1232,28 @@ class atmcr_nas extends CI_Controller {
 		}
 	}
 	
+	public function arr($arr) {
+		return json_decode($arr, TRUE);
+	}
+	
+	public function searchArrayValueByKey(array $array, $search) {
+    	// foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($array)) as $key => $value) {
+			// echo "<pre>";
+			// print_r($key);
+    	    // // if ($search === $key)
+    		// // return $value;
+    	// }
+		
+		foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($array)) as $key => $value) {
+			// echo "<pre>";
+			// print_r($key." = ".$value);
+			if ($search == $key) {
+				return $value;
+			}
+		}
+		return false;
+	}
+
 	public function terbilang($nilai) {
 		if($nilai<0) {
 			$hasil = "minus ". trim($this->penyebut($nilai))." Rupiah";
