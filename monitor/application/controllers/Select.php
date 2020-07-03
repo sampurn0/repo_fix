@@ -206,7 +206,7 @@ class Select extends CI_Controller {
 		$data['bank'] = $this->input->post('bank');
 		
 		
-		$query = "SELECT * FROM client";	
+		$query = "SELECT * FROM client WHERE wsid LIKE '%".$data['search']."%'";	
 		$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
 
 		$list = array();
