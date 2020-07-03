@@ -518,18 +518,7 @@ class Flm extends REST_Controller {
 					
 					
 					$problem1 = array();
-					$problem2 = array();
-					foreach(json_decode($r['problem_type']) as $p) {
-						// $problem[] = $this->db->select('nama_sub_kategori')->from('sub_kategori')->where('nama_sub_kategori', $p)->limit(1)->get()->row()->nama_sub_kategori;
-						
-						$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'")->row()->nama_kategori;
-						
-						$problem2[] = $this->db->query("SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'")->row()->nama_sub_kategori;
-						
-						echo "SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'<br>";
-						
-						echo "SELECT nama_sub_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='$p'<br>";
-					}
+					$problem1[] = $this->db->query("SELECT nama_kategori FROM `kategori` LEFT JOIN sub_kategori ON(sub_kategori.id_kategori=kategori.id_kategori) WHERE nama_sub_kategori='".$r['problem_type']."'")->row()->nama_kategori;
 					
 					$problem = '<ol>';
 					$problem .= '<li>' . implode('</li><li>', explode(", ", $r['problem_type'])).'</li>';
