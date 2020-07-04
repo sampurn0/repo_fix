@@ -37,6 +37,10 @@ class Inventory extends CI_Controller {
         $this->data['datainventory2'] = json_decode($this->curl->simple_get(rest_api().'/master_inventory/index2'));
 		
 		$sql = "SELECT type_mesin, (SUM(client_ho.ctr) + SUM(client_ho.reject)) AS catridge FROM client LEFT JOIN client_ho ON (client_ho.wsid=client.wsid) WHERE type_mesin!='' GROUP BY type_mesin";
+		$sql = "SELECT client.type_mesin, COUNT(master_cassette.wsid) AS catridge FROM client
+				LEFT JOIN master_cassette ON(master_cassette.wsid=client.wsid)
+				LEFT JOIN client_ho ON (client_ho.wsid=client.wsid) 
+				WHERE type_mesin!='' GROUP BY client.type_mesin;";
 		$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
 		
         $this->data['data_mesin'] = $result;

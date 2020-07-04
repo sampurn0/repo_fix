@@ -130,10 +130,10 @@ class Cashreplenish extends CI_Controller {
 			echo '			<td>'.$row->date.'</td>';
 			echo '			<td>'.$row->name.'</td>';
 			echo '			<td style="text-align: center">';
-			echo '				<button type="button" class="button green" onClick="window.location.href=\''.base_url().'cashtransit/edit_'.$row->h_min.'/'.$row->id_ct.'\'" title="Edit">';
+			echo '				<button type="button" class="button green" onClick="window.location.href=\''.base_url().'cashreplenish/edit_'.$row->h_min.'/'.$row->id_ct.'\'" title="Edit">';
 			echo '					<span class="smaller">Detail</span>';
 			echo '				</button>';
-			echo '				<button type="button" class="button red" onClick="openDelete(\''.$row->id_ct.'\', \''.base_url().'cashtransit/delete\')" title="Delete">';
+			echo '				<button type="button" class="button red" onClick="openDelete(\''.$row->id_ct.'\', \''.base_url().'cashreplenish/delete\')" title="Delete">';
 			echo '					<span class="smaller">Delete</span>';
 			echo '				</button>';
 			echo '			</td>';
@@ -169,7 +169,7 @@ class Cashreplenish extends CI_Controller {
 	
 	public function edit_1($id) {
 		$this->data['active_menu'] = "cashreplenish_1";
-		$this->data['url'] = "cashtransit/save";
+		$this->data['url'] = "cashreplenish/save";
 		$this->data['flag'] = "edit";
 		
 		$id = $this->uri->segment(3);
@@ -181,7 +181,7 @@ class Cashreplenish extends CI_Controller {
 	
 	public function edit_0($id) {
 		$this->data['active_menu'] = "cashreplenish_0";
-		$this->data['url'] = "cashtransit/save";
+		$this->data['url'] = "cashreplenish/save";
 		$this->data['flag'] = "edit";
 		
 		$id = $this->uri->segment(3);
