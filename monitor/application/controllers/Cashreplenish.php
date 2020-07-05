@@ -193,16 +193,71 @@ class Cashreplenish extends CI_Controller {
 	
 	public function get_data() {
 		$id = $this->uri->segment(3);
-		$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-		$rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+		$page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
+		$rows = isset($_REQUEST['rows']) ? intval($_REQUEST['rows']) : 10;
+		$offset = ($page-1)*$rows;
 		
 		$data['id'] = $id;
 		$data['page'] = $page;
 		$data['rows'] = $rows;
 		
-		$result = $this->curl->simple_post(rest_api().'/plan_cashreplenish/get_data',$data,array(CURLOPT_BUFFERSIZE => 10));
+		$query = "
+				SELECT
+					SQL_CALC_FOUND_ROWS *, 
+					cashtransit_detail.id as id_ct, 
+					cashtransit_detail.ctr as ttl_ctr 
+				FROM cashtransit_detail 
+				LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+				LEFT JOIN master_zone ON(master_zone.id=client.sektor) LEFt JOIN master_branch ON(master_branch.id=master_zone.id_branch)
+				LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+				WHERE cashtransit_detail.state='ro_atm' AND id_cashtransit='".$id."' limit $offset,$rows";
+		
+		$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+		
+		$query = "
+				SELECT
+					SQL_CALC_FOUND_ROWS *, 
+					cashtransit_detail.id as id_ct, 
+					cashtransit_detail.ctr as ttl_ctr 
+				FROM cashtransit_detail 
+				LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+				LEFT JOIN master_zone ON(master_zone.id=client.sektor) LEFt JOIN master_branch ON(master_branch.id=master_zone.id_branch)
+				LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+				WHERE cashtransit_detail.state='ro_atm' AND id_cashtransit='".$id."'";
+		
+		$total = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+		$result["total"] = count($total);
 
-		echo $result;
+		$items = array();
+		$i = 0;
+		foreach($res as $row){
+			$items[$i]['id'] = $row->id_ct;
+			$items[$i]['id_cashtransit'] = $row->id_cashtransit;
+			$items[$i]['id_bank'] = $row->id_bank;
+			$items[$i]['wsid'] = $row->wsid;
+			$items[$i]['branch'] = $this->db->query("SELECT name FROM master_branch where id='".$row->branch."'")->row()->name;
+			$items[$i]['bank'] = $row->bank;
+			$items[$i]['lokasi'] = $row->lokasi;
+			$items[$i]['sektor'] = $row->kode_zone;
+			$items[$i]['jenis'] = $row->type;
+			$items[$i]['denom'] = $row->denom;
+			$items[$i]['brand'] = $row->vendor;
+			$items[$i]['model'] = $row->type_mesin;
+			$items[$i]['pcs_100000'] = $row->pcs_100000;
+			$items[$i]['pcs_50000'] = $row->pcs_50000;
+			$items[$i]['pcs_20000'] = $row->pcs_20000;
+			$items[$i]['pcs_10000'] = $row->pcs_10000;
+			$items[$i]['pcs_5000'] = $row->pcs_5000;
+			$items[$i]['pcs_2000'] = $row->pcs_2000;
+			$items[$i]['pcs_1000'] = $row->pcs_1000;
+			$items[$i]['pcs_coin'] = $row->pcs_coin;
+			$items[$i]['ctr'] = $row->ttl_ctr;
+			$items[$i]['total'] = $row->total;
+			$i++;
+		}
+		$result["rows"] = $items;
+		
+		echo json_encode($result);
 	}
 	
 	public function show_form() {
