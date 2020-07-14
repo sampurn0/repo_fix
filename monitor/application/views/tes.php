@@ -13,7 +13,7 @@
 			}
 			
 			img {
-				margin-top: -8px;
+				margin-top: -4px;
 				margin-left: 20px;
 			}
 			
