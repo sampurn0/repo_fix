@@ -1,7 +1,10 @@
 	<html>
     <head>
         <style>
-            @page { margin: 0px; margin-top: 5px; size: 50mm 20mm portrait; }
+            @page { 
+				margin: 0px; 
+				size: 50mm 20mm portrait; 
+			}
 			
 			p {
 				font-size: 8px;
@@ -12,6 +15,10 @@
 			img {
 				margin-top: -8px;
 				margin-left: 20px;
+			}
+			
+			#content_qrcode, #content_qrcode2, #content_qrcode3 {
+				margin-top: 8px
 			}
 		</style>
 	</head>
