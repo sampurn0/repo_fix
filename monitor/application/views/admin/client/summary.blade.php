@@ -231,11 +231,11 @@
 											<td><?=$row->keterangan?></td>
 											<td>
 												<?php if($row->foto!=="" && $row->foto!=="document_bast.jpg") { ?>
-														<img src="http://pt-bijak.co.id/rest_api_dev_minggu/server/upload/<?=$wsid?>/<?=$row->foto?>?<?=rand()?>" style="transform: rotate(90deg);" width="100" height="100" onclick="openModal();currentSlide(<?=$idx_foto?>)" class="hover-shadow cursor"></img>
+														<img src="http://pt-bijak.co.id/repo_fix/rest_api_release/server/upload/<?=$wsid?>/<?=$row->foto?>?<?=rand()?>" style="transform: rotate(90deg);" width="100" height="100" onclick="openModal();currentSlide(<?=$idx_foto?>)" class="hover-shadow cursor"></img>
 												<?php 	$idx_foto++; 
 													  } else if($row->foto!=="" && $row->foto=="document_bast.jpg") { ?>
-														<img src="http://pt-bijak.co.id/rest_api_dev_minggu/server/upload/<?=$wsid?>/document_bast_internal.jpg?<?=rand()?>" style="transform: rotate(90deg);" width="100" height="100" onclick="openModal();currentSlide(<?=$idx_foto?>)" class="hover-shadow cursor"></img>
-														<img src="http://pt-bijak.co.id/rest_api_dev_minggu/server/upload/<?=$wsid?>/document_bast_external.jpg?<?=rand()?>" style="transform: rotate(90deg);" width="100" height="100" onclick="openModal();currentSlide(<?=$idx_foto+1?>)" class="hover-shadow cursor"></img>
+														<img src="http://pt-bijak.co.id/repo_fix/rest_api_release/server/upload/<?=$wsid?>/document_bast_internal.jpg?<?=rand()?>" style="transform: rotate(90deg);" width="100" height="100" onclick="openModal();currentSlide(<?=$idx_foto?>)" class="hover-shadow cursor"></img>
+														<img src="http://pt-bijak.co.id/repo_fix/rest_api_release/server/upload/<?=$wsid?>/document_bast_external.jpg?<?=rand()?>" style="transform: rotate(90deg);" width="100" height="100" onclick="openModal();currentSlide(<?=$idx_foto+1?>)" class="hover-shadow cursor"></img>
 												<?php 	$idx_foto++; 
 													  } ?>
 											</td>
@@ -264,18 +264,18 @@
 						<?php if($row->foto!=="" && $row->foto!=="document_bast.jpg") { ?>
 							<div class="mySlides">
 								<div class="numbertext"><?=($idx_fotox+1)?></div>
-								<img src="http://pt-bijak.co.id/rest_api_dev_minggu/server/upload/<?=$wsid?>/<?=$row->foto?>?<?=rand()?>" style="width:100%; height:60%; transform: rotate(90deg);">
+								<img src="http://pt-bijak.co.id/repo_fix/rest_api_release/server/upload/<?=$wsid?>/<?=$row->foto?>?<?=rand()?>" style="width:100%; height:60%; transform: rotate(90deg);">
 							</div>
 						<?php 	$idx_fotox++;	  
 						
 						} else if($row->foto!=="" && $row->foto=="document_bast.jpg") { ?>
 							<div class="mySlides">
 								<div class="numbertext"><?=($idx_fotox+1)?></div>
-								<img src="http://pt-bijak.co.id/rest_api_dev_minggu/server/upload/<?=$wsid?>/document_bast_internal.jpg?<?=rand()?>" style="width:100%; height:60%; transform: rotate(90deg);">
+								<img src="http://pt-bijak.co.id/repo_fix/rest_api_release/server/upload/<?=$wsid?>/document_bast_internal.jpg?<?=rand()?>" style="width:100%; height:60%; transform: rotate(90deg);">
 							</div>
 							<div class="mySlides">
 								<div class="numbertext"><?=($idx_fotox+2)?></div>
-								<img src="http://pt-bijak.co.id/rest_api_dev_minggu/server/upload/<?=$wsid?>/document_bast_external.jpg?<?=rand()?>" style="width:100%; height:60%; transform: rotate(90deg);">
+								<img src="http://pt-bijak.co.id/repo_fix/rest_api_release/server/upload/<?=$wsid?>/document_bast_external.jpg?<?=rand()?>" style="width:100%; height:60%; transform: rotate(90deg);">
 							</div>
 						<?php 	$idx_fotox++;	
 						} ?>
