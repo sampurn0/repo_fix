@@ -611,7 +611,7 @@ class Cashprocessing extends CI_Controller {
 				} else if(substr($seal, 0, 1)=='A') {
 					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else if(substr($seal, 0, 1)=='B') {
-					$sql = "UPDATE master_tbag SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
+					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else {
 					$sql = "UPDATE master_bag SET status='used' WHERE kode='$seal'";
 				}
@@ -809,7 +809,7 @@ class Cashprocessing extends CI_Controller {
 				} else if(substr($seal, 0, 1)=='A') {
 					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else if(substr($seal, 0, 1)=='B') {
-					$sql = "UPDATE master_tbag SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
+					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else {
 					$sql = "UPDATE master_bag SET status='used' WHERE kode='$seal'";
 				}
@@ -970,7 +970,7 @@ class Cashprocessing extends CI_Controller {
 				} else if(substr($seal, 0, 1)=='A') {
 					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else if(substr($seal, 0, 1)=='B') {
-					$sql = "UPDATE master_tbag SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
+					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else {
 					$sql = "UPDATE master_bag SET status='used' WHERE kode='$seal'";
 				}
