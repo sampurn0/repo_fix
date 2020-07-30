@@ -3386,7 +3386,13 @@ class Tes extends CI_Controller {
 			// echo '<pre>' . print_r($v, true) . '</pre>';
 			$sql = "SELECT * FROM master_seal WHERE UPPER(kode) = BINARY(kode) AND kode='$v';";
 			$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
-			echo "(".str_pad($start, 2, "0", STR_PAD_LEFT).") ".$seal." ".$result[0]->kode." ".$result[0]->status."<br>";
+			echo "(".str_pad($start, 2, "0", STR_PAD_LEFT).") ".$result[0]->kode." ".$result[0]->status."<br>";
+			
+			if($result[0]->status=="available") {
+				$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$v'";
+				echo $sql."<br>";
+				$this->curl->simple_get(rest_api().'/select/query2', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10));
+			}
 		}
 		
 		if ($pages > 0) {
@@ -3397,22 +3403,6 @@ class Tes extends CI_Controller {
 			echo "<a ".($current_page==$pages?"hidden":"")." href='?i=".($current_page+1)."'><button>Next</button></a>";
 			echo "<a ".($current_page==$pages?"hidden":"")." href='?i=$pages'><button>Last</button><a>";
 		}
-		
-		$seal = "B53265"; 
-		
-		if(substr($seal, 0, 1)=='a') {
-			$sql = "UPDATE master_seal SET status='used' WHERE LOWER(kode) = BINARY(kode) AND kode='$seal'";
-			$cpc_prepare_sql = "UPDATE cpc_prepared SET status='used' WHERE seal='$seal'";
-			$this->curl->simple_get(rest_api().'/select/query2', array('query'=>$cpc_prepare_sql), array(CURLOPT_BUFFERSIZE => 10));
-		} else if(substr($seal, 0, 1)=='A') {
-			$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
-		} else if(substr($seal, 0, 1)=='B') {
-			$sql = "UPDATE master_tbag SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
-		} else {
-			$sql = "UPDATE master_bag SET status='used' WHERE kode='$seal'";
-		}
-		
-		echo $sql;
 		
 		// for ($i=$no; $i<=$mulai ; $i++) {
 			// $sql = "SELECT * FROM master_seal WHERE UPPER(kode) = BINARY(kode) AND kode='$data_array[$i]';";
