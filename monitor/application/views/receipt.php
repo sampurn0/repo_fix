@@ -10,7 +10,7 @@
 			}
 			
 			img {
-				margin-top: -8px;
+				margin-top: 0px;
 				margin-left: 20px;
 			}
 		</style>
