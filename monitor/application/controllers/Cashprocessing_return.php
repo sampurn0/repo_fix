@@ -465,16 +465,16 @@ class Cashprocessing_return extends CI_Controller {
 		$ctr = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)))->ctr;
 		$this->data['ctr'] = $ctr;
 		
-		echo $sql;
+// 		echo $sql;
 		
 		// if($session->userdata['level']=="LEVEL1") {
-			// if($this->input->get('act')=="ATM") {
-				// return view('admin/cashprocessing_return/show_form_atm', $this->data);
-			// } else if($this->input->get('act')=="CRM") {
-				// return view('admin/cashprocessing_return/show_form_crm', $this->data);
-			// } else if($this->input->get('act')=="CDM") {
-				// return view('admin/cashprocessing_return/show_form_cdm', $this->data);
-			// }
+			if($this->input->get('act')=="ATM") {
+				return view('admin/cashprocessing_return/show_form_atm', $this->data);
+			} else if($this->input->get('act')=="CRM") {
+				return view('admin/cashprocessing_return/show_form_crm', $this->data);
+			} else if($this->input->get('act')=="CDM") {
+				return view('admin/cashprocessing_return/show_form_cdm', $this->data);
+			}
 		// }
 	}
 	

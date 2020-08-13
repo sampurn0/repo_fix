@@ -181,7 +181,7 @@ class atmcr_nas extends CI_Controller {
 				// $terbilang = ucwords($this->terbilang(($ctr*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*$denom)));
 				
 				$ttl_ctr = '('.$ctr.') '.(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000).'';
-				$denom = (intval($row->pcs_50000)!==0 ? "50000" : "100000");
+				$denom = (intval($row->pcs_50000)!==0 ? "50000" : (intval($row->total)!==0 ? "100000" : $row->denom));
 				$value = (intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000);
 				// $ttl_all = 'Rp. '.number_format(($ctr*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*$denom), 0, ",", ".").'';
 				// $terbilang = ucwords($this->terbilang(($ctr*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*$denom)));
@@ -1230,6 +1230,8 @@ class atmcr_nas extends CI_Controller {
 
 			$dompdf->stream($row->wsid.'('.date('Ymd', strtotime($row->date)).').pdf', array("Attachment" => false));
 		}
+		
+		// echo $template_html;
 	}
 	
 	public function arr($arr) {
