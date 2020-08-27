@@ -33,8 +33,6 @@ class Seal extends REST_Controller {
 		
 		$row = $this->db->query($sql)->row_array();
 		
-		print_r($row);
-		
 		if($act=="ATM") {
 			$array = array();
 			for($i=1;$i<=$row['ctr'];$i++) {
@@ -56,8 +54,6 @@ class Seal extends REST_Controller {
 				$array["cart_".$i."_seal"] = $row["cart_".$i."_seal"];
 			}
 		}
-		
-		print_r($array);
 		
 		$val = $this->searchForId($seal, $array);
 		
@@ -82,6 +78,13 @@ class Seal extends REST_Controller {
 		
 		// echo json_encode($list);
 		echo json_encode($result);	
+	}
+	
+	function reset_cancel_get() {
+		$id_detail = ($this->input->get('id_detail')=="" ? 31 : $this->input->get('id_detail'));
+		$sql = "DELETE FROM run_status_cancel WHERE id_detail='$id_detail'";
+		
+		echo $sql;
 	}
 	
 	function update_receipt_get() {
