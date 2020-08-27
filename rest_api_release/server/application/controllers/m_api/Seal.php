@@ -33,10 +33,13 @@ class Seal extends REST_Controller {
 		
 		$row = $this->db->query($sql)->row_array();
 		
+		$array2 = array();
 		if($act=="ATM") {
 			$array = array();
+			$array2 = array();
 			for($i=1;$i<=$row['ctr'];$i++) {
 				$array["cart_".$i."_seal"] = $row["cart_".$i."_seal"];
+				$array2[$row["cart_".$i."_seal"]] = "cart_".$i."_seal";
 			}
 		} else if($act=="CRM") {
 			$array = array();
@@ -56,28 +59,47 @@ class Seal extends REST_Controller {
 		}
 		
 		$val = $this->searchForId($seal, $array);
+	    $cart_no = $this->searchForId2($seal, $array2);
 		
 		$result['val'] = $val;
 		
-		if($val=="valid") {
+// 		if($val=="valid") {
 			$row_seal = $this->db->query("SELECT * FROM run_status_cancel WHERE id_detail='$id_detail' AND cart_seal='$seal'")->num_rows();
 			if($row_seal==0) {
+			    $this->db->query("UPDATE runsheet_cashprocessing SET $cart_no='' WHERE id='$id_detail'");
 				$data['id_cashtransit'] = $row['id_cashtransit'];
 				$data['id_detail'] = $id_detail;
 				$data['act'] = $act;
+				$data['cart_no'] = $cart_no;
 				$data['cart_seal'] = $seal;
 				$this->db->insert('run_status_cancel', $data);
 			} else {
+			    $cart_no = $this->db->query("SELECT cart_no FROM run_status_cancel WHERE id_detail='$id_detail' AND cart_seal='$seal'")->row()->cart_no;
+			    $this->db->query("UPDATE runsheet_cashprocessing SET $cart_no='$seal' WHERE id='$id_detail'");
 				$this->db->where('id_detail', $id_detail);
 				$this->db->where('cart_seal', $seal);
 				$this->db->delete('run_status_cancel');
 			}
-		}
+// 		}
 		// $list = array();
 		// $list
 		
 		// echo json_encode($list);
 		echo json_encode($result);	
+	}
+	
+	function reset_cancel_get() {
+		$id_detail = ($this->input->get('id_detail')=="" ? 31 : $this->input->get('id_detail'));
+		$sql = "DELETE FROM run_status_cancel WHERE id_detail='$id_detail'";
+		
+		$cart_no = $this->db->query("SELECT cart_no, cart_seal FROM run_status_cancel WHERE id_detail='$id_detail'")->result_array();
+		foreach($cart_no as $r) {
+		    $cart_no = $r['cart_no'];
+		    $seal = $r['cart_seal'];
+		    $this->db->query("UPDATE runsheet_cashprocessing SET $cart_no='$seal' WHERE id='$id_detail'");
+		}
+		
+		$this->db->query($sql);
 	}
 	
 	function update_receipt_get() {
@@ -139,6 +161,16 @@ class Seal extends REST_Controller {
 			if ($val === $id) {
 				// return $val;
 				return "valid";
+			}
+		}
+		return "invalid";
+	}
+	
+	function searchForId2($id, $array) {
+		foreach ($array as $key => $val) {
+			if ($key === $id) {
+				// return $val;
+				return $val;
 			}
 		}
 		return "invalid";
