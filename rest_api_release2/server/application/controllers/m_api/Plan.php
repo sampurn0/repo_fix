@@ -727,17 +727,17 @@ class Plan extends REST_Controller {
 	
 	function syncronize_post() {
 		$data_plan = json_decode($_REQUEST['data_plan'], true);
-		echo "<pre>";
-		print_r($data_plan);
+		// echo "<pre>";
+		// print_r($data_plan);
 		
-		// foreach($data_plan as $r) {
-			// if($r['state']=="ro_cit") {
-				// $this->simpan_cit($r);
-			// } else if($r['state']=="ro_atm") {
-				// $this->simpan_cr($r);
-				// $this->update_seal($r);
-			// }
-		// }
+		foreach($data_plan as $r) {
+			if($r['state']=="ro_cit") {
+				$this->simpan_cit($r);
+			} else if($r['state']=="ro_atm") {
+				$this->simpan_cr($r);
+				$this->update_seal($r);
+			}
+		}
 	}
 	
 	function update_seal($r) {
@@ -773,6 +773,8 @@ class Plan extends REST_Controller {
 		if($r['loading']!="") 		{ $data['loading']	= $r['loading']; }
 		
 		if(!empty($data)) {
+		    $this->jurnal_cancel($r);
+			
 			$this->db->where('id', $data['id']);
 			$update = $this->db->update('cashtransit_detail', $data);
 			echo $this->db->last_query()."\n";
@@ -804,6 +806,48 @@ class Plan extends REST_Controller {
 			$update = $this->db->update('cashtransit_detail', $data);
 			echo $this->db->last_query()."\n";
 		}
+	}
+	
+	function jurnal_cancel($r) {
+        $keterangan = "cancel cassette";
+        $sql_jurnal =  "SELECT id, count(*) as cnt FROM jurnal WHERE id_detail='".$r['id']."' AND keterangan='".$keterangan."'";
+        $check_jurnal = $this->db->query($sql_jurnal)->row();
+        
+        $sql_cancel = "SELECT * FROM run_status_cancel WHERE id_detail='".$r['id']."' GROUP BY id_detail";
+        $num = $this->db->query($sql_cancel)->num_rows();
+        
+        if($num>0) {
+            $denom = $this->db->query("SELECT client.denom as denom FROM cashtransit_detail LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) WHERE cashtransit_detail.id='".$r['id']."'")->row()->denom;
+            $query = $this->db->query("SELECT * FROM run_status_cancel WHERE id_detail='".$r['id']."'")->result_array();
+            $hasil = 0;
+            foreach($query as $x) {
+                list($seal, $value) = explode(";", $x['cart_seal']);
+                $hasil = $hasil + ($denom*$value);
+            }
+            
+            if($check_jurnal->cnt==0) {
+		        $data_jurnal['id_detail'] = $r['id'];
+        		$data_jurnal['tanggal'] = explode(" ", $r['jam_cash_in'])[0];
+        		$data_jurnal['keterangan'] = $keterangan;
+        		$data_jurnal['posisi'] = "debit";
+        		$data_jurnal['debit_100'] = ($denom=="100000" ? $hasil : 0);
+        		$data_jurnal['debit_50'] = ($denom=="50000" ? $hasil : 0);
+        		$data_jurnal['debit_20'] = 0;
+        		
+        		$this->db->insert('jurnal', $data_jurnal);
+		    } else {
+		        $data_jurnal['id_detail'] = $r['id'];
+        		$data_jurnal['tanggal'] = explode(" ", $r['jam_cash_in'])[0];
+        		$data_jurnal['keterangan'] = "$keterangan";
+        		$data_jurnal['posisi'] = "debit";
+        		$data_jurnal['debit_100'] = ($denom=="100000" ? $hasil : 0);
+        		$data_jurnal['debit_50'] = ($denom=="50000" ? $hasil : 0);
+        		$data_jurnal['debit_20'] = 0;
+    			
+    			$this->db->where("id", $check_jurnal->id);
+    			$this->db->update("jurnal", $data_jurnal);
+		    }
+	    }
 	}
 	
 	function jurnal_cit($r) {
