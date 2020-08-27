@@ -715,29 +715,29 @@ class Plan extends REST_Controller {
 		echo "<pre>";
 		print_r($data_plan);
 		
-		// foreach($data_plan as $r) {
-			// if($r['state']=="ro_cit") {
-				// $this->simpan_cit($r);
-			// }  else if($r['state']=="ro_atm") {
-				// $this->simpan_cr($r);
-				// $this->update_seal($r);
-			// }
-		// }
-	}
-	
-	function syncronize_post() {
-		$data_plan = json_decode($_REQUEST['data_plan'], true);
-		// echo "<pre>";
-		// print_r($data_plan);
-		
 		foreach($data_plan as $r) {
 			if($r['state']=="ro_cit") {
 				$this->simpan_cit($r);
-			} else if($r['state']=="ro_atm") {
+			}  else if($r['state']=="ro_atm") {
 				$this->simpan_cr($r);
 				$this->update_seal($r);
 			}
 		}
+	}
+	
+	function syncronize_post() {
+		$data_plan = json_decode($_REQUEST['data_plan'], true);
+		echo "<pre>";
+		print_r($data_plan);
+		
+		// foreach($data_plan as $r) {
+			// if($r['state']=="ro_cit") {
+				// $this->simpan_cit($r);
+			// } else if($r['state']=="ro_atm") {
+				// $this->simpan_cr($r);
+				// $this->update_seal($r);
+			// }
+		// }
 	}
 	
 	function update_seal($r) {
@@ -758,6 +758,7 @@ class Plan extends REST_Controller {
 	function simpan_cr($r) {
 		$data = array();
 		if($r['id']!="")			{ $data['id']			= $r['id']; }
+		if($r['jam_cash_in']!="")	{ $data['jam_cash_in']	= date("Y-m-d H:i:s", strtotime($r['jam_cash_in'])); }
 		if($r['foto_selfie']!="")	{ $data['foto_selfie']	= $r['foto_selfie']; }
 		if($r['receipt_1']!="") 	{ $data['receipt_1']	= $r['receipt_1']; }
 		if($r['receipt_2']!="") 	{ $data['receipt_2']	= $r['receipt_2']; }
