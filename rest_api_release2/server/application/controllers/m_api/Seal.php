@@ -158,7 +158,7 @@ class Seal extends REST_Controller {
 	
 	function searchForId2($id, $array) {
 		foreach ($array as $key => $val) {
-			if ($val === $id) {
+			if ($key === $id) {
 				// return $val;
 				return $val;
 			}
