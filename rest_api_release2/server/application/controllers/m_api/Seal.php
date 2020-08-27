@@ -56,6 +56,7 @@ class Seal extends REST_Controller {
 		}
 		
 		$val = $this->searchForId($seal, $array);
+		$cart_no = $this->searchForId2($seal, $array);
 		
 		$result['val'] = $val;
 		
@@ -65,6 +66,7 @@ class Seal extends REST_Controller {
 				$data['id_cashtransit'] = $row['id_cashtransit'];
 				$data['id_detail'] = $id_detail;
 				$data['act'] = $act;
+				$data['cart_no'] = $cart_no;
 				$data['cart_seal'] = $seal;
 				$this->db->insert('run_status_cancel', $data);
 			} else {
@@ -146,6 +148,16 @@ class Seal extends REST_Controller {
 			if ($val === $id) {
 				// return $val;
 				return "valid";
+			}
+		}
+		return "invalid";
+	}
+	
+	function searchForId2($id, $array) {
+		foreach ($array as $key => $val) {
+			if ($val === $id) {
+				// return $val;
+				return $val;
 			}
 		}
 		return "invalid";
