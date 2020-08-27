@@ -712,7 +712,7 @@ class Plan extends REST_Controller {
 	
 	function syncronize_get() {
 		$data_plan = json_decode($_REQUEST['data_plan'], true);
-		echo "<pre>";
+		echo "<pre>"; 
 		print_r($data_plan);
 		
 		// foreach($data_plan as $r) {
