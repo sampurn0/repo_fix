@@ -418,11 +418,12 @@ class Cashprocessing extends CI_Controller {
 	function update_data() {
 		$state				= trim($this->input->post('state'));
 		if($state=="ro_cit") {
-			$this->update_cit();
+			// $this->update_cit();
 		} else if($state=="ro_atm") {
 			$this->update_atm();
 		}
 		
+		// // print_r($data);
 		// $this->notification();
 		
 		$query = "SELECT * FROM runsheet_operational LEFT JOIN user ON(runsheet_operational.custodian_1=user.username) WHERE runsheet_operational.run_number='".$this->input->post('runsheet')."'";
@@ -500,6 +501,10 @@ class Cashprocessing extends CI_Controller {
 			$cart_2_seal		= trim($this->input->post('cart_2_seal'));
 			$cart_3_seal		= trim($this->input->post('cart_3_seal'));
 			$cart_4_seal		= trim($this->input->post('cart_4_seal'));
+			$value_1			= strtoupper(trim($this->input->post('value_1')));
+			$value_2			= strtoupper(trim($this->input->post('value_2')));
+			$value_3			= strtoupper(trim($this->input->post('value_3')));
+			$value_4			= strtoupper(trim($this->input->post('value_4')));
 			$divert				= trim($this->input->post('divert'));
 			$bag_seal			= trim($this->input->post('bag_seal'));
 			$bag_seal_return			= trim($this->input->post('bag_seal_return'));
@@ -516,10 +521,10 @@ class Cashprocessing extends CI_Controller {
 			$data['ctr_2_no'] = ($cart_2_no!=="") ? $cart_2_no : "";
 			$data['ctr_3_no'] = ($cart_3_no!=="") ? $cart_3_no : "";
 			$data['ctr_4_no'] = ($cart_4_no!=="") ? $cart_4_no : "";
-			$data['cart_1_seal'] = ($cart_1_seal!=="") ? $cart_1_seal : "";
-			$data['cart_2_seal'] = ($cart_2_seal!=="") ? $cart_2_seal : "";
-			$data['cart_3_seal'] = ($cart_3_seal!=="") ? $cart_3_seal : "";
-			$data['cart_4_seal'] = ($cart_4_seal!=="") ? $cart_4_seal : "";
+			$data['cart_1_seal'] = ($cart_1_seal!=="") ? $cart_1_seal.";".$value_1 : "";
+			$data['cart_2_seal'] = ($cart_2_seal!=="") ? $cart_2_seal.";".$value_2 : "";
+			$data['cart_3_seal'] = ($cart_3_seal!=="") ? $cart_3_seal.";".$value_3 : "";
+			$data['cart_4_seal'] = ($cart_4_seal!=="") ? $cart_4_seal.";".$value_4 : "";
 			$data['divert'] = $divert;
 			$data['bag_seal'] = $bag_seal;
 			$data['bag_seal_return'] = $bag_seal_return;
@@ -600,12 +605,12 @@ class Cashprocessing extends CI_Controller {
 			$cart_4_seal		= trim($this->input->post('cart_4_seal'));
 			$cart_5_seal		= trim($this->input->post('cart_5_seal'));
 			$denom_1			= strtoupper(trim($this->input->post('denom_1')));
-			$value_1			= strtoupper(trim($this->input->post('value_1')));
 			$denom_2			= strtoupper(trim($this->input->post('denom_2')));
-			$value_2			= strtoupper(trim($this->input->post('value_2')));
 			$denom_3			= strtoupper(trim($this->input->post('denom_3')));
-			$value_3			= strtoupper(trim($this->input->post('value_3')));
 			$denom_4			= strtoupper(trim($this->input->post('denom_4')));
+			$value_1			= strtoupper(trim($this->input->post('value_1')));
+			$value_2			= strtoupper(trim($this->input->post('value_2')));
+			$value_3			= strtoupper(trim($this->input->post('value_3')));
 			$value_4			= strtoupper(trim($this->input->post('value_4')));
 			$divert				= trim($this->input->post('divert'));
 			$bag_seal			= trim($this->input->post('bag_seal'));

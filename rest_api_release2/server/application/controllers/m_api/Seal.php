@@ -33,6 +33,8 @@ class Seal extends REST_Controller {
 		
 		$row = $this->db->query($sql)->row_array();
 		
+		print_r($row);
+		
 		if($act=="ATM") {
 			$array = array();
 			for($i=1;$i<=$row['ctr'];$i++) {
@@ -54,6 +56,8 @@ class Seal extends REST_Controller {
 				$array["cart_".$i."_seal"] = $row["cart_".$i."_seal"];
 			}
 		}
+		
+		print_r($array);
 		
 		$val = $this->searchForId($seal, $array);
 		

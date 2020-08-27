@@ -349,7 +349,7 @@
 							</li>
 							<li>
 								<a class="<?=($active_menu == "cashreplenish_1" ? 'active' : '')?>" href="<?=base_url()?>cashreplenish/index_1">
-									<span class="list-icon">&nbsp;</span>Cash Replanish (CR)
+									<span class="list-icon">&nbsp;</span>Cash Replenish (CR)
 								</a>
 							</li>
 							<li>
@@ -366,7 +366,7 @@
 							</li>
 							<li>
 								<a class="<?=($active_menu == "cashreplenish_0" ? 'active' : '')?>" href="<?=base_url()?>cashreplenish/index_0">
-									<span class="list-icon">&nbsp;</span>Cash Replanish (CR)
+									<span class="list-icon">&nbsp;</span>Cash Replenish (CR)
 								</a>
 							</li>
 							
@@ -470,7 +470,12 @@
 							</li>
 							<li>
 								<a class="<?=($active_menu == "cashprocessing_batal" ? 'active' : '')?>" href="<?=base_url()?>cashprocessing_batal">
-									<span class="list-icon">&nbsp;</span>ATM CR - Batal Replanish
+									<span class="list-icon">&nbsp;</span>ATM CR - Batal Replenish
+								</a>
+							</li>
+							<li>
+								<a class="<?=($active_menu == "cashprocessing_cancel" ? 'active' : '')?>" href="<?=base_url()?>cashprocessing_cancel">
+									<span class="list-icon">&nbsp;</span>ATM CR - Cancel Replenish
 								</a>
 							</li>
 						</ul>

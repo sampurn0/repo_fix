@@ -298,6 +298,9 @@
 					<table class="dv-table2_<?=$index?>" style="float:left;border:0px solid #ccc;padding:5px;margin-top:5px;width:auto">
 						
 					</table>
+					<table class="dv-table3_<?=$index?>" style="float:left;border:0px solid #ccc;padding:5px;margin-top:5px;width:auto">
+						
+					</table>
 					<table class="dv-table" style="float:left;border:0px solid #ccc;padding:5px;margin-top:5px;width:auto">
 						<tr>
 							<td>CART</td>
@@ -676,6 +679,16 @@
 									);
 								}
 								
+								if(element=="value_1") {
+									$("#value_1_atm_<?=$index?>").textbox('setValue', string);
+								} else if(element=="value_2") {
+									$("#value_2_atm_<?=$index?>").textbox('setValue', string);
+								} else if(element=="value_3") {
+									$("#value_3_atm_<?=$index?>").textbox('setValue', string);
+								} else if(element=="value_4") {
+									$("#value_4_atm_<?=$index?>").textbox('setValue', string);
+								}
+								
 								if(element=="s50k") {
 									$("#s50k_atm_<?=$index?>").textbox('setValue', string);
 								} else if(element=="s100k") {
@@ -707,6 +720,7 @@
 							var cart = parseInt("<?=$row->ctr?>");
 							var row1 = '';
 							var row2 = '';
+							var row3 = '';
 							
 							
 							for(var i=1; i<=cart; i++) {
@@ -729,6 +743,14 @@
 										  '<td style="border: 0px">:</td>'+
 										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_1_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
+										  
+									if(i<=cart) {		
+										row3 += '<tr>'+
+												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+												'</td>'+
+												'</tr>';
+									}
 									
 								}
 								if(i==2) {
@@ -749,6 +771,14 @@
 										  '<td style="border: 0px">:</td>'+
 										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_2_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
+										  
+									if(i<=cart) {		
+										row3 += '<tr>'+
+												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+												'</td>'+
+												'</tr>';
+									}
 								}
 								if(i==3) {
 									cart_no = "<?=$r['cart_3_no']?>";
@@ -768,6 +798,14 @@
 										  '<td style="border: 0px">:</td>'+
 										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_3_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
+										  
+									if(i<=cart) {		
+										row3 += '<tr>'+
+												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+												'</td>'+
+												'</tr>';
+									}
 								}
 								if(i==4) {
 									cart_no = "<?=$r['cart_4_no']?>";
@@ -787,14 +825,22 @@
 										  '<td style="border: 0px">:</td>'+
 										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_4_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
+									
+									if(i<=cart) {		
+										row3 += '<tr>'+
+												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+												'</td>'+
+												'</tr>';
+									}
 								}
-								
 							}
 							
 							$(".cart_total").textbox('setValue', cart);
 							
 							$('table.dv-table1_<?=$index?>').append(row1);
 							$('table.dv-table2_<?=$index?>').append(row2);
+							$('table.dv-table3_<?=$index?>').append(row3);
 							
 							$('.tb').textbox();
 							
