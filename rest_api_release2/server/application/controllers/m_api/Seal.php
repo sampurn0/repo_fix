@@ -84,7 +84,7 @@ class Seal extends REST_Controller {
 		$id_detail = ($this->input->get('id_detail')=="" ? 31 : $this->input->get('id_detail'));
 		$sql = "DELETE FROM run_status_cancel WHERE id_detail='$id_detail'";
 		
-		echo $sql;
+		$this->db->query($sql);
 	}
 	
 	function update_receipt_get() {
