@@ -39,7 +39,7 @@ class Seal extends REST_Controller {
 			$array2 = array();
 			for($i=1;$i<=$row['ctr'];$i++) {
 				$array["cart_".$i."_seal"] = $row["cart_".$i."_seal"];
-				$array2["cart_".$i."_seal"] = "cart_".$i."_seal";
+				$array2[$row["cart_".$i."_seal"]] = "cart_".$i."_seal";
 			}
 		} else if($act=="CRM") {
 			$array = array();
