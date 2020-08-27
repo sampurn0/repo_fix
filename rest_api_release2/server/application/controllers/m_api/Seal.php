@@ -33,10 +33,13 @@ class Seal extends REST_Controller {
 		
 		$row = $this->db->query($sql)->row_array();
 		
+		$array2 = array();
 		if($act=="ATM") {
 			$array = array();
+			$array2 = array();
 			for($i=1;$i<=$row['ctr'];$i++) {
 				$array["cart_".$i."_seal"] = $row["cart_".$i."_seal"];
+				$array2["cart_".$i."_seal"] = "cart_".$i."_seal";
 			}
 		} else if($act=="CRM") {
 			$array = array();
@@ -56,7 +59,7 @@ class Seal extends REST_Controller {
 		}
 		
 		$val = $this->searchForId($seal, $array);
-		$cart_no = $this->searchForId2($seal, $array);
+		$cart_no = $this->searchForId2($seal, $array2);
 		
 		$result['val'] = $val;
 		
