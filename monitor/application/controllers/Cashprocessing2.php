@@ -153,13 +153,9 @@ class Cashprocessing extends CI_Controller {
 		// echo $result;
 		
 		$id = $this->uri->segment(3);
-		$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-		$rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+		$page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
+		$rows = isset($_REQUEST['rows']) ? intval($_REQUEST['rows']) : 10;
 		$offset = ($page-1)*$rows;
-		
-		$data['id'] = $id;
-		$data['page'] = $page;
-		$data['rows'] = $rows;
 		
 		$query = "
 				SELECT
@@ -218,11 +214,73 @@ class Cashprocessing extends CI_Controller {
 					LEFt JOIN master_branch ON(master_branch.id=master_zone.id_branch)
 					LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
 					LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
-					WHERE cashtransit_detail.id_cashtransit='".$id."' AND  cashtransit_detail.data_solve!='batal' AND cashtransit_detail.state='ro_atm' limit $offset,$rows";
+					WHERE cashtransit_detail.id_cashtransit='".$id."' AND cashtransit_detail.state='ro_atm' limit $offset,$rows";
 		
 		// $result = $this->curl->simple_post(rest_api().'/run_operational/get_data',$data,array(CURLOPT_BUFFERSIZE => 10));
 		$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
-		$result["total"] = count($res);
+		
+		$query = "
+				SELECT
+					*,
+					master_zone.name AS zone_name,
+					cashtransit_detail.id as id_ct, 
+					cashtransit_detail.id_cashtransit, 
+					cashtransit_detail.id_bank, 
+					cashtransit_detail.state as state,
+					cashtransit_detail.ctr as ctr2, 
+					cashtransit_detail.pcs_100000 as pcs_100000, 
+					cashtransit_detail.pcs_50000 as pcs_50000, 
+					cashtransit_detail.pcs_20000 as pcs_20000, 
+					cashtransit_detail.pcs_10000 as pcs_10000, 
+					cashtransit_detail.pcs_5000 as pcs_5000, 
+					cashtransit_detail.pcs_2000 as pcs_2000, 
+					cashtransit_detail.pcs_1000 as pcs_1000, 
+					cashtransit_detail.pcs_coin as pcs_coin, 
+					cashtransit_detail.total as total, 
+					client.cabang as branchz,
+					client.bank,
+					client.lokasi,
+					client.sektor,
+					cashtransit_detail.jenis,
+					cashtransit_detail.ctr as ctr,
+					client.denom,
+					client.vendor,
+					client.type_mesin,
+					client.type as act,
+					client.ctr as ctr2,
+					runsheet_cashprocessing.pcs_100000 as s100k,
+					runsheet_cashprocessing.pcs_50000 as s50k,
+					runsheet_cashprocessing.pcs_20000 as s20k,
+					runsheet_cashprocessing.pcs_10000 as s10k,
+					runsheet_cashprocessing.pcs_5000 as s5k,
+					runsheet_cashprocessing.pcs_2000 as s2k,
+					runsheet_cashprocessing.pcs_1000 as s1k,
+					runsheet_cashprocessing.pcs_coin as coin,
+					runsheet_cashprocessing.total as nominal,
+					runsheet_cashprocessing.ctr_1_no,
+					runsheet_cashprocessing.ctr_2_no,
+					runsheet_cashprocessing.ctr_3_no,
+					runsheet_cashprocessing.ctr_4_no,
+					runsheet_cashprocessing.ctr_5_no,
+					runsheet_cashprocessing.cart_1_seal,
+					runsheet_cashprocessing.cart_2_seal,
+					runsheet_cashprocessing.cart_3_seal,
+					runsheet_cashprocessing.cart_4_seal,
+					runsheet_cashprocessing.cart_5_seal,
+					runsheet_cashprocessing.divert,
+					runsheet_cashprocessing.bag_seal,
+					runsheet_cashprocessing.bag_no
+				FROM cashtransit_detail 
+					LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+					LEFT JOIN master_zone ON(master_zone.id=client.sektor) 
+					LEFt JOIN master_branch ON(master_branch.id=master_zone.id_branch)
+					LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+					LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+					WHERE cashtransit_detail.id_cashtransit='".$id."' AND cashtransit_detail.state='ro_atm'";
+		
+		// $result = $this->curl->simple_post(rest_api().'/run_operational/get_data',$data,array(CURLOPT_BUFFERSIZE => 10));
+		$total = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+		$result["total"] = count($total);
 
 		$items = array();
 		$i = 0;
@@ -241,11 +299,7 @@ class Cashprocessing extends CI_Controller {
 			$items[$i]['denom'] = $row->denom;
 			$items[$i]['brand'] = $row->vendor;
 			$items[$i]['model'] = $row->type_mesin;
-			
-			if($row->act=="CRM") {
-				$items[$i]['detail_denom'] = '100K : '.number_format($row->pcs_100000, 0, ',', ',').'<br>'.'50K : '.number_format($row->pcs_50000, 0, ',', ',');
-			} else {
-				$items[$i]['detail_denom'] = 
+			$items[$i]['detail_denom'] = 
 										(
 											$row->pcs_100000!=0 ? '100K : '.number_format($row->pcs_100000, 0, ',', ',') : (
 												$row->pcs_50000!=0 ? '50K : '.number_format($row->pcs_50000, 0, ',', ',') : (
@@ -259,8 +313,6 @@ class Cashprocessing extends CI_Controller {
 												)
 											)
 										);
-			}
-			
 			$items[$i]['pcs_100000'] = $row->pcs_100000;
 			$items[$i]['pcs_50000'] = $row->pcs_50000;
 			$items[$i]['pcs_20000'] = $row->pcs_20000;
@@ -292,7 +344,6 @@ class Cashprocessing extends CI_Controller {
 			$items[$i]['total'] = $row->total;
 			$items[$i]['nominal'] = (100000*$row->s100k)+(50000*$row->s50k)+(20000*$row->s20k)+(10000*$row->s10k)+(5000*$row->s5k)+(2000*$row->s2k)+(1000*$row->s1k)+(1*$row->coin);
 			$items[$i]['bag_seal'] = $row->bag_seal;
-			$items[$i]['bag_seal_return'] = $row->bag_seal_return;
 			$items[$i]['bag_no'] = $row->bag_no;
 			$items[$i]['t_bag'] = $row->t_bag;
 			$i++;
@@ -500,10 +551,6 @@ class Cashprocessing extends CI_Controller {
 			$cart_2_seal		= trim($this->input->post('cart_2_seal'));
 			$cart_3_seal		= trim($this->input->post('cart_3_seal'));
 			$cart_4_seal		= trim($this->input->post('cart_4_seal'));
-			$value_1			= strtoupper(trim($this->input->post('value_1')));
-			$value_2			= strtoupper(trim($this->input->post('value_2')));
-			$value_3			= strtoupper(trim($this->input->post('value_3')));
-			$value_4			= strtoupper(trim($this->input->post('value_4')));
 			$divert				= trim($this->input->post('divert'));
 			$bag_seal			= trim($this->input->post('bag_seal'));
 			$bag_seal_return			= trim($this->input->post('bag_seal_return'));
@@ -520,10 +567,10 @@ class Cashprocessing extends CI_Controller {
 			$data['ctr_2_no'] = ($cart_2_no!=="") ? $cart_2_no : "";
 			$data['ctr_3_no'] = ($cart_3_no!=="") ? $cart_3_no : "";
 			$data['ctr_4_no'] = ($cart_4_no!=="") ? $cart_4_no : "";
-			$data['cart_1_seal'] = ($cart_1_seal!=="") ? $cart_1_seal.";".$value_1 : "";
-			$data['cart_2_seal'] = ($cart_2_seal!=="") ? $cart_2_seal.";".$value_2 : "";
-			$data['cart_3_seal'] = ($cart_3_seal!=="") ? $cart_3_seal.";".$value_3 : "";
-			$data['cart_4_seal'] = ($cart_4_seal!=="") ? $cart_4_seal.";".$value_4 : "";
+			$data['cart_1_seal'] = ($cart_1_seal!=="") ? $cart_1_seal : "";
+			$data['cart_2_seal'] = ($cart_2_seal!=="") ? $cart_2_seal : "";
+			$data['cart_3_seal'] = ($cart_3_seal!=="") ? $cart_3_seal : "";
+			$data['cart_4_seal'] = ($cart_4_seal!=="") ? $cart_4_seal : "";
 			$data['divert'] = $divert;
 			$data['bag_seal'] = $bag_seal;
 			$data['bag_seal_return'] = $bag_seal_return;
@@ -564,7 +611,7 @@ class Cashprocessing extends CI_Controller {
 				} else if(substr($seal, 0, 1)=='A') {
 					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else if(substr($seal, 0, 1)=='B') {
-					$sql = "UPDATE master_tbag SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
+					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else {
 					$sql = "UPDATE master_bag SET status='used' WHERE kode='$seal'";
 				}
@@ -604,12 +651,12 @@ class Cashprocessing extends CI_Controller {
 			$cart_4_seal		= trim($this->input->post('cart_4_seal'));
 			$cart_5_seal		= trim($this->input->post('cart_5_seal'));
 			$denom_1			= strtoupper(trim($this->input->post('denom_1')));
-			$denom_2			= strtoupper(trim($this->input->post('denom_2')));
-			$denom_3			= strtoupper(trim($this->input->post('denom_3')));
-			$denom_4			= strtoupper(trim($this->input->post('denom_4')));
 			$value_1			= strtoupper(trim($this->input->post('value_1')));
+			$denom_2			= strtoupper(trim($this->input->post('denom_2')));
 			$value_2			= strtoupper(trim($this->input->post('value_2')));
+			$denom_3			= strtoupper(trim($this->input->post('denom_3')));
 			$value_3			= strtoupper(trim($this->input->post('value_3')));
+			$denom_4			= strtoupper(trim($this->input->post('denom_4')));
 			$value_4			= strtoupper(trim($this->input->post('value_4')));
 			$divert				= trim($this->input->post('divert'));
 			$bag_seal			= trim($this->input->post('bag_seal'));
@@ -762,7 +809,7 @@ class Cashprocessing extends CI_Controller {
 				} else if(substr($seal, 0, 1)=='A') {
 					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else if(substr($seal, 0, 1)=='B') {
-					$sql = "UPDATE master_tbag SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
+					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else {
 					$sql = "UPDATE master_bag SET status='used' WHERE kode='$seal'";
 				}
@@ -923,7 +970,7 @@ class Cashprocessing extends CI_Controller {
 				} else if(substr($seal, 0, 1)=='A') {
 					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else if(substr($seal, 0, 1)=='B') {
-					$sql = "UPDATE master_tbag SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
+					$sql = "UPDATE master_seal SET status='used' WHERE UPPER(kode) = BINARY(kode) AND kode='$seal'";
 				} else {
 					$sql = "UPDATE master_bag SET status='used' WHERE kode='$seal'";
 				}
