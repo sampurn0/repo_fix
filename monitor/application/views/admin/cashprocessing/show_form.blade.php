@@ -773,7 +773,7 @@
 									row2 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' SEAL</td>'+
 										  '<td style="border: 0px">:</td>'+
-										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_2_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
+										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+res[0]+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
 										  
 									if(i<=cart) {		
@@ -802,7 +802,7 @@
 									row2 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' SEAL</td>'+
 										  '<td style="border: 0px">:</td>'+
-										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_3_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
+										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+res[0]+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
 										  
 									if(i<=cart) {		
@@ -831,7 +831,7 @@
 									row2 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' SEAL</td>'+
 										  '<td style="border: 0px">:</td>'+
-										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_4_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
+										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+res[0]+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
 									
 									if(i<=cart) {		
