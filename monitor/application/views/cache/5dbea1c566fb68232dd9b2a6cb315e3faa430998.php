@@ -287,6 +287,7 @@
 			<?php 
 				if($r['act']=="ATM") {
 			?>
+					<span style="float: left; margin-top: 10px"><span style="color:red;">*)</span> Isi dengan lembar per cassette</span><br><br>
 					<input name="act" type="hidden" value="<?=$r['act']?>" readonly>
 					<input name="state" type="hidden" value="<?=$state?>" readonly>
 					<input name="id" type="hidden" value="<?=$id?>" readonly>
@@ -730,7 +731,8 @@
 										cart_no = i;
 									}
 									cart_1_seal = "<?=$r['cart_1_seal']?>";
-									// alert(cart_1_seal);
+									res = cart_1_seal.split(";");
+									var value = res[1] == undefined ? "" : res[1];
 									
 									row1 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' NO</td>'+
@@ -741,13 +743,13 @@
 									row2 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' SEAL</td>'+
 										  '<td style="border: 0px">:</td>'+
-										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+cart_1_seal+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
+										  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" id="cart_'+i+'_seal_atm_<?=$index?>" style="height: 28px" value="'+res[0]+'"  class="easyui-validatebox tb easyui-textbox" type="text"></td>'+
 										  '</tr>';
 										  
 									if(i<=cart) {		
 										row3 += '<tr>'+
 												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
-													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value="'+value+'"  class="easyui-validatebox tb" type="text" required="true"><span style="color: red">*</span>'+
 												'</td>'+
 												'</tr>';
 									}
@@ -759,6 +761,8 @@
 										cart_no = i;
 									}
 									cart_2_seal = "<?=$r['cart_2_seal']?>";
+									res = cart_2_seal.split(";");
+									var value = res[1] == undefined ? "" : res[1];
 									
 									row1 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' NO</td>'+
@@ -775,7 +779,7 @@
 									if(i<=cart) {		
 										row3 += '<tr>'+
 												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
-													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value="'+value+'"  class="easyui-validatebox tb" type="text" required="true"><span style="color: red">*</span>'+
 												'</td>'+
 												'</tr>';
 									}
@@ -786,6 +790,8 @@
 										cart_no = i;
 									}
 									cart_3_seal = "<?=$r['cart_3_seal']?>";
+									res = cart_3_seal.split(";");
+									var value = res[1] == undefined ? "" : res[1];
 									
 									row1 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' NO</td>'+
@@ -802,7 +808,7 @@
 									if(i<=cart) {		
 										row3 += '<tr>'+
 												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
-													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value="'+value+'"  class="easyui-validatebox tb" type="text" required="true"><span style="color: red">*</span>'+
 												'</td>'+
 												'</tr>';
 									}
@@ -813,6 +819,8 @@
 										cart_no = i;
 									}
 									cart_4_seal = "<?=$r['cart_4_seal']?>";
+									res = cart_4_seal.split(";");
+									var value = res[1] == undefined ? "" : res[1];
 									
 									row1 +=   '<tr>'+
 										  '<td style="border: 0px">CART '+i+' NO</td>'+
@@ -829,7 +837,7 @@
 									if(i<=cart) {		
 										row3 += '<tr>'+
 												'<td style="border: 0px; padding: 10px 15px 5px 0px">'+
-													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value=""  class="easyui-validatebox tb" type="text">'+
+													' <input name="value_'+i+'" style="height: 28px" id="value_'+i+'_atm_<?=$index?>" value="'+value+'"  class="easyui-validatebox tb" type="text" required="true"><span style="color: red">*</span>'+
 												'</td>'+
 												'</tr>';
 									}
