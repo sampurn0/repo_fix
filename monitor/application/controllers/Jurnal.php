@@ -450,6 +450,7 @@ class Jurnal extends CI_Controller {
 			$mulai = ($page>1) ? ($page * $halaman) - $halaman : 0;
 			$query = "SELECT 
 						client.wsid,
+						jurnal.id_detail,
 						jurnal.tanggal,
 						jurnal.debit_100,
 						jurnal.kredit_100,
@@ -494,9 +495,9 @@ class Jurnal extends CI_Controller {
 				
 				$html_content .= '
 					<tr>
-						<td>'.$no.' '.$r->id_detail.'</td>
+						<td>'.$no.'</td>
 						<td style="text-align: center">'.($r->tanggal=="0000-00-00" ? "" : date("d-m-Y", strtotime($r->tanggal))).'</td>
-						<td style="text-align: center">'.$r->wsid.'</td>
+						<td style="text-align: center">('.$r->id_detail.') '.$r->wsid.'</td>
 						<td style="text-align: left">'.strtoupper(str_replace("_", " ", $r->keterangan_jurnal)).'</td>
 						<td style="text-align: right">'.($r->debit_100==0 ? 0 : number_format($r->debit_100, 0, ",", ",")).'</td>
 						<td style="text-align: right">'.($r->kredit_100==0 ? 0 : number_format($r->kredit_100, 0, ",", ",")).'</td>
