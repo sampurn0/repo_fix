@@ -389,7 +389,7 @@ class Ticket extends CI_Controller {
 		$data['id_ticket'] = $ticket;
 		$data['id_bank'] = strtoupper(trim($this->input->post('id_bank')));
 		$data['ticket_client'] = strtoupper(trim($this->input->post('ticket_client')));
-		$data['email_date'] = strtoupper(trim($this->input->post('email_date')));
+		$data['email_date'] = date("Y-m-d H:i:s" , strtotime(trim($this->input->post('email_date'))));
 		$data['problem_type'] = (count($this->input->post('problem_type'))>1 ? implode(", ", $this->input->post('problem_type')) : implode("", $this->input->post('problem_type')));
 		$data['teknisi_1'] = strtoupper(trim($this->input->post('teknisi_1')));
 		$data['guard'] = strtoupper(trim($this->input->post('guard')));
