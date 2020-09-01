@@ -21,8 +21,39 @@ class Combination_lock extends CI_Controller {
             redirect('');
         }
     }
+	
+	public function index() {
+		$this->data['active_menu'] = "combination_lock";
+		
+		$query = "SELECT * FROM combi_lock";
+		
+		$result = json_decode(
+					$this->curl->simple_get(rest_api().'/select/query_all', 
+						array('query'=>$query), 
+						array(CURLOPT_BUFFERSIZE => 10)
+					)
+				);
+				
+		$list = array();
+		$i = 0;
+		foreach($result as $r) {
+			$list[$i]['id'] = $r->id;
+			$list[$i]['wsid'] = $r->wsid;
+			$list[$i]['combination'] = $r->combination;
+			$list[$i]['status'] = $r->status;
+			
+			$i++;
+		}
+		
+		// echo "<pre>";
+		// print_r($list);
+		$this->data['data_combination'] = $list;
+		
+		
+        return view('admin/combilock/index', $this->data);
+	}
 
-    public function index() {
+    public function index2() {
         $this->data['active_menu'] = "combination_lock";
         
         $query = "SELECT * FROM combi_lock";
