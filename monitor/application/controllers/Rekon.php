@@ -651,7 +651,7 @@ class Rekon extends CI_Controller {
 			AND A.data_solve!='' 
 			AND D.type!='CDM' 
 			#AND A.jam_cash_in NOT LIKE '0000-00-00%'
-			#AND A.date >= '2020-08-01%'
+			AND A.date >= '2020-08-01%'
 			GROUP BY DATE(A.date)
 			ORDER BY DATE(A.date) DESC
 		";
