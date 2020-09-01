@@ -82,7 +82,7 @@ class Cashprocessing_return extends CI_Controller {
 						cashtransit_detail.id_cashtransit=cashtransit.id 
 						AND cashtransit_detail.data_solve!='' 
 						AND cashtransit_detail.data_solve!='batal' 
-						AND cashtransit_detail.cpc_process='' 
+						#AND cashtransit_detail.cpc_process='' 
 						AND cashtransit_detail.unloading='1' 
 						AND runsheet_cashprocessing.id IS NOT NULL 
 						GROUP BY cashtransit_detail.id_cashtransit
@@ -225,7 +225,7 @@ class Cashprocessing_return extends CI_Controller {
 				cashtransit_detail.data_solve!='batal' AND 
 				cashtransit_detail.id_cashtransit='".$id."' AND 
 				cashtransit_detail.data_solve!='' AND 
-				cashtransit_detail.cpc_process='' AND 
+				#cashtransit_detail.cpc_process='' AND 
 				#cashtransit_detail.unloading='1' AND 
 				cashtransit_detail.state='ro_atm' 
 				limit $offset,$rows";
@@ -464,6 +464,8 @@ class Cashprocessing_return extends CI_Controller {
 					)";
 		$ctr = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)))->ctr;
 		$this->data['ctr'] = $ctr;
+		
+// 		echo $sql;
 		
 		// if($session->userdata['level']=="LEVEL1") {
 			if($this->input->get('act')=="ATM") {

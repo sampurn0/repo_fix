@@ -112,9 +112,9 @@
 					intval($data->cart_3_seal=="" ? 0 : 1) + 
 					intval($data->cart_4_seal=="" ? 0 : 1);
 					
-			if($ctr==0) {
-				$ctr = $data_ctr;
-			}
+// 			if($ctr==0) {
+// 				$ctr = $data_ctr;
+// 			}
 		?>
 		<input name="act" type="hidden" value="<?=$act?>" readonly>
 		<input name="state" type="hidden" value="<?=$state?>" readonly>
