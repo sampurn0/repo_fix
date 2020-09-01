@@ -736,7 +736,8 @@ class Rekon extends CI_Controller {
 				D.lokasi,
 				D.type,
 				E.pcs_50000,
-				E.pcs_100000
+				E.pcs_100000,
+				(SELECT id_detail FROM run_status_cancel WHERE id_detail=A.id LIMIT 0,1) as id_detail
 			FROM cashtransit_detail A
 			LEFT JOIN cashtransit B ON (B.id=A.id_cashtransit) 
 			LEFT JOIN master_branch C ON (C.id=B.branch) 
@@ -765,7 +766,8 @@ class Rekon extends CI_Controller {
 					D.lokasi,
 					D.type,
 					E.pcs_50000,
-					E.pcs_100000
+					E.pcs_100000,
+					(SELECT id_detail FROM run_status_cancel WHERE id_detail=A.id LIMIT 0,1) as id_detail
 				FROM cashtransit_detail A
 				LEFT JOIN cashtransit B ON (B.id=A.id_cashtransit) 
 				LEFT JOIN master_branch C ON (C.id=B.branch) 
@@ -939,6 +941,14 @@ class Rekon extends CI_Controller {
 				} else if($hasil<0) {
 					$ket = "TURUN";
 				}
+			}
+			
+			if(isset($row->id_detail)) {
+				$ket .= "<br> CANCEL CASSETTE<br>(PENGISIAN SEKARANG)";
+			}
+			
+			if(isset($row2->id_detail)) {
+				$ket .= "<br> CANCEL CASSETTE<br>(PENGISIAN SEBELUMNYA)";
 			}
 			
 			if($act=="ATM") {
