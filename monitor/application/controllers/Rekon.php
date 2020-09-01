@@ -378,18 +378,8 @@ class Rekon extends CI_Controller {
 			<body style="text-align:center;">
 
 				<h1 style="color:green;">
-					GeeksForGeeks
+					TESTER PAGES @ by me
 				</h1>
-
-				<h3>
-					JavaScript | Increase and
-					Decrease image size
-				</h3>
-				<hr>
-
-				<div class="box">
-					<img src="https://media.geeksforgeeks.org/wp-content/uploads/20190912174307/qwe1.png" id="geeksZZ" GFG="250" alt="Geeksforgeeks">
-				</div>
 				<hr>
 
 				
