@@ -979,11 +979,11 @@ class Rekon extends CI_Controller {
 					'selisih' 		=> ($selisih=="" ? "-" : $this->rupiah($selisih)), 
 					'now_time' 		=> $format_now_time, 
 					'now_ctr' 		=> $ctr1, 
-					'now_D50' 		=> (intval($row->pcs_50000)==0 ? 0 : $this->rupiah($ctr1 * ($row->pcs_50000-$canceled1['lembar']))), 
-					'now_D100' 		=> (intval($row->pcs_100000)==0 ? 0 : $this->rupiah($ctr1 * ($row->pcs_100000-$canceled1['lembar']))), 
-					'now_T50' 		=> ((intval($row->pcs_50000)==0 ? 0 : $this->rupiah($ctr1 * ($row->pcs_50000-$canceled1['lembar']) * 50))), 
-					'now_T100' 		=> ((intval($row->pcs_100000)==0 ? 0 : $this->rupiah($ctr1 * ($row->pcs_100000-$canceled1['lembar']) * 100))), 
-					'now_total' 	=> $this->rupiah(($ctr1*(intval($row->pcs_50000)!==0 ? ($row->pcs_50000-$canceled1['lembar']) : ($row->pcs_100000-$canceled1['lembar']))*(intval($row->pcs_50000)!==0 ? 50 : 100))), 
+					'now_D50' 		=> (intval($row->pcs_50000)==0 ? 0 : $this->rupiah($ctr1 * $row->pcs_50000)), 
+					'now_D100' 		=> (intval($row->pcs_100000)==0 ? 0 : $this->rupiah($ctr1 * $row->pcs_100000)), 
+					'now_T50' 		=> ((intval($row->pcs_50000)==0 ? 0 : $this->rupiah($ctr1 * $row->pcs_50000 * 50))), 
+					'now_T100' 		=> ((intval($row->pcs_100000)==0 ? 0 : $this->rupiah($ctr1 * $row->pcs_100000 * 100))), 
+					'now_total' 	=> $this->rupiah(($ctr1*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*(intval($row->pcs_50000)!==0 ? 50 : 100))), 
 					'keterangan' 	=> $ket
 				);
 			}else if($act=="CRM") { 
