@@ -1190,6 +1190,7 @@ class Rekon extends CI_Controller {
 		$sql = "
 			SELECT 
 				A.id,
+				B.id as id_ct,
 				A.jam_cash_in,
 				A.data_solve,
 				A.cpc_process,
@@ -1220,6 +1221,7 @@ class Rekon extends CI_Controller {
 			$sql = "
 				SELECT 
 					A.id,
+					B.id as id_ct,
 					A.jam_cash_in,
 					A.data_solve,
 					A.cpc_process,
@@ -1259,7 +1261,8 @@ class Rekon extends CI_Controller {
 			
 			$sql2 = "
 				SELECT 
-					A.*,
+					A.id,
+					B.id as id_ct,
 					A.ctr as jum_ctr,
 					E.pcs_50000,
 					E.pcs_100000,
@@ -1479,7 +1482,7 @@ class Rekon extends CI_Controller {
 					// 'cancel' 		=> 0, 
 					'no' 			=> $no, 
 					'date' 			=> $date, 
-					'wsid' 			=> "ID NOW : ".$row->id.", "."ID PREV : ".$row2->id.", ".$row->wsid, 
+					'wsid' 			=> "ID NOW : (".$row->id_ct.")".$row->id.", "."ID PREV : (".$row2->id_ct.")".$row2->id.", ".$row->wsid, 
 					// 'wsid' 			=> $row->wsid, 
 					'lokasi' 		=> $row->lokasi, 
 					'type' 			=> $row->type, 

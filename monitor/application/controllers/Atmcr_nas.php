@@ -130,7 +130,11 @@ class atmcr_nas extends CI_Controller {
 					SELECT id_karyawan
 					FROM karyawan
 					WHERE karyawan.nik = runsheet_operational.custodian_2
-				), '') AS id_karyawan_2
+				), '') AS id_karyawan_2,
+				(SELECT cart_seal FROM run_status_cancel WHERE id_detail=cashtransit_detail.id AND cart_no='cart_1_seal') as cart_1_cancel,
+				(SELECT cart_seal FROM run_status_cancel WHERE id_detail=cashtransit_detail.id AND cart_no='cart_2_seal') as cart_2_cancel,
+				(SELECT cart_seal FROM run_status_cancel WHERE id_detail=cashtransit_detail.id AND cart_no='cart_3_seal') as cart_3_cancel,
+				(SELECT cart_seal FROM run_status_cancel WHERE id_detail=cashtransit_detail.id AND cart_no='cart_4_seal') as cart_4_cancel
 			FROM cashtransit 
 			LEFT JOIN master_branch ON(cashtransit.branch=master_branch.id) 
 			LEFT JOIN cashtransit_detail ON(cashtransit.id=cashtransit_detail.id_cashtransit) 
@@ -170,7 +174,7 @@ class atmcr_nas extends CI_Controller {
 				$data = json_decode($row->data_solve);
 			}
 			
-			
+			// print_r($data);
 			// echo $type;
 			
 			if($type=="ATM") {
@@ -180,13 +184,39 @@ class atmcr_nas extends CI_Controller {
 				// $ttl_all = 'Rp. '.number_format(($ctr*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*$denom), 0, ",", ".").'';
 				// $terbilang = ucwords($this->terbilang(($ctr*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*$denom)));
 				
-				$ttl_ctr = '('.$ctr.') '.(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000).'';
+				$row_cart_1_seal = explode(";", $row->cart_1_seal)[0];
+				$row_cart_2_seal = explode(";", $row->cart_2_seal)[0];
+				$row_cart_3_seal = explode(";", $row->cart_3_seal)[0];
+				$row_cart_4_seal = explode(";", $row->cart_4_seal)[0];
+				
+				$data_cart_1_seal = explode(";", $data->cart_1_seal);
+				$data_cart_2_seal = explode(";", $data->cart_2_seal);
+				$data_cart_3_seal = explode(";", $data->cart_3_seal);
+				$data_cart_4_seal = explode(";", $data->cart_4_seal);
+				
+				$cart_1_cancel = explode(";", $row->cart_1_cancel);
+				$cart_2_cancel = explode(";", $row->cart_2_cancel);
+				$cart_3_cancel = explode(";", $row->cart_3_cancel);
+				$cart_4_cancel = explode(";", $row->cart_4_cancel);
+				
+				$cancel_ctr = ($cart_1_cancel[0]!=="" ? 1 : 0)+
+							  ($cart_2_cancel[0]!=="" ? 1 : 0)+
+							  ($cart_3_cancel[0]!=="" ? 1 : 0)+
+							  ($cart_4_cancel[0]!=="" ? 1 : 0);
+				
+				$cancel_lembar = ($cart_1_cancel[0]!=="" ? $cart_1_cancel[1] : 0)+
+								 ($cart_2_cancel[0]!=="" ? $cart_2_cancel[1] : 0)+
+								 ($cart_3_cancel[0]!=="" ? $cart_3_cancel[1] : 0)+
+								 ($cart_4_cancel[0]!=="" ? $cart_4_cancel[1] : 0);
+				
+				$ttl_ctr = '('.($ctr-$cancel_ctr).') '.(intval($row->pcs_50000)!==0 ? ($row->pcs_50000-$cancel_lembar) : ($row->pcs_100000-$cancel_lembar)).'';
 				$denom = (intval($row->pcs_50000)!==0 ? "50000" : (intval($row->total)!==0 ? "100000" : $row->denom));
-				$value = (intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000);
+				$value = (intval($row->pcs_50000)!==0 ? ($row->pcs_50000-$cancel_lembar) : ($row->pcs_100000-$cancel_lembar));
 				// $ttl_all = 'Rp. '.number_format(($ctr*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*$denom), 0, ",", ".").'';
 				// $terbilang = ucwords($this->terbilang(($ctr*(intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*$denom)));
-				$ttl_all = 'Rp. '.number_format($row->total, 0, ",", ".").'';
-				$terbilang = ucwords($this->terbilang($row->total));
+				$total = ($row->total-($cancel_lembar*$denom));
+				$ttl_all = 'Rp. '.number_format($total, 0, ",", ".").'';
+				$terbilang = ucwords($this->terbilang($total));
 				
 				
 				$tbag_html = '';
@@ -248,38 +278,38 @@ class atmcr_nas extends CI_Controller {
 						<tbody>
 							<tr>
 								<td>Catridge 1</td>
-								<td align="center">'.$row->cart_1_seal.'</td>
+								<td align="center">'.$row_cart_1_seal.'</td>
 								<td></td>
-								<td></td>
-								<td align="center">'.$data->cart_1_seal.'</td>
-								<td align="center">'.($data->cart_1_seal!=="" ? intval($data->cart_1_no) : "").'</td>
+								<td align="center">'.$cart_1_cancel[0].'</td>
+								<td align="center">'.$data_cart_1_seal[0].'</td>
+								<td align="center">'.($data_cart_1_seal[0]!=="" ? intval($data->cart_1_no) : "").'</td>
 								<td align="left">'.($data->cart_1_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_1_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
 							<tr>
 								<td>Catridge 2</td>
-								<td align="center">'.$row->cart_2_seal.'</td>
+								<td align="center">'.$row_cart_2_seal.'</td>
 								<td></td>
-								<td></td>
-								<td align="center">'.$data->cart_2_seal.'</td>
-								<td align="center">'.($data->cart_2_seal!=="" ? intval($data->cart_2_no) : "").'</td>
+								<td align="center">'.$cart_2_cancel[0].'</td>
+								<td align="center">'.$data_cart_2_seal[0].'</td>
+								<td align="center">'.($data_cart_2_seal[0]!=="" ? intval($data->cart_2_no) : "").'</td>
 								<td align="left">'.($data->cart_2_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_2_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
 							<tr>
 								<td>Catridge 3</td>
-								<td align="center">'.$row->cart_3_seal.'</td>
+								<td align="center">'.$row_cart_3_seal.'</td>
 								<td></td>
-								<td></td>
-								<td align="center">'.$data->cart_3_seal.'</td>
-								<td align="center">'.($data->cart_3_seal!=="" ? intval($data->cart_3_no) : "").'</td>
+								<td align="center">'.$cart_3_cancel[0].'</td>
+								<td align="center">'.$data_cart_3_seal[0].'</td>
+								<td align="center">'.($data_cart_3_seal[0]!=="" ? intval($data->cart_3_no) : "").'</td>
 								<td align="left">'.($data->cart_3_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_3_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
 							<tr>
 								<td>Catridge 4</td>
-								<td align="center">'.$row->cart_4_seal.'</td>
+								<td align="center">'.$row_cart_4_seal.'</td>
 								<td></td>
-								<td></td>
-								<td align="center">'.$data->cart_4_seal.'</td>
-								<td align="center">'.($data->cart_4_seal!=="" ? intval($data->cart_4_no) : "").'</td>
+								<td align="center">'.$cart_4_cancel[0].'</td>
+								<td align="center">'.$data_cart_4_seal[0].'</td>
+								<td align="center">'.($data_cart_4_seal[0]!=="" ? intval($data->cart_4_no) : "").'</td>
 								<td align="left">'.($data->cart_4_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_4_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
 							<tr>
@@ -836,7 +866,6 @@ class atmcr_nas extends CI_Controller {
 					$total_all_value = $total_seal1_value+$total_seal2_value+$total_seal3_value+$total_seal4_value+$total_divert_value;
 					$total_all_value_str = 'Rp. <span class="alignright">'.number_format(($total_all_value*1000), 0, ",", ".").'</span>';
 				}
-				
 				
 				$inner_content_html = '
 					<table style="width: 100%; font-size: 10px;" border="1" class="sixth">

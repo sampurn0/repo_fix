@@ -112,6 +112,8 @@
 					intval($data->cart_3_seal=="" ? 0 : 1) + 
 					intval($data->cart_4_seal=="" ? 0 : 1);
 					
+			// echo "<pre>";
+			// print_r($data);
 // 			if($ctr==0) {
 // 				$ctr = $data_ctr;
 // 			}
@@ -262,65 +264,81 @@
 						cart_1_no = "<?=$cpc->cart_1_no?>";
 						cart_1_seal = "<?=$data->cart_1_seal?>";
 						
-						row1 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_1_seal+'" class="easyui-validatebox tb" type="text"></td>'+
-							  '</tr>';
-							  
-						row2 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_1_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>"  type="text" required="true"></td>'+
-							  '</tr>';
+						if(cart_1_seal!=="") {
+							row1 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' SEAL</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_1_seal+'" class="easyui-validatebox tb" type="text"></td>'+
+								  '</tr>';
+								  
+							row2 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' VALUE</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_1_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>"  type="text" required="true"></td>'+
+								  '</tr>';
+						} else {
+							i = i+1;
+						}
 					}
 					if(i==2) {
 						cart_2_no = "<?=$cpc->cart_2_no?>";
 						cart_2_seal = "<?=$data->cart_2_seal?>";
 						
-						row1 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_2_seal+'" class="easyui-validatebox tb" type="text"></td>'+
-							  '</tr>';
-							  
-						row2 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_2_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
-							  '</tr>';
+						if(cart_2_seal!=="") {
+							row1 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' SEAL</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_2_seal+'" class="easyui-validatebox tb" type="text"></td>'+
+								  '</tr>';
+								  
+							row2 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' VALUE</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_2_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
+								  '</tr>';
+						} else {
+							i = i+1;
+						}
 					}
 					if(i==3) {
 						cart_3_no = "<?=$cpc->cart_3_no?>";
 						cart_3_seal = "<?=$data->cart_3_seal?>";
 						
-						row1 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_3_seal+'" class="easyui-validatebox tb" type="text"></td>'+
-							  '</tr>';
-							  
-						row2 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_3_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
-							  '</tr>';
+						if(cart_3_seal!=="") {
+							row1 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' SEAL</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_3_seal+'" class="easyui-validatebox tb" type="text"></td>'+
+								  '</tr>';
+								  
+							row2 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' VALUE</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_3_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
+								  '</tr>';
+						} else {
+							i = i+1;
+						}
 					}
 					if(i==4) {
 						cart_4_no = "<?=$cpc->cart_4_no?>";
 						cart_4_seal = "<?=$data->cart_4_seal?>";
 						
-						row1 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_4_seal+'" class="easyui-validatebox tb" type="text"></td>'+
-							  '</tr>';
-							  
-						row2 +=   '<tr>'+
-							  '<td style="border: 0px">CART '+i+' VALUE</td>'+
-							  '<td style="border: 0px">:</td>'+
-							  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_4_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
-							  '</tr>';
+						if(cart_4_seal!=="") {
+							row1 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' SEAL</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_seal" style="height: 28px;" value="'+cart_4_seal+'" class="easyui-validatebox tb" type="text"></td>'+
+								  '</tr>';
+								  
+							row2 +=   '<tr>'+
+								  '<td style="border: 0px">CART '+i+' VALUE</td>'+
+								  '<td style="border: 0px">:</td>'+
+								  '<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="cart_'+i+'_val" style="height: 28px" value="'+cart_4_no+'"  class="easyui-validatebox tb" id="cart_'+i+'_val<?=$index?>" type="text" required="true"></td>'+
+								  '</tr>';
+						} else {
+							i = i+1;
+						}
 					}
 					
 					
