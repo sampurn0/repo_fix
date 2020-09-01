@@ -834,9 +834,10 @@ class Rekon extends CI_Controller {
 			
 			// KETERANGAN 
 			$denom = (intval($row->pcs_50000)!==0 ? "50000" : "100000");
-			$now_total = ($row->jum_ctr * (intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*(intval($row->pcs_50000)!==0 ? 50 : 100));
-			$s50k = ($ctr2 * (intval($row2->pcs_50000)==0 ? 0 : $row2->pcs_50000))*50;
-			$s100k = ($ctr2 * (intval($row->pcs_100000)==0 ? 0 : $row->pcs_100000))*100;
+			$now_total = ($ctr1 * (intval($row->pcs_50000)!==0 ? ($row->pcs_50000-$canceled1['lembar']) : ($row->pcs_100000-$canceled1['lembar']))*(intval($row->pcs_50000)!==0 ? 50 : 100));
+			$s50k = ($ctr2 * (intval($row2->pcs_50000)==0 ? 0 : $row2->pcs_50000-$canceled2['lembar']))*50;
+			$s100k = ($ctr2 * (intval($row->pcs_100000)==0 ? 0 : $row->pcs_100000-$canceled2['lembar']))*100;
+			
 			
 			$dispensed = intval(str_replace(".", "", $data->return_withdraw))/$denom;
 			$return_withdraw = str_replace(".", "", str_replace(",", "", $data->return_withdraw));
@@ -902,6 +903,8 @@ class Rekon extends CI_Controller {
 				// echo "<pre>";
 				// print_r($data);
 			// }
+			
+			// echo $now_total." ".$s50k;
 			
 			$hasil = 0;
 			$ket = "";
@@ -1161,16 +1164,6 @@ class Rekon extends CI_Controller {
 		
 		$tanggal = "%".date('Y-m-d')."%";
 		$tanggal = (isset($_REQUEST['datea']) ? "%".$_REQUEST['datea']."%" : "");
-		// A.id, 
-		// A.date, 
-		// A.jam_cash_in,
-		// A.updated_date, 
-		// A.id_cashtransit, 
-		// A.id_bank, 
-		// A.ctr, 
-		// A.state, 
-		// A.data_solve, 
-		// A.cpc_process
 		
 		$limit = $_REQUEST['limit']-1;
 		// echo $limit;
@@ -1179,24 +1172,6 @@ class Rekon extends CI_Controller {
 		} else {
 			$limit = "LIMIT $limit,1";
 		}
-		
-		// $sql_new = "
-			// SELECT count(A.id) as cnt
-			// FROM cashtransit_detail A
-			// LEFT JOIN cashtransit B ON (B.id=A.id_cashtransit) 
-			// LEFT JOIN master_branch C ON (C.id=B.branch) 
-			// LEFT JOIN client D ON(D.id=A.id_bank) 
-			// LEFT JOIN runsheet_cashprocessing E ON(E.id=A.id) 
-			// WHERE A.data_solve!='batal' 
-			// AND A.state='ro_atm' 
-			// AND A.data_solve!='' 
-			// AND D.type!='CDM' 
-			// AND A.jam_cash_in LIKE '$tanggal'
-			// AND A.jam_cash_in NOT LIKE '0000-00-00%'
-			// ORDER BY A.jam_cash_in ASC $limit
-		// ";
-		
-		// $result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql_new), array(CURLOPT_BUFFERSIZE => 10)));
 		
 		$sql = "
 			SELECT 
@@ -1307,9 +1282,10 @@ class Rekon extends CI_Controller {
 			
 			// KETERANGAN 
 			$denom = (intval($row->pcs_50000)!==0 ? "50000" : "100000");
-			$now_total = ($row->jum_ctr * (intval($row->pcs_50000)!==0 ? $row->pcs_50000 : $row->pcs_100000)*(intval($row->pcs_50000)!==0 ? 50 : 100));
-			$s50k = ($ctr2 * (intval($row2->pcs_50000)==0 ? 0 : $row2->pcs_50000))*50;
-			$s100k = ($ctr2 * (intval($row->pcs_100000)==0 ? 0 : $row->pcs_100000))*100;
+			$now_total = ($ctr1 * (intval($row->pcs_50000)!==0 ? ($row->pcs_50000-$canceled1['lembar']) : ($row->pcs_100000-$canceled1['lembar']))*(intval($row->pcs_50000)!==0 ? 50 : 100));
+			$s50k = ($ctr2 * (intval($row2->pcs_50000)==0 ? 0 : $row2->pcs_50000-$canceled2['lembar']))*50;
+			$s100k = ($ctr2 * (intval($row->pcs_100000)==0 ? 0 : $row->pcs_100000-$canceled2['lembar']))*100;
+			
 			
 			$dispensed = intval(str_replace(".", "", $data->return_withdraw))/$denom;
 			$return_withdraw = str_replace(".", "", str_replace(",", "", $data->return_withdraw));
