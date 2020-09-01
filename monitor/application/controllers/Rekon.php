@@ -336,7 +336,7 @@ class Rekon extends CI_Controller {
 			AND A.state='ro_atm' 
 			AND A.data_solve!='' 
 			AND D.type!='CDM' 
-			AND A.jam_cash_in LIKE '0000-00-00%'
+			#AND A.jam_cash_in LIKE '0000-00-00%'
 			AND A.date >= '2020-07-01%'
 			GROUP BY DATE(A.date)
 		";
@@ -426,6 +426,25 @@ class Rekon extends CI_Controller {
 		
 		
 		if(!empty($datea)) {
+			$where1 = "
+				A.data_solve!='batal' 
+				AND A.state='ro_atm' 
+				AND A.data_solve!='' 
+				AND D.type!='CDM' 
+				#AND A.jam_cash_in LIKE '0000-00-00%'
+				AND A.date LIKE '$datea%'
+				ORDER BY cash_id ASC, A.updated_date ASC
+			";
+			$where2 = "
+				A.data_solve!='batal' 
+				AND A.state='ro_atm' 
+				AND A.data_solve!='' 
+				AND D.type!='CDM' 
+				#AND A.jam_cash_in LIKE '0000-00-00%'
+				AND A.date LIKE '$datea%'
+				ORDER BY cash_id ASC, A.updated_date ASC
+			";
+			
 			$sql = "
 				SELECT 
 					A.id, 
@@ -458,13 +477,8 @@ class Rekon extends CI_Controller {
 				LEFT JOIN master_branch C ON (C.id=B.branch) 
 				LEFT JOIN client D ON(D.id=A.id_bank) 
 				LEFT JOIN runsheet_cashprocessing E ON(E.id=A.id) 
-				WHERE A.data_solve!='batal' 
-				AND A.state='ro_atm' 
-				AND A.data_solve!='' 
-				AND D.type!='CDM' 
-				AND A.jam_cash_in LIKE '0000-00-00%'
-				AND A.date LIKE '$datea%'
-				ORDER BY cash_id ASC, A.updated_date ASC
+				WHERE 
+				$where1
 			";
 			
 				// #AND A.jam_cash_in = '0000-00-00%'
@@ -838,7 +852,7 @@ class Rekon extends CI_Controller {
 			$denom = (intval($row->pcs_50000)!==0 ? "50000" : "100000");
 			$now_total = ($ctr1 * (intval($row->pcs_50000)!==0 ? ($row->pcs_50000-$canceled1['lembar']) : ($row->pcs_100000-$canceled1['lembar']))*(intval($row->pcs_50000)!==0 ? 50 : 100));
 			$s50k = ($ctr2 * (intval($row2->pcs_50000)==0 ? 0 : $row2->pcs_50000-$canceled2['lembar']))*50;
-			$s100k = ($ctr2 * (intval($row->pcs_100000)==0 ? 0 : $row->pcs_100000-$canceled2['lembar']))*100;
+			$s100k = ($ctr2 * (intval($row2->pcs_100000)==0 ? 0 : $row2->pcs_100000-$canceled2['lembar']))*100;
 			
 			
 			$dispensed = intval(str_replace(".", "", $data->return_withdraw))/$denom;
@@ -906,7 +920,7 @@ class Rekon extends CI_Controller {
 				// print_r($data);
 			// }
 			
-			// echo $now_total." ".$s50k;
+			// echo $now_total." ".$s100k;
 			
 			$hasil = 0;
 			$ket = "";
@@ -1194,7 +1208,8 @@ class Rekon extends CI_Controller {
 				D.lokasi,
 				D.type,
 				E.pcs_50000,
-				E.pcs_100000
+				E.pcs_100000,
+				(SELECT id_detail FROM run_status_cancel WHERE id_detail=A.id LIMIT 0,1) as id_detail
 			FROM cashtransit_detail A
 			LEFT JOIN cashtransit B ON (B.id=A.id_cashtransit) 
 			LEFT JOIN master_branch C ON (C.id=B.branch) 
@@ -1223,7 +1238,8 @@ class Rekon extends CI_Controller {
 					D.lokasi,
 					D.type,
 					E.pcs_50000,
-					E.pcs_100000
+					E.pcs_100000,
+					(SELECT id_detail FROM run_status_cancel WHERE id_detail=A.id LIMIT 0,1) as id_detail
 				FROM cashtransit_detail A
 				LEFT JOIN cashtransit B ON (B.id=A.id_cashtransit) 
 				LEFT JOIN master_branch C ON (C.id=B.branch) 
@@ -1294,7 +1310,7 @@ class Rekon extends CI_Controller {
 			$denom = (intval($row->pcs_50000)!==0 ? "50000" : "100000");
 			$now_total = ($ctr1 * (intval($row->pcs_50000)!==0 ? ($row->pcs_50000-$canceled1['lembar']) : ($row->pcs_100000-$canceled1['lembar']))*(intval($row->pcs_50000)!==0 ? 50 : 100));
 			$s50k = ($ctr2 * (intval($row2->pcs_50000)==0 ? 0 : $row2->pcs_50000-$canceled2['lembar']))*50;
-			$s100k = ($ctr2 * (intval($row->pcs_100000)==0 ? 0 : $row->pcs_100000-$canceled2['lembar']))*100;
+			$s100k = ($ctr2 * (intval($row2->pcs_100000)==0 ? 0 : $row2->pcs_100000-$canceled2['lembar']))*100;
 			
 			
 			$dispensed = intval(str_replace(".", "", $data->return_withdraw))/$denom;
@@ -1398,6 +1414,14 @@ class Rekon extends CI_Controller {
 				} else if($hasil<0) {
 					$ket = "TURUN";
 				}
+			}
+			
+			if(isset($row->id_detail)) {
+				$ket .= "<br> CANCEL CASSETTE<br>(PENGISIAN SEKARANG)";
+			}
+			
+			if(isset($row2->id_detail)) {
+				$ket .= "<br> CANCEL CASSETTE<br>(PENGISIAN SEBELUMNYA)";
 			}
 			
 			// $data_prev[] = array('id'=>null, 'no'=>null, 'date'=>null, 'wsid'=>null, 'lokasi'=>null, 'type'=>null, 'tanggal'=>null, 'time'=>null, 'ctr'=>null, 'total'=>null, 'csst1'=>null, 'csst2'=>null, 'csst3'=>null, 'csst4'=>null, 'reject'=>null, 'D50'=>null, 'D100'=>null, 'T50'=>null, 'T100'=>null, 'CSST1_50'=>null, 'CSST1_100'=>null, 'CSST2_50'=>null, 'CSST2_100'=>null, 'CSST3_50'=>null, 'CSST3_100'=>null, 'CSST4_50'=>null, 'CSST4_100'=>null, 'RJT50'=>null, 'RJT100'=>null, 'TOTALA'=>null, 'CSST1B50'=>null, 'CSST1B100'=>null, 'TOTALB'=>null, 'selisih'=>null, 'now_time'=>null, 'now_ctr'=>null, 'now_D50'=>null, 'now_D100'=>null, 'now_T50'=>null, 'now_T100'=>null, 'now_total'=>null, 'keterangan'=>null);
@@ -2599,7 +2623,7 @@ class Rekon extends CI_Controller {
 							<th style="vertical-align: middle" rowspan="4">Lokasi</th>
 							<th style="vertical-align: middle" rowspan="4">ATM/CRM</th>
 							<th style="vertical-align: middle" colspan="30" '.$show_hide.'>REKONSILIASI</th>
-							<th style="vertical-align: middle" rowspan="4">Counter (khusus CRM) (x1000)</th>
+							<th style="vertical-align: middle" rowspan="4">Counter<br>(khusus CRM)<br>(x1000)</th>
 							<th style="vertical-align: middle" rowspan="'.($show_hide=="hidden" ? "4" : "2").'">Selisih</th>
 							<th style="vertical-align: middle" rowspan="4">Time</th>
 							<th style="vertical-align: middle" colspan="4">PENGISIAN BERIKUTNYA</th>
