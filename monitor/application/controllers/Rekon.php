@@ -194,8 +194,8 @@ class Rekon extends CI_Controller {
 				LEFT JOIN master_branch C ON (C.id=B.branch) 
 				LEFT JOIN client D ON(D.id=A.id_bank) 
 				LEFT JOIN runsheet_cashprocessing E ON(E.id=A.id) 
-				WHERE A.data_solve!='batal' 
-				AND A.state='ro_atm' 
+				WHERE 
+				A.state='ro_atm' 
 				AND A.data_solve!='' 
 				AND D.type!='CDM' 
 				AND D.wsid LIKE '$datea%'
@@ -218,9 +218,11 @@ class Rekon extends CI_Controller {
 				echo $datea;
 			}
 			foreach($result as $r) { 
+				$batal = ($r->data_solve=="batal" ? "(BATAL)" : "");
+			
 				echo '<tr>';
 					echo '<td>';
-						echo '<span style="font-size: 28px; font-weight: bold">'.$r->id.'<br>'.$r->wsid.'<br>H-'.$r->h_min.'<br>RUN-'.$r->run_number.'</span>';
+						echo '<span style="font-size: 28px; font-weight: bold">'.$r->date.'<br>'.$r->id.'<br>'.$r->wsid.'<br>H-'.$r->h_min.'<br>RUN-'.$r->run_number.'<br>'.$batal.'</span>';
 					echo '</td>';
 					echo '<td>';
 						echo '<img width="210px"  height="290px" id="geeks_1_'.$r->id.'" src="'.$r->receipt_1.'"/><br>';
