@@ -278,37 +278,37 @@ class atmcr_nas extends CI_Controller {
 						<tbody>
 							<tr>
 								<td>Catridge 1</td>
-								<td align="center">'.$row_cart_1_seal[0].' '.$row_cart_1_seal[1].'</td>
+								<td align="center">'.$row->cart_1_seal.'</td>
 								<td></td>
-								<td align="center">'.$cart_1_cancel[0].' '.$cart_1_cancel[1].'</td>
-								<td align="center">'.$data_cart_1_seal[0].' '.$data_cart_1_seal[1].'</td>
+								<td align="center">'.$row->cart_1_cancel.'</td>
+								<td align="center">'.$data->cart_1_seal.'</td>
 								<td align="center">'.($data_cart_1_seal[0]!=="" ? intval($data->cart_1_no) : "").'</td>
 								<td align="left">'.($data->cart_1_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_1_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
 							<tr>
 								<td>Catridge 2</td>
-								<td align="center">'.$row_cart_2_seal[0].' '.$row_cart_2_seal[1].'</td>
+								<td align="center">'.$row->cart_2_seal.'</td>
 								<td></td>
-								<td align="center">'.$cart_2_cancel[0].' '.$cart_2_cancel[1].'</td>
-								<td align="center">'.$data_cart_2_seal[0].' '.$data_cart_2_seal[1].'</td>
+								<td align="center">'.$row->cart_2_cancel.'</td>
+								<td align="center">'.$data->cart_2_seal.'</td>
 								<td align="center">'.($data_cart_2_seal[0]!=="" ? intval($data->cart_2_no) : "").'</td>
 								<td align="left">'.($data->cart_2_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_2_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
 							<tr>
 								<td>Catridge 3</td>
-								<td align="center">'.$row_cart_3_seal[0].' '.$row_cart_3_seal[1].'</td>
+								<td align="center">'.$row->cart_3_seal.'</td>
 								<td></td>
-								<td align="center">'.$cart_3_cancel[0].' '.$cart_3_cancel[1].'</td>
-								<td align="center">'.$data_cart_3_seal[0].' '.$data_cart_3_seal[1].'</td>
+								<td align="center">'.$row->cart_3_cancel.'</td>
+								<td align="center">'.$data->cart_3_seal.'</td>
 								<td align="center">'.($data_cart_3_seal[0]!=="" ? intval($data->cart_3_no) : "").'</td>
 								<td align="left">'.($data->cart_3_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_3_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
 							<tr>
 								<td>Catridge 4</td>
-								<td align="center">'.$row_cart_4_seal[0].' '.$row_cart_4_seal[1].'</td>
+								<td align="center">'.$row->cart_4_seal.'</td>
 								<td></td>
-								<td align="center">'.$cart_4_cancel[0].' '.$cart_4_cancel[1].'</td>
-								<td align="center">'.$data_cart_4_seal[0].' '.$data_cart_4_seal[1].'</td>
+								<td align="center">'.$row->cart_4_cancel.'</td>
+								<td align="center">'.$data->cart_4_seal.'</td>
 								<td align="center">'.($data_cart_4_seal[0]!=="" ? intval($data->cart_4_no) : "").'</td>
 								<td align="left">'.($data->cart_4_seal!=="" ? 'Rp. <span class="alignright">'.number_format((intval($denom)*$data->cart_4_no), 0, ",", ".").'</span>' : "").'</td>
 							</tr>
