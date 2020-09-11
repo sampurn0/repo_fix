@@ -73,14 +73,14 @@ class Table extends REST_Controller {
 	
 	function delete_sync_get() {
 		$query = "
-			DELETE FROM `jurnal_sync` WHERE tanggal > '2020-08-02'
+			DELETE FROM `jurnal_sync` WHERE tanggal LIKE '%".date("Y-m")."%'
 		";
 		$this->db->query($query);
 	}
 	
 	function count_rows() {
 		$query = "SELECT count(*) as cnt FROM jurnal 
-			WHERE tanggal > '2020-08-02' AND 
+			WHERE tanggal LIKE '%".date("Y-m")."%' AND 
 			NOT EXISTS (
 				SELECT * FROM jurnal_sync 
 				WHERE ids = jurnal.id
@@ -105,7 +105,7 @@ class Table extends REST_Controller {
 		LEFT JOIN (SELECT id, id_bank FROM cashtransit_detail) AS cashtransit_detail ON(cashtransit_detail.id=jurnal.id_detail)
 		LEFT JOIN (SELECT id, wsid FROM client) AS client ON(client.id=cashtransit_detail.id_bank)
 		WHERE 
-			jurnal.tanggal > '2020-08-02' AND 
+			jurnal.tanggal LIKE '%".date("Y-m")."%' AND 
 			NOT EXISTS (
 				SELECT * FROM jurnal_sync 
 				WHERE ids = jurnal.id
