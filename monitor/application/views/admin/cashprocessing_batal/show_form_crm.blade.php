@@ -100,7 +100,6 @@
 		<?php 
 			$r = get_object_vars($row);
 			
-			
 			$data = json_decode($r['data_solve']);
 			
 			$ctr  = intval($data->cart_1_seal=="" ? 0 : 1) + 
@@ -108,7 +107,8 @@
 					intval($data->cart_3_seal=="" ? 0 : 1) + 
 					intval($data->cart_4_seal=="" ? 0 : 1);
 					
-			// print_r($data);
+			$ctr = intval($r['ctr'])-1;
+			// print_r($r['cart_1_seal']);
 		?>
 		<input name="act" type="hidden" value="<?=$act?>" readonly>
 		<input name="state" type="hidden" value="<?=$state?>" readonly>
@@ -155,7 +155,7 @@
 					<input name="div_50" style="width: 100px; height: 28px;" value="" data-options="prompt:'50K'" class="easyui-validatebox tb" type="text">
 				</td>
 			</tr>
-			<tr>
+			<tr hidden>
 				<td style="border: 0px; padding: 10px 15px 5px 0px">
 					<input name="tbag_100" style="width: 100px; height: 28px;" value="" data-options="prompt:'100K'" class="easyui-validatebox tb" type="text">
 					<input name="tbag_50" style="width: 100px; height: 28px;" value="" data-options="prompt:'50K'" class="easyui-validatebox tb" type="text">
@@ -284,11 +284,10 @@
 				var row1 = '';
 				var row2 = '';
 				
-				
 				for(var i=1; i<=cart; i++) {
 					if(i==1) {
 						cart_1_no = "<?=$r['cart_1_no']?>";
-						cart_1_seal = "<?=$data->cart_1_seal?>";
+						cart_1_seal = "<?=$r['cart_1_seal']?>";
 						
 						row1 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
@@ -304,7 +303,7 @@
 					}
 					if(i==2) {
 						cart_2_no = "<?=$r['cart_2_no']?>";
-						cart_2_seal = "<?=$data->cart_2_seal?>";
+						cart_2_seal = "<?=$r['cart_2_seal']?>";
 						
 						row1 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
@@ -320,7 +319,7 @@
 					}
 					if(i==3) {
 						cart_3_no = "<?=$r['cart_3_no']?>";
-						cart_3_seal = "<?=$data->cart_3_seal?>";
+						cart_3_seal = "<?=$r['cart_3_seal']?>";
 						
 						row1 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
@@ -336,7 +335,7 @@
 					}
 					if(i==4) {
 						cart_4_no = "<?=$r['cart_4_no']?>";
-						cart_4_seal = "<?=$data->cart_4_seal?>";
+						cart_4_seal = "<?=$r['cart_4_seal']?>";
 						
 						row1 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
@@ -351,7 +350,7 @@
 							  '</tr>';
 					}
 					if(i==5) {
-						cart_5_seal = "<?=$data->cart_5_seal?>";
+						cart_5_seal = "<?=$r['cart_5_seal']?>";
 						
 						row1 +=   '<tr>'+
 							  '<td style="border: 0px">CART '+i+' SEAL</td>'+
