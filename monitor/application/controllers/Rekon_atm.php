@@ -467,9 +467,13 @@ class Rekon_atm extends CI_Controller {
 		$output = array();
 		if(!empty($data_prev)) {
 			$output['table1'] = $this->show_table($data_prev);
-			$output['table2'] = $this->show_table2($data_prev2);
 		} else {
 			$output['table1'] = "<center>SORRY, NO DATA!</center>";
+		}
+		
+		if(!empty($data_prev2)) {
+			$output['table2'] = $this->show_table2($data_prev2);
+		} else {
 			$output['table2'] = "<center>SORRY, NO DATA!</center>";
 		}
 		

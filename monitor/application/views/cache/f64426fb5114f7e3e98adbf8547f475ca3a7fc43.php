@@ -452,7 +452,7 @@
 						self.showLoading();
 						
 						$.ajax({
-							url     : "<?=base_url()?>rekon_atm/get_data_by_search",
+							url     : "<?=base_url()?>rekon_atm/get_data_by_search2",
 							type    : "POST",
 							data    : {date: dateText},
 							dataType: "json",
