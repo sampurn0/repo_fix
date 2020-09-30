@@ -772,6 +772,14 @@ class Plan extends REST_Controller {
 		if($r['data_solve']!="") 	{ $data['data_solve']	= $r['data_solve']; }
 		if($r['loading']!="") 		{ $data['loading']	= $r['loading']; }
 		
+		$id_bank = $this->db->query("SELECT id_bank FROM cashtransit_detail WHERE id='".$r['id']."'")->row_array()['id_bank'];
+		$prev = $this->db->query("SELECT * FROM (SELECT `id`, `id_cashtransit`, `id_bank`, `id_pengirim`, `id_penerima`, `no_boc`, `state`, `metode`, `jenis`, `denom`, `pcs_100000`, `pcs_50000`, `pcs_20000`, `pcs_10000`, `pcs_5000`, `pcs_2000`, `pcs_1000`, `pcs_coin`, `detail_uang`, `ctr`, `divert`, `total`, `date`, `data_solve`, `cpc_process`, `updated_date` FROM cashtransit_detail) AS cashtransit_detail LEFT JOIN runsheet_cashprocessing ON (runsheet_cashprocessing.id=cashtransit_detail.id) WHERE cashtransit_detail.id_bank='$id_bank' AND cashtransit_detail.id = (SELECT MAX(id) FROM cashtransit_detail WHERE id < ".$r['id']." AND id_bank='$id_bank')")->result_array();
+		
+		echo $this->db->last_query()."\n";
+		if(count($prev)==0) {
+			$data['cpc_process'] = "pengisian";
+		}
+		
 		if(!empty($data)) {
 		    $this->jurnal_cancel($r);
 			
