@@ -409,10 +409,6 @@ class Cashprocessing extends CI_Controller {
 			
 		}
 		
-		
-		$is_pengisian_awal = count($prev);
-		$this->data['is_pengisian_awal'] = $is_pengisian_awal;
-		
 		// echo $id."<br>";
 		// echo $id_ct."<br>";
 		// echo $index."<br>";

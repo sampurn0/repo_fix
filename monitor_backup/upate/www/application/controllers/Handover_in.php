@@ -57,7 +57,6 @@ class Handover_in extends CI_Controller {
 		$vehicle = trim($this->input->post('vehicle'));
 		$guard = trim($this->input->post('guard'));
 		$custodian = trim($this->input->post('custodian'));
-		$dibuat_oleh = trim($this->input->post('pic'));
 		
 		
 		$cnt_detail = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>
@@ -68,8 +67,8 @@ class Handover_in extends CI_Controller {
 			$id = $this->curl->simple_get(rest_api().'/select/query2', array('query'=>
 				"
 				INSERT INTO `detail_ho`
-					(`run`, `date`, `bank`, `custodian`, `police_number`, `guard`, `dibuat_oleh`) VALUES 
-					('$run_number','".date('Y-m-d')."','$bank','$custodian','$vehicle','$guard','$dibuat_oleh')
+					(`run`, `date`, `bank`, `custodian`, `police_number`, `guard`) VALUES 
+					('$run_number','".date('Y-m-d')."','$bank','$custodian','$vehicle','$guard')
 				"
 			), array(CURLOPT_BUFFERSIZE => 10));
 		} else {

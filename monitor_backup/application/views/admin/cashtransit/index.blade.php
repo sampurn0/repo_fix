@@ -1,4 +1,6 @@
-<?php $__env->startSection('content'); ?>
+@extends('layouts.master')
+
+@section('content')
 	<script src="<?=base_url()?>constellation/assets/equipment/jquery-3.4.1.min.js"></script>
 	<link href="<?=base_url()?>constellation/assets/equipment/select2.min.css" rel="stylesheet" />
 	<script src="<?=base_url()?>constellation/assets/equipment/select2.min.js"></script>
@@ -297,26 +299,19 @@
 								'<option value="">-- select kelolaan --</option>'+
 							'</select>'+
 						'</p>'+
-						'<p>'+
-							'<label>Dibuat Oleh</label>'+
-							'<select name="pic" class="pic full-width" required>'+
-								'<option value="">-- select pembuat plan --</option>'+
-							'</select>'+
-						'</p>'+
 					'</fieldset>'+
 				'</form>'+
 			'';
 			
 			$.modal({
 				content: content,
-				title: 'Input Planning CIT (H-<?=$h_min?>)',
+				title: 'Input H-<?=$h_min?>',
 				maxWidth: 400,
 				buttons: {
 					'Yes': function(win) { 
 						var id_branch = jq3412(".js-example-basic-single2 option:selected").val();
 						var run_number = jq3412("#run_number").val();
 						var action_date = jq3412("#action_date").val();
-						var pic = jq3412(".pic option:selected").val();
 						
 						if(action_date=="") {
 							alert("Mohon isi tanggal action!");
@@ -328,13 +323,8 @@
 							
 							return false;
 						}
-						if(pic=="") {
-							alert("Mohon isi pic!");
-							
-							return false;
-						}
 						
-						alert("RUN NUMBER : "+run_number+" \nTANGGAL : "+action_date+" \nH MIN : "+h_min+" \nKELOLAAN : "+id_branch+" \nPIC : "+pic);
+						alert("RUN NUMBER : "+run_number+" \nTANGGAL : "+action_date+" \nH MIN : "+h_min+" \nKELOLAAN : "+id_branch);
 					
 						// // alert(data);
 						$.ajax({
@@ -344,8 +334,7 @@
 							data: {
 								id:id_branch,
 								h_min:h_min,
-								action_date:action_date,
-								pic:pic
+								action_date:action_date
 							},
 							success: function(data) {
 								window.location.href = '<?=base_url()?>cashtransit/edit_<?=$h_min?>/'+data;
@@ -380,44 +369,6 @@
 				ajax: {
 					dataType: 'json',
 					url: '<?php echo base_url().'select/select_branch'?>',
-					delay: 250,
-					type: "POST",
-					data: function(params) {
-						return {
-							search: params.term
-						}
-					},
-					processResults: function (data, page) {
-						console.log(data);
-						return {
-							results: data
-						};
-					}
-				},
-				maximumSelectionLength: 3,
-
-				// add "(new tag)" for new tags
-				createTag: function (params) {
-				  var term = jq3412.trim(params.term);
-
-				  if (term === '') {
-					return null;
-				  }
-
-				  return {
-					id: term,
-					text: term + ' (add new)'
-				  };
-				},
-			});
-			
-			jq3412('.pic').select2({
-				tags: false,
-				tokenSeparators: [','],
-				width: '100%',
-				ajax: {
-					dataType: 'json',
-					url: '<?php echo base_url().'cashreplenish/suggest_pic'?>',
 					delay: 250,
 					type: "POST",
 					data: function(params) {
@@ -524,7 +475,7 @@
 					oTable = table.dataTable({
 						/*
 						 * We set specific options for each columns here. Some columns contain raw data to enable correct sorting, so we convert it for display
-						 * @url  http://www.datatables.net/usage/columns
+						 * @url http://www.datatables.net/usage/columns
 						 */
 						aoColumns: [
 							{ bSortable: false },	// No sorting for this columns, as it only contains checkboxes
@@ -540,7 +491,7 @@
 						
 						/*
 						 * Set DOM structure for table controls
-						 * @url  http://www.datatables.net/examples/basic_init/dom.html
+						 * @url http://www.datatables.net/examples/basic_init/dom.html
 						 */
 						sDom: '<"block-controls"<"controls-buttons"p>>rti<"block-footer clearfix"lf>',
 						
@@ -591,5 +542,4 @@
 			});
 		});
 	</script>
-<?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+@endsection

@@ -123,8 +123,8 @@
 								<?php if($session->userdata['level']=="LEVEL1") { ?>
 									<td>
 										<!--<span><a class="action-icons c-edit" onClick="window.location.href='<?php echo base_url();?>handover/add_ho/<?php echo $row->id;?>'" href="#" title="Detail">Detail</a></span>-->
-										<span><a class="button" onClick="window.location.href='<?php echo base_url();?>handover_in/add_ho/<?php echo $row->id;?>'" href="#" id="print_bast_done" title="Detail">Detail</a></span>
-										<span><a class="action-icons c-delete" onClick="openDelete('<?php echo $row->id;?>', '<?php echo base_url();?>handover_in/delete')" href="#" title="delete">Delete</a></span>
+										<span><a class="button" onClick="window.location.href='<?php echo base_url();?>handover/add_ho/<?php echo $row->id;?>'" href="#" id="print_bast_done" title="Detail">Detail</a></span>
+										<span><a class="action-icons c-delete" onClick="openDelete('<?php echo $row->id;?>', '<?php echo base_url();?>handover/delete')" href="#" title="delete">Delete</a></span>
 									</td>
 								<?php } ?>
 							</tr>
@@ -181,12 +181,6 @@
 								'<option value="">- select custody -</option>'+
 							'</select>'+
 						'</p>'+
-						'<p>'+
-							'<label>Dibuat Oleh</label>'+
-							'<select name="pic" class="pic full-width" required>'+
-								'<option value="">-- select pembuat plan --</option>'+
-							'</select>'+
-						'</p>'+
 					'</fieldset>'+
 				'</form>'+
 			'';
@@ -203,46 +197,13 @@
 						var vehicle = jq341(".vehicle option:selected").val();
 						var guard = jq341(".guard option:selected").val();
 						var custodian = jq341(".custodian option:selected").val();
-						var pic = jq341(".pic option:selected").val();
 						
-						if(run_number=="") {
+						if(run_number=="" || jumlah_lokasi=="" || vehicle=="" || guard=="" || custodian=="") {
 							alert("ISI FORM UNTUK MELANJUTKAN");
-							
-							return false;
-						}
-						if(jumlah_lokasi=="") {
-							alert("ISI FORM UNTUK MELANJUTKAN");
-							
-							return false;
-						}
-						if(bank=="") {
-							alert("ISI FORM UNTUK MELANJUTKAN");
-							
-							return false;
-						}
-						if(vehicle=="") {
-							alert("ISI FORM UNTUK MELANJUTKAN");
-							
-							return false;
-						}
-						if(guard=="" || custodian=="" || pic=="") {
-							alert("ISI FORM UNTUK MELANJUTKAN");
-							
-							return false;
-						}
-						if(custodian=="") {
-							alert("ISI FORM UNTUK MELANJUTKAN");
-							
-							return false;
-						}
-						if(pic=="") {
-							alert("ISI FORM UNTUK MELANJUTKAN");
-							
-							return false;
 						}
 						
 						$.ajax({
-							url: '<?=base_url()?>handover_in/save_data',
+							url: '<?=base_url()?>handover/save_data',
 							dataType: 'html',
 							type: 'POST',
 							data: {
@@ -251,12 +212,11 @@
 								bank: bank,
 								vehicle: vehicle,
 								guard: guard,
-								custodian: custodian,
-								pic: pic
+								custodian: custodian
 							},
 							success: function(data) {
 								// console.table(data);
-								window.location.href = '<?=base_url()?>handover_in/add_ho/'+data;
+								window.location.href = '<?=base_url()?>handover/add_ho/'+data;
 							}
 						});
 					},
@@ -386,44 +346,6 @@
 				ajax: {
 					dataType: 'json',
 					url: '<?php echo base_url().'operational/suggest_custodi'?>',
-					delay: 250,
-					type: "POST",
-					data: function(params) {
-						return {
-							search: params.term
-						}
-					},
-					processResults: function (data, page) {
-						console.log(data);
-						return {
-							results: data
-						};
-					}
-				},
-				maximumSelectionLength: 3,
-
-				// add "(new tag)" for new tags
-				createTag: function (params) {
-				  var term = jq341.trim(params.term);
-
-				  if (term === '') {
-					return null;
-				  }
-
-				  return {
-					id: term,
-					text: term + ' (add new)'
-				  };
-				},
-			});
-			
-			jq341('.pic').select2({
-				tags: false,
-				tokenSeparators: [','],
-				width: '100%',
-				ajax: {
-					dataType: 'json',
-					url: '<?php echo base_url().'cashreplenish/suggest_pic'?>',
 					delay: 250,
 					type: "POST",
 					data: function(params) {

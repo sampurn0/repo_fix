@@ -252,7 +252,6 @@ class Cashtransit extends CI_Controller {
 		$data['id'] = $this->input->post("id");
 		$data['h_min'] = $this->input->post("h_min");
 		$data['action_date'] = date("Y-m-d", strtotime($this->input->post("action_date")));
-		$data['dibuat_oleh'] = $this->input->post("pic");
 		
 		$id = $this->curl->simple_post(rest_api().'/plan_cashreplenish/add_master',$data,array(CURLOPT_BUFFERSIZE => 10));
 

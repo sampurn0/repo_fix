@@ -56,7 +56,7 @@
 						border:false,
 						cache:true,
 						// href:'show_form.php?index='+index,
-						href:'<?=base_url()?>handover_in/show_form?index='+index+'&id='+<?=$id?>,
+						href:'<?=base_url()?>handover/show_form?index='+index+'&id='+<?=$id?>,
 						onLoad:function(){
 							$('#dg').datagrid('fixDetailRowHeight',index);
 							$('#dg').datagrid('selectRow',index);
@@ -70,7 +70,7 @@
 		function saveItem(index){
 			var row = $('#dg').datagrid('getRows')[index];
 			console.log(row);
-			var url = row.isNewRecord ? '<?=base_url()?>handover_in/save_data' : '<?=base_url()?>handover_in/update_data?id='+row.id;
+			var url = row.isNewRecord ? '<?=base_url()?>handover/save_data' : '<?=base_url()?>handover/update_data?id='+row.id;
 			console.log(url);
 			$('#dg').datagrid('getRowDetail',index).find('form').form('submit',{
 				url: url,
@@ -107,7 +107,7 @@
 					if (r){
 						var index = $('#dg').datagrid('getRowIndex',row);
 						console.log(row);
-						$.post('<?=base_url()?>handover_in/delete_data',{id:row.id},function(){
+						$.post('<?=base_url()?>handover/delete_data',{id:row.id},function(){
 							$('#dg').datagrid('deleteRow',index);
 						});
 					}
@@ -143,7 +143,7 @@
 	<div id="control-bar" class="grey-bg clearfix"><div class="container_12">
 	
 		<div class="float-left">
-			<button type="button" onclick="window.location.href='<?=base_url()?>handover_in'"><img src="<?=base_url()?>constellation/assets/images/icons/fugue/navigation-180.png" width="16" height="16"> Back</button>
+			<button type="button" onclick="window.location.href='<?=base_url()?>handover'"><img src="<?=base_url()?>constellation/assets/images/icons/fugue/navigation-180.png" width="16" height="16"> Back</button>
 		</div>
 	</div></div>
 	<!-- End control bar -->
@@ -159,7 +159,7 @@
 				data-options="
 					rownumbers:true,
 					singleSelect:true,
-					url:'<?=base_url()?>handover_in/get_data/<?=$id?>',
+					url:'<?=base_url()?>handover/get_data/<?=$id?>',
 					method:'get',
 					rowStyler: function(index,row){
 						// console.table(row);

@@ -57,39 +57,38 @@
 			background: #e6e6e6 !important;
 		}
 	</style>
-	
-	<!-- End control bar -->
 
 	<!-- Content -->
 	<article class="container_12">
-	<section class="grid_12">
-		<div class="block-border">
-			<div class="block-content no-title dark-bg">
-				<div id="control-bar">
-					<div class="container_16">
-						<div class="float-left">
-							<button type="button" onclick="window.history.back()"><img src="<?=base_url()?>constellation/assets/images/icons/fugue/navigation-180.png" width="16" height="16"> Back</button>
-						</div>
-						
-						
-						<?php if($session->userdata['level']=="LEVEL1") { ?>
-							<div class="float-right">
-								<button type="button" onClick="openModalBranch();">Tambah</button>
+		<section class="grid_12">
+			<div class="block-border">
+				<div class="block-content no-title dark-bg">
+					<div id="control-bar">
+						<div class="container_16">
+							<div class="float-left">
+								<button type="button" onclick="window.history.back()"><img src="<?=base_url()?>constellation/assets/images/icons/fugue/navigation-180.png" width="16" height="16"> Back</button>
 							</div>
-						<?php } ?>
-						<center>
-							<img src="<?=base_url()?>constellation/assets/images/bijak.png" width="50" height="50">
-						</center>
-						<p align="center"><b>PT. BINTANG JASA ARTHA KELOLA</b><br>BIJAK INTEGRATED MONITORING APPLICATION   
-							<br>[DATA <?=strtoupper(str_replace("_", " ", $active_menu))?>]
-						</p>
-					</div>
-				</div>	
+							
+							<?php if($session->userdata['level']=="LEVEL1") { ?>
+								<div class="float-right">
+									<!--<button type="button" onClick="window.location.href='<?=base_url()?>cashreplenish/add'">Tambah</button>-->
+									<button type="button" onClick="openModalBranch();">Tambah</button>
+								</div>
+							<?php } ?>
+							<center>
+								<img src="<?=base_url()?>constellation/assets/images/bijak.png" width="50" height="50">
+							</center>
+							<p align="center"><b>PT. BINTANG JASA ARTHA KELOLA</b><br>BIJAK INTEGRATED MONITORING APPLICATION   
+								<br>[DATA <?=strtoupper(str_replace("_", " ", $active_menu))?>]
+							</p>
+						</div>
+					</div>	
+				</div>
 			</div>
-		</div>
+		
 			<div class="block-border">
 				<form class="block-content form" id="table_form" method="post" action="#">
-					<h1>CASH IN TRANSIT (H-<?=$h_min?>)</h1>
+					<h1>CASH REPLENISH (H-<?=$h_min?>)</h1>
 					<br>
 					<div id="control-bar" class="clearfix">
 						<div class="container_12">
@@ -101,7 +100,8 @@
 					</div>
 					<div class="widget_content" id="content_table">
 						<div>
-							<table class="table " cellspacing="0" width="100%">
+							<table class="table" cellspacing="0" width="100%">
+							
 								<thead>
 									<tr>
 										<th class="black-cell"><span class="loading"></span></th>
@@ -125,29 +125,29 @@
 								<tbody>
 									<?php 
 										$no = 0;
-										if(count($data_cashtransit)==0) {
+										if(count($data_cashreplenish)==0) {
 											echo "<tr><td colspan='5' style='text-align: center'>NO DATA</td></tr>";
 										}
-										foreach($data_cashtransit as $row): 
+										foreach($data_cashreplenish as $row): 
 										$no++;
 									?>
-											<tr>
-												<td class="th table-check-cell"><?=$no?></td>
-												<td><?php echo $row->run_number;?></td>
-												<td><?php echo date("d-m-Y", strtotime($row->date));?></td>
-												<td><?php echo date("d-m-Y", strtotime($row->action_date));?></td>
-												<?php if($session->userdata['level']=="LEVEL1") { ?>
-													<td style="text-align: center">
-														<button type="button" class='button green' onClick="window.location.href='<?php echo base_url();?>cashtransit/edit_<?php echo $row->h_min; ?>/<?php echo $row->id_ct;?>'" title='Edit'><span class='smaller'>Detail</span></button>
-														<button type="button" class='button red' onClick="openDelete('<?php echo $row->id_ct;?>', '<?php echo base_url();?>cashtransit/delete')" title='Delete'><span class='smaller'>Delete</span></button>
-													</td>
-												<?php } ?>
-											</tr>
+									<tr>
+										<td class="th table-check-cell"><?=$no?></td>
+										<td><?php echo $row->run_number;?></td>
+										<td><?php echo date("d-m-Y", strtotime($row->date));?></td>
+										<td><?php echo date("d-m-Y", strtotime($row->action_date));?></td>
+										<?php if($session->userdata['level']=="LEVEL1") { ?>
+											<td style="text-align: center">
+												<button type="button" class='button green' onClick="window.location.href='<?php echo base_url();?>cashreplenish/edit_<?php echo $row->h_min; ?>/<?php echo $row->id_ct;?>'" title='Edit'><span class='smaller'>Detail</span></button>
+												<button type="button" class='button red' onClick="openDelete('<?php echo $row->id_ct;?>', '<?php echo base_url();?>cashreplenish/delete')" title='Delete'><span class='smaller'>Delete</span></button>
+												
+											</td>
+										<?php } ?>
+									</tr>
 									<?php 
 										endforeach; 
 									?>
 								</tbody>
-							
 							</table>
 						</div>
 					</div>
@@ -171,7 +171,7 @@
 		console.log(jq341().jquery);
 		console.log(jq3412().jquery);
 		console.log( "<h3>After $.noConflict(true)</h3>" );
-		console.log( "2nd loaded jQuery version (jq162): " + jq341.fn.jquery + "<br>" );
+		console.log( "2nd loaded jQuery version (jq162): " + jq3412.fn.jquery + "<br>" );
 		
 		function jsUcfirst(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
 		
@@ -202,7 +202,7 @@
 						self.showLoading();
 						
 						$.ajax({
-							url     : "<?=base_url()?>cashtransit/get_table",
+							url     : "<?=base_url()?>cashreplenish/get_table",
 							type    : "POST",
 							data    : {
 								date: dateText,
@@ -229,57 +229,10 @@
 				
 			}
 		});  
-		
-		function openModalTambah() {
-			$ = jq341;
-			var orig = $("#html_content_new").find(".mysets-area");
-			var content = $(orig).clone().show();
-			
-			$.confirm({
-				title: 'Info!',
-				content: content,
-				contentLoaded: function(data, status, xhr){
-					// this.setContentAppend(' <b>' + status);
-				},
-				buttons: {
-					Submit: function () {
-						var jc = this;
-					},
-					Close: function () {
-						// alert("SUCCESS");
-					}
-				},
-				onContentReady: function () {
-					// bind to events
-					var jc = this;
-					
-					$('.action_date').datepicker({
-						changeMonth: true,
-						changeYear: true,
-						showButtonPanel: true,
-						dateFormat: 'yy-mm-dd',
-						onClose: function(dateText, inst) { 
-							alert(dateText);
-							jc.$content.find('.action_date').val(dateText);
-						}
-					});  
-				}
-			});
-		}
 	
 		function openModalBranch()
 		{
 			var h_min = "<?=$h_min?>";
-			
-			var content = 
-						'<p>'+
-							'<label>Branch</label>'+
-							'<input type="hidden" name="h_min" class="h_min" value="<?=$h_min?>">'+
-							'<select name="cabang" class="js-example-basic-single2 full-width" required>'+
-								'<option value="">- select cabang -</option>'+
-							'</select>'+
-						'</p>';
-			
 			var content = ''+
 				'<form class="form">'+
 					'<fieldset>'+
@@ -297,26 +250,19 @@
 								'<option value="">-- select kelolaan --</option>'+
 							'</select>'+
 						'</p>'+
-						'<p>'+
-							'<label>Dibuat Oleh</label>'+
-							'<select name="pic" class="pic full-width" required>'+
-								'<option value="">-- select pembuat plan --</option>'+
-							'</select>'+
-						'</p>'+
 					'</fieldset>'+
 				'</form>'+
 			'';
 			
 			$.modal({
 				content: content,
-				title: 'Input Planning CIT (H-<?=$h_min?>)',
+				title: 'Input (H-<?=$h_min?>)',
 				maxWidth: 400,
 				buttons: {
 					'Yes': function(win) { 
 						var id_branch = jq3412(".js-example-basic-single2 option:selected").val();
 						var run_number = jq3412("#run_number").val();
 						var action_date = jq3412("#action_date").val();
-						var pic = jq3412(".pic option:selected").val();
 						
 						if(action_date=="") {
 							alert("Mohon isi tanggal action!");
@@ -328,13 +274,8 @@
 							
 							return false;
 						}
-						if(pic=="") {
-							alert("Mohon isi pic!");
-							
-							return false;
-						}
 						
-						alert("RUN NUMBER : "+run_number+" \nTANGGAL : "+action_date+" \nH MIN : "+h_min+" \nKELOLAAN : "+id_branch+" \nPIC : "+pic);
+						alert("RUN NUMBER : "+run_number+" \nTANGGAL : "+action_date+" \nH MIN : "+h_min+" \nKELOLAAN : "+id_branch);
 					
 						// // alert(data);
 						$.ajax({
@@ -344,18 +285,16 @@
 							data: {
 								id:id_branch,
 								h_min:h_min,
-								action_date:action_date,
-								pic:pic
+								action_date:action_date
 							},
 							success: function(data) {
-								window.location.href = '<?=base_url()?>cashtransit/edit_<?=$h_min?>/'+data;
+								window.location.href = '<?=base_url()?>cashreplenish/edit_<?=$h_min?>/'+data;
 							}
 						});
 					},
 					'Close': function(win) { win.closeModal(); }
 				}
 			});
-			
 			
 			if(h_min=="1") {
 				$("#action_date").datepicker({
@@ -410,50 +349,12 @@
 				  };
 				},
 			});
-			
-			jq3412('.pic').select2({
-				tags: false,
-				tokenSeparators: [','],
-				width: '100%',
-				ajax: {
-					dataType: 'json',
-					url: '<?php echo base_url().'cashreplenish/suggest_pic'?>',
-					delay: 250,
-					type: "POST",
-					data: function(params) {
-						return {
-							search: params.term
-						}
-					},
-					processResults: function (data, page) {
-						console.log(data);
-						return {
-							results: data
-						};
-					}
-				},
-				maximumSelectionLength: 3,
-
-				// add "(new tag)" for new tags
-				createTag: function (params) {
-				  var term = jq3412.trim(params.term);
-
-				  if (term === '') {
-					return null;
-				  }
-
-				  return {
-					id: term,
-					text: term + ' (add new)'
-				  };
-				},
-			});
 		}
 	
 		jq3412(document).ready(function() {
 			
 			jq3412('.sort_by_').select2().on('select2:select', function (evt) {
-				// var data = jq341(".sort_by_ option:selected").text();
+				// var data = jq3412(".sort_by_ option:selected").text();
 				var value = jq3412(".sort_by_ option:selected").val();
 				
 				if(value!=="") {
@@ -502,7 +403,7 @@
 					},
 					maximumSelectionLength: 3
 				}).on('select2:select', function (evt) {
-					var data = jq341(".sorted_by_ option:selected").text();
+					var data = jq3412(".sorted_by_ option:selected").text();
 					$.ajax({
 						type: "POST",
 						url : "<?php echo base_url().'select/getdataclient'?>",				

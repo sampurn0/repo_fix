@@ -286,6 +286,9 @@
 		<?php elseif($state=="ro_atm"): ?>
 			<?php 
 				if($r['act']=="ATM") {
+					if($is_pengisian_awal==0) {
+						echo "PENGISIAN AWAL<br>";
+					}
 			?>
 					<span style="float: left; margin-top: 10px"><span style="color:red;">*)</span> Isi dengan lembar per cassette</span><br><br>
 					<input name="act" type="hidden" value="<?=$r['act']?>" readonly>
@@ -318,11 +321,13 @@
 							<td>:</td>
 							<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="bag_seal" id="bag_seal_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
 						</tr>
+						<?php if($is_pengisian_awal>0) { ?>
 						<tr>
 							<td>BIG SEAL RETURN</td>
 							<td>:</td>
 							<td style="border: 0px; padding: 10px 15px 5px 0px"><input name="bag_seal_return" id="bag_seal_return_atm_<?=$index?>" style="height: 28px" class="easyui-validatebox easyui-textbox" required="true"></input></td>
 						</tr>
+						<?php } ?>
 						<tr>
 							<td>BAG NO</td>
 							<td>:</td>

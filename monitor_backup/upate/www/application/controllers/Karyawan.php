@@ -138,40 +138,6 @@ class Karyawan extends CI_Controller {
 		return view('admin/karyawan/form', $this->data);
 	}
 	
-	public function change_status($id) {
-		$this->data['active_menu'] = "karyawan";
-	
-		$row = json_decode($this->curl->simple_get(rest_api().'/master_karyawan?nik='.$id))[0];
-
-
-		$this->data['url'] = "karyawan/changestatus";
-
-		$this->data['nik'] = $id;		
-		$this->data['dd_status'] = $this->model_app->dropdown_status();
-		$this->data['id_status'] = $row->status;
-		
-		$this->data['flag'] = "edit";
-		
-		return view('admin/karyawan/change_status', $this->data);
-	}
-	
-	function changestatus() {
-		$nik = strtoupper(trim($this->input->post('nik')));
-		$id_status = strtoupper(trim($this->input->post('id_status')));
-		
-		$query_update = "UPDATE karyawan SET status='$id_status' WHERE nik='$nik'";
-		
-		$update = json_decode($this->curl->simple_get(rest_api().'/select/query2', array('query'=>$query_update), array(CURLOPT_BUFFERSIZE => 10)));
-		
-		if (!$update) {
-			$this->session->set_flashdata('error', 'Data gagal diupdate.');
-			redirect('karyawan');	
-		} else  {
-			$this->session->set_flashdata('success', 'Data terupdate.');
-			redirect('karyawan');	
-		}
-	}
-	
 	function update() {
 		$nik = strtoupper(trim($this->input->post('nik')));
 		$id_karyawan = strtoupper(trim($this->input->post('id_karyawan')));

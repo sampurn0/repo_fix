@@ -468,16 +468,6 @@ class Model_app extends CI_Model{
             
             return $value;
     }
-	
-	public function dropdown_status()
-    {
-        $value[''] = '--PILIH--';            
-        $value['Y'] = 'ACTIVE';
-        $value['N'] = 'INACTIVE';           
-        $value['RESIGN'] = 'RESIGN';           
-            
-            return $value;
-    }
 
     public function dropdown_level()
     {
@@ -628,27 +618,4 @@ class Model_app extends CI_Model{
             }
             return $value;
     }
-	
-	public function suggest_pic() {
-		$search = $this->input->post('search');
-		
-		$sql = "SELECT * FROM user LEFT JOIN karyawan ON(user.username=karyawan.nik) WHERE (user.level='LEVEL1' OR user.level='LEVEL2' OR user.level='LEVEL3') AND karyawan.nama LIKE '%$search%'";
-		$sql = "SELECT * FROM user LEFT JOIN karyawan ON(user.username=karyawan.nik)";
-		// echo $sql;
-		$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
-		// print_r($result->result());
-		
-		$list = array();
-		if (count($result) > 0) {
-			$key=0;
-			foreach ($result as $row) {
-				$list[$key]['id'] = $row->username;
-				$list[$key]['text'] = $row->nama; 
-				$key++;
-			}
-			echo json_encode($list);
-		} else {
-			echo json_encode($list);
-		}
-	}
 }

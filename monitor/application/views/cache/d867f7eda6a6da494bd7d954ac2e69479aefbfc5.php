@@ -250,19 +250,26 @@
 								'<option value="">-- select kelolaan --</option>'+
 							'</select>'+
 						'</p>'+
+						'<p>'+
+							'<label>Dibuat Oleh</label>'+
+							'<select name="pic" class="pic full-width" required>'+
+								'<option value="">-- select pembuat plan --</option>'+
+							'</select>'+
+						'</p>'+
 					'</fieldset>'+
 				'</form>'+
 			'';
 			
 			$.modal({
 				content: content,
-				title: 'Input (H-<?=$h_min?>)',
+				title: 'Input Planning CR (H-<?=$h_min?>)',
 				maxWidth: 400,
 				buttons: {
 					'Yes': function(win) { 
 						var id_branch = jq3412(".js-example-basic-single2 option:selected").val();
 						var run_number = jq3412("#run_number").val();
 						var action_date = jq3412("#action_date").val();
+						var pic = jq3412(".pic option:selected").val();
 						
 						if(action_date=="") {
 							alert("Mohon isi tanggal action!");
@@ -274,8 +281,13 @@
 							
 							return false;
 						}
+						if(pic=="") {
+							alert("Mohon isi pic!");
+							
+							return false;
+						}
 						
-						alert("RUN NUMBER : "+run_number+" \nTANGGAL : "+action_date+" \nH MIN : "+h_min+" \nKELOLAAN : "+id_branch);
+						alert("RUN NUMBER : "+run_number+" \nTANGGAL : "+action_date+" \nH MIN : "+h_min+" \nKELOLAAN : "+id_branch+" \nPIC : "+pic);
 					
 						// // alert(data);
 						$.ajax({
@@ -285,7 +297,8 @@
 							data: {
 								id:id_branch,
 								h_min:h_min,
-								action_date:action_date
+								action_date:action_date,
+								pic:pic
 							},
 							success: function(data) {
 								window.location.href = '<?=base_url()?>cashreplenish/edit_<?=$h_min?>/'+data;
@@ -319,6 +332,44 @@
 				ajax: {
 					dataType: 'json',
 					url: '<?php echo base_url().'select/select_branch'?>',
+					delay: 250,
+					type: "POST",
+					data: function(params) {
+						return {
+							search: params.term
+						}
+					},
+					processResults: function (data, page) {
+						console.log(data);
+						return {
+							results: data
+						};
+					}
+				},
+				maximumSelectionLength: 3,
+
+				// add "(new tag)" for new tags
+				createTag: function (params) {
+				  var term = jq3412.trim(params.term);
+
+				  if (term === '') {
+					return null;
+				  }
+
+				  return {
+					id: term,
+					text: term + ' (add new)'
+				  };
+				},
+			});
+			
+			jq3412('.pic').select2({
+				tags: false,
+				tokenSeparators: [','],
+				width: '100%',
+				ajax: {
+					dataType: 'json',
+					url: '<?php echo base_url().'cashreplenish/suggest_pic'?>',
 					delay: 250,
 					type: "POST",
 					data: function(params) {

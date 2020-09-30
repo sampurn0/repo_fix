@@ -83,28 +83,6 @@ class Cashreplenish extends CI_Controller {
 		return view('admin/cashreplenish/index', $this->data);
     }
 	
-	public function suggest_pic() {
-		$search = $this->input->post('search');
-		
-		$sql = "SELECT * FROM karyawan WHERE (karyawan.id_bagian_dept='12' OR karyawan.id_bagian_dept='13') AND karyawan.nama LIKE '%$search%' AND karyawan.status='Y'";
-		// echo $sql;
-		$result = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$sql), array(CURLOPT_BUFFERSIZE => 10)));
-		// print_r($result->result());
-		
-		$list = array();
-		if (count($result) > 0) {
-			$key=0;
-			foreach ($result as $row) {
-				$list[$key]['id'] = $row->nama;
-				$list[$key]['text'] = $row->nama; 
-				$key++;
-			}
-			echo json_encode($list);
-		} else {
-			echo json_encode($list);
-		}
-	}
-	
 	public function get_table() {
 		$date = $this->input->post('date');
 		$h_min = $this->input->post('h_min');

@@ -60,9 +60,6 @@
 									<th>
 										Operation
 									</th>
-									<th>
-										Status
-									</th>
 								<?php } ?>
 
 							</tr>
@@ -99,17 +96,6 @@
 									<td>
 										<span><a class="action-icons c-edit" onClick="window.location.href='<?php echo base_url();?>karyawan/edit/<?php echo $row->nik;?>'" href="#" title="Edit">Edit</a></span>
 										<span><a class="action-icons c-delete" onClick="openDelete('<?php echo $row->nik;?>', '<?php echo base_url();?>karyawan/delete')" href="#" title="delete">Delete</a></span>
-									</td>
-									<td>
-										<?php 
-											if($row->status=="Y") {
-												echo '<button type="button" class="small blue" style="font-size: 12px" onClick="window.location.href=\''.base_url().'karyawan/change_status/'.$row->nik.'\'">ACTIVE</button>';
-											} else if($row->status=="N") {
-												echo '<button type="button" class="small red" style="font-size: 12px" onClick="window.location.href=\''.base_url().'karyawan/change_status/'.$row->nik.'\'">INACTIVE</button>';
-											} else {
-												echo '<button type="button" class="small grey" style="font-size: 12px" onClick="window.location.href=\''.base_url().'karyawan/change_status/'.$row->nik.'\'">'.$row->status.'</button>';
-											}
-										?>
 									</td>
 								<?php } ?>
 							</tr>
