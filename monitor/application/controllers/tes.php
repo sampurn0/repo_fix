@@ -497,7 +497,7 @@ class Tes extends CI_Controller {
 	}
 	
 	function b() {
-		$seal = 'B54819 B52908 B52813 B52852 B52748 B53244 B52906 B53144 B52818 B52923 B52865 B53577 B52817 B52869 B53114 B52820 B52909';
+		$seal = 'B54039 B54200 B54035 B54986 B54719 B54712 B54780 B54839';
 		$seal = explode(' ', $seal);
 		
 		$i = 0;
@@ -555,7 +555,7 @@ class Tes extends CI_Controller {
 				// echo $i.". ".$s." ".$data_record->cpc_process." => ADA<br>";
 				echo $i.". ".$s." => ADA<br>";
 				$query = "UPDATE runsheet_cashprocessing SET bag_seal_return='' WHERE bag_seal_return='$s' AND id='$data_record->id'";
-				// $result = json_decode($this->curl->simple_get(rest_api().'/select/query2', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+				$result = json_decode($this->curl->simple_get(rest_api().'/select/query2', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
 				
 				if(!$result) {
 					$q = "SELECT * FROM master_seal WHERE kode='$s' AND jenis='big'";

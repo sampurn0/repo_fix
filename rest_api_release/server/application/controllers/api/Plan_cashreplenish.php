@@ -39,6 +39,7 @@ class Plan_cashreplenish extends REST_Controller {
 		$id = $this->input->post("id");
 		$h_min = $this->input->post("h_min");
 		$action_date = $this->input->post("action_date");
+		$dibuat_oleh = $this->input->post("dibuat_oleh");
 		
 		$q = 'SELECT * FROM cashtransit WHERE date="'.date("Y-m-d").'"';
 		$query = $this->db->query($q);
@@ -50,6 +51,7 @@ class Plan_cashreplenish extends REST_Controller {
 		$data['h_min'] = $h_min;
 		$data['run_number'] = $run_number;
 		$data['action_date'] = $action_date;
+		$data['dibuat_oleh'] = $dibuat_oleh;
 		$this->db->insert('cashtransit', $data);
 		$this->data['id'] = $this->db->insert_id();
 		
