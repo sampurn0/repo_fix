@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class All_runsheet extends CI_Controller {
+	var $access_boc = "FALSE";
+	
     public function __construct() {
         parent::__construct();
 		$this->load->library('curl');	
@@ -13,6 +15,20 @@ class All_runsheet extends CI_Controller {
 			$level = trim($this->session->userdata('level'));
 
 			$this->data['level'] = $level;
+			
+			$nik = trim($this->session->userdata('id_user'));
+			$id_karyawan = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>
+				"SELECT id_karyawan FROM karyawan WHERE nik='$nik'"
+			), array(CURLOPT_BUFFERSIZE => 10)))->id_karyawan;
+			
+			if($id_karyawan=="19008") {
+				$this->access_boc = true;
+			} else {
+				$this->access_boc = false;
+			}
+			
+		
+			$this->data['access_boc'] = $this->access_boc;
 		} else {
             redirect('');
         }
@@ -406,7 +422,7 @@ class All_runsheet extends CI_Controller {
 				echo '	<td class="sticky-col first-col">'.$no.'</td>';
 				echo '	<td>'.$r->ids.'</td>';
 				echo '	<td>'.($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH").'</td>';
-				echo '	<td style="text-align: center">'.($r->wsid=="" ? $r->no_boc : $r->wsid."(".$r->type.")").'</td>';
+				echo '	<td style="text-align: center">'.($access_boc==true ? ($r->state=="ro_cit" ? '<button type="button" class="yellow" onclick="openEditBOC(\''.$r->ids.'\', \''.$r->no_boc.'\')" style="font-size: 10px">EDIT</button>' : "") : "").' '.($r->wsid=="" ? $r->no_boc : $r->wsid." (".$r->type.")").'</td>';
 				echo '	<td>'.$r->lokasi_client.'</td>';
 				echo '	<td>'.number_format($r->denom, 0, ',', '.').'</td>';
 				echo '	<td>'.number_format($r->totalss, 0, ',', '.').'</td>';
@@ -456,6 +472,36 @@ class All_runsheet extends CI_Controller {
 	}
 	
 	
+	public function edit_boc() {
+		$this->data['active_menu'] = "all_runsheet";
+		$this->data['url'] = "all_runsheet/save";
+		$this->data['flag'] = "edit";
+		
+		$id = $this->uri->segment(3);
+		
+		$id_karyawan = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>
+			"SELECT id_karyawan FROM karyawan WHERE nik='$nik'"
+		), array(CURLOPT_BUFFERSIZE => 10)))->id_karyawan;
+		
+		$this->data['id_karyawan'] = $id_karyawan;
+		$this->data['id'] = $id;
+		
+		return view('admin/all_runsheet/form', $this->data);
+	}
+	
+	public function save_edit_boc() {
+		$id = $this->input->post('id');
+		$no_boc = $this->input->post('no_boc');
+		$query = "UPDATE cashtransit_detail SET no_boc='$no_boc' WHERE id='$id'";
+		
+		// echo $query;
+		$result = $this->curl->simple_get(rest_api().'/select/query2', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10));
+		if(!$result) {
+			echo "success";
+		} else {
+			echo "failed";
+		}
+	}
 	
 	
 	

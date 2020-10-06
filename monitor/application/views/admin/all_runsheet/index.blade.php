@@ -180,7 +180,8 @@
 															<td class="sticky-col first-col"><?=$no?></td>
 															<td><?=$r->ids?></td>
 															<td><?=($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH")?></td>
-															<td style="text-align: center"><?=($r->wsid=="" ? $r->no_boc : $r->wsid." (".$r->type.")")?></td>
+															<td style="text-align: center"><?=
+																($access_boc==true ? ($r->state=="ro_cit" ? '<button type="button" class="yellow" onclick="openEditBOC(\''.$r->ids.'\', \''.$r->no_boc.'\')" style="font-size: 10px">EDIT</button>' : "") : "").' '.($r->wsid=="" ? $r->no_boc : $r->wsid." (".$r->type.")")?></td>
 															<td><?=$r->lokasi_client?></td>
 															<td><?=number_format($r->denom, 0, ',', '.')?></td>
 															<td><?=number_format($r->total, 0, ',', '.')?></td>
@@ -253,6 +254,17 @@
 					<p>
 						<label>ID BANK</label>
 						<select id="sealxx" class="js-example-basic-single2xxx full-width">- select cabang -</select>
+					</p>
+				</fieldset>
+			</form>
+		</div>
+		
+		<div id="html_content_edit" hidden>
+			<form class="form mysets-area">
+				<fieldset>
+					<p>
+						<label>NO BOC</label>
+						<input type="text" placeholder="" class="no_boc form-control" required />
 					</p>
 				</fieldset>
 			</form>
@@ -355,6 +367,60 @@
 		
 		function openBatal2(id) {
 			alert(id);
+		}
+		
+		function openEditBOC(id, no_boc) {
+			$ = jq341;
+			var orig = $("#html_content_edit").find(".mysets-area");
+			orig.find(".no_boc").val(no_boc);
+			var content = $(orig).clone().show();
+			
+			$.confirm({
+				title: 'Info Edit BOC!',
+				content: content,
+				columnClass: 'col-md-1 col-md-offset-1',
+				contentLoaded: function(data, status, xhr){
+					// this.setContentAppend(' <b>' + status);
+				},
+				buttons: {
+					Submit: function () {
+						var jc = this;
+						no_boc = this.$content.find(".no_boc").val();
+						
+						var data = {
+							id: id,
+							no_boc: no_boc
+						};
+						
+						if(no_boc=="" || no_boc==null) {
+							return false;
+						}
+						
+						$.ajax({
+							url: '<?=base_url()?>all_runsheet/save_edit_boc',
+							dataType: 'html',
+							type: 'POST',
+							data: data,
+							success: function(data) {
+								alert(data);
+							}
+						});
+					},
+					Close: function () {
+						// alert("SUCCESS");
+					}
+				},
+				onContentReady: function () {
+					// bind to events
+					var jc = this;
+					
+					this.$content.find('form').on('submit', function (e) {
+						// if the user submits the form by pressing enter in the field.
+						e.preventDefault();
+						jc.$$formSubmit.trigger('click'); // reference the button and click it
+					});
+				}
+			});
 		}
 		
 		function openBatal(id) {
