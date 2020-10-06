@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cashprocessing_return extends CI_Controller {
+	var $access_edit = false;
     var $data = array();
 	
 	public function __construct() {
@@ -23,6 +24,18 @@ class Cashprocessing_return extends CI_Controller {
 			// $this->data['notif_approval'] = $this->ticket_model->getnotif_approval($id_dept);
 			// $this->data['notif_assignment'] = $this->ticket_model->getnotif_assign($id_user);
 			// $this->data['datalist_ticket'] = $this->ticket_model->datalist_ticket();
+			
+			$nik = trim($this->session->userdata('id_user'));
+			$id_karyawan = json_decode($this->curl->simple_get(rest_api().'/select/query', array('query'=>
+				"SELECT id_karyawan FROM karyawan WHERE nik='$nik'"
+			), array(CURLOPT_BUFFERSIZE => 10)))->id_karyawan;
+			
+			if($id_karyawan=="190081") {
+				$this->access_edit = true;
+			} else {
+				$this->access_edit = false;
+			}
+			$this->data['access_edit'] = $this->access_edit;
 		} else {
             redirect('');
         }
@@ -65,34 +78,66 @@ class Cashprocessing_return extends CI_Controller {
 	}
 	
 	function json() {
-		$query = "
-			SELECT 
-				cashtransit.id as id_ct, 
-				cashtransit.run_number, 
-				cashtransit.h_min, 
-				cashtransit.date, 
-				cashtransit.action_date, 
-				master_branch.name as branch,
-				IFNULL((
-					SELECT COUNT(DISTINCT cashtransit_detail.id) 
-					FROM cashtransit_detail 
-					LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) 
-					LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
-					WHERE 
-						cashtransit_detail.id_cashtransit=cashtransit.id 
-						AND cashtransit_detail.data_solve!='' 
-						AND cashtransit_detail.data_solve!='batal' 
-						AND cashtransit_detail.cpc_process='' 
-						AND cashtransit_detail.unloading='1' 
-						AND runsheet_cashprocessing.id IS NOT NULL 
-						GROUP BY cashtransit_detail.id_cashtransit
-				), 0) as count 
-					FROM cashtransit 
-					LEFT JOIN 
-					(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
-					ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
-					LEFT JOIN master_branch ON(cashtransit.branch=master_branch.id) 
-		";
+		
+		if($this->access_edit==true) {
+			$query = "
+				SELECT 
+					cashtransit.id as id_ct, 
+					cashtransit.run_number, 
+					cashtransit.h_min, 
+					cashtransit.date, 
+					cashtransit.action_date, 
+					master_branch.name as branch,
+					IFNULL((
+						SELECT COUNT(DISTINCT cashtransit_detail.id) 
+						FROM cashtransit_detail 
+						LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) 
+						LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+						WHERE 
+							cashtransit_detail.id_cashtransit=cashtransit.id 
+							AND cashtransit_detail.data_solve!='' 
+							AND cashtransit_detail.data_solve!='batal' 
+							#AND cashtransit_detail.cpc_process='' 
+							AND cashtransit_detail.unloading='1' 
+							AND runsheet_cashprocessing.id IS NOT NULL 
+							GROUP BY cashtransit_detail.id_cashtransit
+					), 0) as count 
+						FROM cashtransit 
+						LEFT JOIN 
+						(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+						ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+						LEFT JOIN master_branch ON(cashtransit.branch=master_branch.id) 
+			";
+		} else {
+			$query = "
+				SELECT 
+					cashtransit.id as id_ct, 
+					cashtransit.run_number, 
+					cashtransit.h_min, 
+					cashtransit.date, 
+					cashtransit.action_date, 
+					master_branch.name as branch,
+					IFNULL((
+						SELECT COUNT(DISTINCT cashtransit_detail.id) 
+						FROM cashtransit_detail 
+						LEFT JOIN client ON(cashtransit_detail.id_bank=client.id) 
+						LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+						WHERE 
+							cashtransit_detail.id_cashtransit=cashtransit.id 
+							AND cashtransit_detail.data_solve!='' 
+							AND cashtransit_detail.data_solve!='batal' 
+							AND cashtransit_detail.cpc_process='' 
+							AND cashtransit_detail.unloading='1' 
+							AND runsheet_cashprocessing.id IS NOT NULL 
+							GROUP BY cashtransit_detail.id_cashtransit
+					), 0) as count 
+						FROM cashtransit 
+						LEFT JOIN 
+						(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+						ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+						LEFT JOIN master_branch ON(cashtransit.branch=master_branch.id) 
+			";
+		}
 		
 		$param['query'] = $query; //nama tabel dari database
 		$param['column_order'] = array('cashtransit.id'); //field yang ada di table user

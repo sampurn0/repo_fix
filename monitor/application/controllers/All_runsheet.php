@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class All_runsheet extends CI_Controller {
-	var $access_boc = "FALSE";
+	var $access_boc = false;
 	
     public function __construct() {
         parent::__construct();
