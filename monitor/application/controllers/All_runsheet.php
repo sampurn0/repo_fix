@@ -491,7 +491,7 @@ class All_runsheet extends CI_Controller {
 	
 	public function save_edit_boc() {
 		$id = $this->input->post('id');
-		$no_boc = $this->input->post('no_boc');
+		$no_boc = trim($this->input->post('no_boc'));
 		$query = "UPDATE cashtransit_detail SET no_boc='$no_boc' WHERE id='$id'";
 		
 		// echo $query;
