@@ -30,7 +30,7 @@ class Cashprocessing_return extends CI_Controller {
 				"SELECT id_karyawan FROM karyawan WHERE nik='$nik'"
 			), array(CURLOPT_BUFFERSIZE => 10)))->id_karyawan;
 			
-			if($id_karyawan=="190081") {
+			if($id_karyawan=="19008") {
 				$this->access_edit = true;
 			} else {
 				$this->access_edit = false;
