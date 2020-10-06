@@ -212,134 +212,266 @@ class Cashprocessing_return extends CI_Controller {
 		$rows = isset($_REQUEST['rows']) ? intval($_REQUEST['rows']) : 10;
 		$offset = ($page-1)*$rows;
 		
-		$query = "select *,
-			cashtransit_detail.id as id_ct, 
-			cashtransit_detail.id_cashtransit, 
-			cashtransit_detail.id_bank, 
-			cashtransit_detail.state as state,
-			cashtransit_detail.ctr as ctr2, 
-			cashtransit_detail.pcs_100000 as pcs_100000, 
-			cashtransit_detail.pcs_50000 as pcs_50000, 
-			cashtransit_detail.pcs_20000 as pcs_20000, 
-			cashtransit_detail.pcs_10000 as pcs_10000, 
-			cashtransit_detail.pcs_5000 as pcs_5000, 
-			cashtransit_detail.pcs_2000 as pcs_2000, 
-			cashtransit_detail.pcs_1000 as pcs_1000, 
-			cashtransit_detail.pcs_coin as pcs_coin, 
-			cashtransit_detail.total as total, 
-			cashtransit_detail.data_solve as data_solve, 
-			cashtransit_detail.cpc_process as cpc_process, 
-			client.cabang as branch,
-			client.wsid,
-			client.bank,
-			client.lokasi,
-			client.sektor,
-			cashtransit_detail.jenis,
-			cashtransit_detail.ctr as ctr,
-			client.denom,
-			client.vendor,
-			client.type,
-			client.type_mesin,
-			client.ctr as ctr2,
-			runsheet_cashprocessing.pcs_100000 as s100k,
-			runsheet_cashprocessing.pcs_50000 as s50k,
-			runsheet_cashprocessing.pcs_20000 as s20k,
-			runsheet_cashprocessing.pcs_10000 as s10k,
-			runsheet_cashprocessing.pcs_5000 as s5k,
-			runsheet_cashprocessing.pcs_2000 as s2k,
-			runsheet_cashprocessing.pcs_1000 as s1k,
-			runsheet_cashprocessing.pcs_coin as coin,
-			runsheet_cashprocessing.total as nominal,
-			runsheet_cashprocessing.ctr_1_no,
-			runsheet_cashprocessing.ctr_2_no,
-			runsheet_cashprocessing.ctr_3_no,
-			runsheet_cashprocessing.ctr_4_no,
-			runsheet_cashprocessing.cart_1_seal,
-			runsheet_cashprocessing.cart_2_seal,
-			runsheet_cashprocessing.cart_3_seal,
-			runsheet_cashprocessing.cart_4_seal,
-			runsheet_cashprocessing.divert,
-			runsheet_cashprocessing.bag_seal,
-			runsheet_cashprocessing.bag_no
-		from 
-			(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
-			LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
-			LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
-			LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
-			WHERE 
-				cashtransit_detail.data_solve!='batal' AND 
-				cashtransit_detail.id_cashtransit='".$id."' AND 
-				cashtransit_detail.data_solve!='' AND 
-				cashtransit_detail.cpc_process='' AND 
-				#cashtransit_detail.unloading='1' AND 
-				cashtransit_detail.state='ro_atm' 
-				limit $offset,$rows";
+		if($this->access_edit==true) {
+			$query = "select *,
+				cashtransit_detail.id as id_ct, 
+				cashtransit_detail.id_cashtransit, 
+				cashtransit_detail.id_bank, 
+				cashtransit_detail.state as state,
+				cashtransit_detail.ctr as ctr2, 
+				cashtransit_detail.pcs_100000 as pcs_100000, 
+				cashtransit_detail.pcs_50000 as pcs_50000, 
+				cashtransit_detail.pcs_20000 as pcs_20000, 
+				cashtransit_detail.pcs_10000 as pcs_10000, 
+				cashtransit_detail.pcs_5000 as pcs_5000, 
+				cashtransit_detail.pcs_2000 as pcs_2000, 
+				cashtransit_detail.pcs_1000 as pcs_1000, 
+				cashtransit_detail.pcs_coin as pcs_coin, 
+				cashtransit_detail.total as total, 
+				cashtransit_detail.data_solve as data_solve, 
+				cashtransit_detail.cpc_process as cpc_process, 
+				client.cabang as branch,
+				client.wsid,
+				client.bank,
+				client.lokasi,
+				client.sektor,
+				cashtransit_detail.jenis,
+				cashtransit_detail.ctr as ctr,
+				client.denom,
+				client.vendor,
+				client.type,
+				client.type_mesin,
+				client.ctr as ctr2,
+				runsheet_cashprocessing.pcs_100000 as s100k,
+				runsheet_cashprocessing.pcs_50000 as s50k,
+				runsheet_cashprocessing.pcs_20000 as s20k,
+				runsheet_cashprocessing.pcs_10000 as s10k,
+				runsheet_cashprocessing.pcs_5000 as s5k,
+				runsheet_cashprocessing.pcs_2000 as s2k,
+				runsheet_cashprocessing.pcs_1000 as s1k,
+				runsheet_cashprocessing.pcs_coin as coin,
+				runsheet_cashprocessing.total as nominal,
+				runsheet_cashprocessing.ctr_1_no,
+				runsheet_cashprocessing.ctr_2_no,
+				runsheet_cashprocessing.ctr_3_no,
+				runsheet_cashprocessing.ctr_4_no,
+				runsheet_cashprocessing.cart_1_seal,
+				runsheet_cashprocessing.cart_2_seal,
+				runsheet_cashprocessing.cart_3_seal,
+				runsheet_cashprocessing.cart_4_seal,
+				runsheet_cashprocessing.divert,
+				runsheet_cashprocessing.bag_seal,
+				runsheet_cashprocessing.bag_no
+			from 
+				(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+				LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+				LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+				LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+				WHERE 
+					cashtransit_detail.data_solve!='batal' AND 
+					cashtransit_detail.id_cashtransit='".$id."' AND 
+					cashtransit_detail.data_solve!='' AND 
+					#cashtransit_detail.cpc_process='' AND 
+					#cashtransit_detail.unloading='1' AND 
+					cashtransit_detail.state='ro_atm' 
+					limit $offset,$rows";
+			
+			$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+			
+			$query = "select *,
+				cashtransit_detail.id as id_ct, 
+				cashtransit_detail.id_cashtransit, 
+				cashtransit_detail.id_bank, 
+				cashtransit_detail.state as state,
+				cashtransit_detail.ctr as ctr2, 
+				cashtransit_detail.pcs_100000 as pcs_100000, 
+				cashtransit_detail.pcs_50000 as pcs_50000, 
+				cashtransit_detail.pcs_20000 as pcs_20000, 
+				cashtransit_detail.pcs_10000 as pcs_10000, 
+				cashtransit_detail.pcs_5000 as pcs_5000, 
+				cashtransit_detail.pcs_2000 as pcs_2000, 
+				cashtransit_detail.pcs_1000 as pcs_1000, 
+				cashtransit_detail.pcs_coin as pcs_coin, 
+				cashtransit_detail.total as total, 
+				cashtransit_detail.data_solve as data_solve, 
+				cashtransit_detail.cpc_process as cpc_process, 
+				client.cabang as branch,
+				client.wsid,
+				client.bank,
+				client.lokasi,
+				client.sektor,
+				cashtransit_detail.jenis,
+				cashtransit_detail.ctr as ctr,
+				client.denom,
+				client.vendor,
+				client.type,
+				client.type_mesin,
+				client.ctr as ctr2,
+				runsheet_cashprocessing.pcs_100000 as s100k,
+				runsheet_cashprocessing.pcs_50000 as s50k,
+				runsheet_cashprocessing.pcs_20000 as s20k,
+				runsheet_cashprocessing.pcs_10000 as s10k,
+				runsheet_cashprocessing.pcs_5000 as s5k,
+				runsheet_cashprocessing.pcs_2000 as s2k,
+				runsheet_cashprocessing.pcs_1000 as s1k,
+				runsheet_cashprocessing.pcs_coin as coin,
+				runsheet_cashprocessing.total as nominal,
+				runsheet_cashprocessing.ctr_1_no,
+				runsheet_cashprocessing.ctr_2_no,
+				runsheet_cashprocessing.ctr_3_no,
+				runsheet_cashprocessing.ctr_4_no,
+				runsheet_cashprocessing.cart_1_seal,
+				runsheet_cashprocessing.cart_2_seal,
+				runsheet_cashprocessing.cart_3_seal,
+				runsheet_cashprocessing.cart_4_seal,
+				runsheet_cashprocessing.divert,
+				runsheet_cashprocessing.bag_seal,
+				runsheet_cashprocessing.bag_no
+			from 
+				(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+				LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+				LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+				LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+				WHERE 
+					cashtransit_detail.data_solve!='batal' AND 
+					cashtransit_detail.id_cashtransit='".$id."' AND 
+					cashtransit_detail.data_solve!='' AND 
+					#cashtransit_detail.cpc_process='' AND 
+					cashtransit_detail.state='ro_atm'";
+					
+			$total = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+			$result["total"] = count($total);
 		
-		$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
-		
-		$query = "select *,
-			cashtransit_detail.id as id_ct, 
-			cashtransit_detail.id_cashtransit, 
-			cashtransit_detail.id_bank, 
-			cashtransit_detail.state as state,
-			cashtransit_detail.ctr as ctr2, 
-			cashtransit_detail.pcs_100000 as pcs_100000, 
-			cashtransit_detail.pcs_50000 as pcs_50000, 
-			cashtransit_detail.pcs_20000 as pcs_20000, 
-			cashtransit_detail.pcs_10000 as pcs_10000, 
-			cashtransit_detail.pcs_5000 as pcs_5000, 
-			cashtransit_detail.pcs_2000 as pcs_2000, 
-			cashtransit_detail.pcs_1000 as pcs_1000, 
-			cashtransit_detail.pcs_coin as pcs_coin, 
-			cashtransit_detail.total as total, 
-			cashtransit_detail.data_solve as data_solve, 
-			cashtransit_detail.cpc_process as cpc_process, 
-			client.cabang as branch,
-			client.wsid,
-			client.bank,
-			client.lokasi,
-			client.sektor,
-			cashtransit_detail.jenis,
-			cashtransit_detail.ctr as ctr,
-			client.denom,
-			client.vendor,
-			client.type,
-			client.type_mesin,
-			client.ctr as ctr2,
-			runsheet_cashprocessing.pcs_100000 as s100k,
-			runsheet_cashprocessing.pcs_50000 as s50k,
-			runsheet_cashprocessing.pcs_20000 as s20k,
-			runsheet_cashprocessing.pcs_10000 as s10k,
-			runsheet_cashprocessing.pcs_5000 as s5k,
-			runsheet_cashprocessing.pcs_2000 as s2k,
-			runsheet_cashprocessing.pcs_1000 as s1k,
-			runsheet_cashprocessing.pcs_coin as coin,
-			runsheet_cashprocessing.total as nominal,
-			runsheet_cashprocessing.ctr_1_no,
-			runsheet_cashprocessing.ctr_2_no,
-			runsheet_cashprocessing.ctr_3_no,
-			runsheet_cashprocessing.ctr_4_no,
-			runsheet_cashprocessing.cart_1_seal,
-			runsheet_cashprocessing.cart_2_seal,
-			runsheet_cashprocessing.cart_3_seal,
-			runsheet_cashprocessing.cart_4_seal,
-			runsheet_cashprocessing.divert,
-			runsheet_cashprocessing.bag_seal,
-			runsheet_cashprocessing.bag_no
-		from 
-			(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
-			LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
-			LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
-			LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
-			WHERE 
-				cashtransit_detail.data_solve!='batal' AND 
-				cashtransit_detail.id_cashtransit='".$id."' AND 
-				cashtransit_detail.data_solve!='' AND 
-				#cashtransit_detail.cpc_process='' AND 
-				cashtransit_detail.state='ro_atm'";
-				
-		$total = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
-		$result["total"] = count($total);
+		} else {
+				$query = "select *,
+				cashtransit_detail.id as id_ct, 
+				cashtransit_detail.id_cashtransit, 
+				cashtransit_detail.id_bank, 
+				cashtransit_detail.state as state,
+				cashtransit_detail.ctr as ctr2, 
+				cashtransit_detail.pcs_100000 as pcs_100000, 
+				cashtransit_detail.pcs_50000 as pcs_50000, 
+				cashtransit_detail.pcs_20000 as pcs_20000, 
+				cashtransit_detail.pcs_10000 as pcs_10000, 
+				cashtransit_detail.pcs_5000 as pcs_5000, 
+				cashtransit_detail.pcs_2000 as pcs_2000, 
+				cashtransit_detail.pcs_1000 as pcs_1000, 
+				cashtransit_detail.pcs_coin as pcs_coin, 
+				cashtransit_detail.total as total, 
+				cashtransit_detail.data_solve as data_solve, 
+				cashtransit_detail.cpc_process as cpc_process, 
+				client.cabang as branch,
+				client.wsid,
+				client.bank,
+				client.lokasi,
+				client.sektor,
+				cashtransit_detail.jenis,
+				cashtransit_detail.ctr as ctr,
+				client.denom,
+				client.vendor,
+				client.type,
+				client.type_mesin,
+				client.ctr as ctr2,
+				runsheet_cashprocessing.pcs_100000 as s100k,
+				runsheet_cashprocessing.pcs_50000 as s50k,
+				runsheet_cashprocessing.pcs_20000 as s20k,
+				runsheet_cashprocessing.pcs_10000 as s10k,
+				runsheet_cashprocessing.pcs_5000 as s5k,
+				runsheet_cashprocessing.pcs_2000 as s2k,
+				runsheet_cashprocessing.pcs_1000 as s1k,
+				runsheet_cashprocessing.pcs_coin as coin,
+				runsheet_cashprocessing.total as nominal,
+				runsheet_cashprocessing.ctr_1_no,
+				runsheet_cashprocessing.ctr_2_no,
+				runsheet_cashprocessing.ctr_3_no,
+				runsheet_cashprocessing.ctr_4_no,
+				runsheet_cashprocessing.cart_1_seal,
+				runsheet_cashprocessing.cart_2_seal,
+				runsheet_cashprocessing.cart_3_seal,
+				runsheet_cashprocessing.cart_4_seal,
+				runsheet_cashprocessing.divert,
+				runsheet_cashprocessing.bag_seal,
+				runsheet_cashprocessing.bag_no
+			from 
+				(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+				LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+				LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+				LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+				WHERE 
+					cashtransit_detail.data_solve!='batal' AND 
+					cashtransit_detail.id_cashtransit='".$id."' AND 
+					cashtransit_detail.data_solve!='' AND 
+					cashtransit_detail.cpc_process='' AND 
+					#cashtransit_detail.unloading='1' AND 
+					cashtransit_detail.state='ro_atm' 
+					limit $offset,$rows";
+			
+			$res = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+			
+			$query = "select *,
+				cashtransit_detail.id as id_ct, 
+				cashtransit_detail.id_cashtransit, 
+				cashtransit_detail.id_bank, 
+				cashtransit_detail.state as state,
+				cashtransit_detail.ctr as ctr2, 
+				cashtransit_detail.pcs_100000 as pcs_100000, 
+				cashtransit_detail.pcs_50000 as pcs_50000, 
+				cashtransit_detail.pcs_20000 as pcs_20000, 
+				cashtransit_detail.pcs_10000 as pcs_10000, 
+				cashtransit_detail.pcs_5000 as pcs_5000, 
+				cashtransit_detail.pcs_2000 as pcs_2000, 
+				cashtransit_detail.pcs_1000 as pcs_1000, 
+				cashtransit_detail.pcs_coin as pcs_coin, 
+				cashtransit_detail.total as total, 
+				cashtransit_detail.data_solve as data_solve, 
+				cashtransit_detail.cpc_process as cpc_process, 
+				client.cabang as branch,
+				client.wsid,
+				client.bank,
+				client.lokasi,
+				client.sektor,
+				cashtransit_detail.jenis,
+				cashtransit_detail.ctr as ctr,
+				client.denom,
+				client.vendor,
+				client.type,
+				client.type_mesin,
+				client.ctr as ctr2,
+				runsheet_cashprocessing.pcs_100000 as s100k,
+				runsheet_cashprocessing.pcs_50000 as s50k,
+				runsheet_cashprocessing.pcs_20000 as s20k,
+				runsheet_cashprocessing.pcs_10000 as s10k,
+				runsheet_cashprocessing.pcs_5000 as s5k,
+				runsheet_cashprocessing.pcs_2000 as s2k,
+				runsheet_cashprocessing.pcs_1000 as s1k,
+				runsheet_cashprocessing.pcs_coin as coin,
+				runsheet_cashprocessing.total as nominal,
+				runsheet_cashprocessing.ctr_1_no,
+				runsheet_cashprocessing.ctr_2_no,
+				runsheet_cashprocessing.ctr_3_no,
+				runsheet_cashprocessing.ctr_4_no,
+				runsheet_cashprocessing.cart_1_seal,
+				runsheet_cashprocessing.cart_2_seal,
+				runsheet_cashprocessing.cart_3_seal,
+				runsheet_cashprocessing.cart_4_seal,
+				runsheet_cashprocessing.divert,
+				runsheet_cashprocessing.bag_seal,
+				runsheet_cashprocessing.bag_no
+			from 
+				(SELECT id, id_cashtransit, id_bank, id_pengirim, id_penerima, no_boc, state, metode, jenis, denom, pcs_100000, pcs_50000, pcs_20000, pcs_10000, pcs_5000, pcs_2000, pcs_1000, pcs_coin, detail_uang, ctr, divert, total, date, data_solve, jam_cash_in, cpc_process, updated_date, loading, unloading, req_combi, fraud_indicated FROM cashtransit_detail) AS cashtransit_detail
+				LEFT JOIN client on(cashtransit_detail.id_bank=client.id) 
+				LEFT JOIN cashtransit ON(cashtransit_detail.id_cashtransit=cashtransit.id) 
+				LEFT JOIN runsheet_cashprocessing ON(cashtransit_detail.id=runsheet_cashprocessing.id) 
+				WHERE 
+					cashtransit_detail.data_solve!='batal' AND 
+					cashtransit_detail.id_cashtransit='".$id."' AND 
+					cashtransit_detail.data_solve!='' AND 
+					#cashtransit_detail.cpc_process='' AND 
+					cashtransit_detail.state='ro_atm'";
+					
+			$total = json_decode($this->curl->simple_get(rest_api().'/select/query_all', array('query'=>$query), array(CURLOPT_BUFFERSIZE => 10)));
+			$result["total"] = count($total);
+		}
 		
 		$items = array();
 		$i = 0;
