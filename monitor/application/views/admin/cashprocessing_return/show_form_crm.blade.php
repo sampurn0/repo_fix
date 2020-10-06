@@ -114,7 +114,6 @@
 					
 			// print_r($data);
 		?>
-		<?=$nama_kasir($cpc->cashier)?>
 		<input name="act" type="hidden" value="<?=$act?>" readonly>
 		<input name="state" type="hidden" value="<?=$state?>" readonly>
 		<input name="id" type="hidden" value="<?=$id?>" readonly>
