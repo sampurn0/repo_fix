@@ -422,7 +422,7 @@ class All_runsheet extends CI_Controller {
 				echo '	<td class="sticky-col first-col">'.$no.'</td>';
 				echo '	<td>'.$r->ids.'</td>';
 				echo '	<td>'.($r->state=="ro_cit" ? "CASH PICKUP" : "REPLENISH").'</td>';
-				echo '	<td style="text-align: center">'.($access_boc==true ? ($r->state=="ro_cit" ? '<button type="button" class="yellow" onclick="openEditBOC(\''.$r->ids.'\', \''.$r->no_boc.'\')" style="font-size: 10px">EDIT</button>' : "") : "").' '.($r->wsid=="" ? $r->no_boc : $r->wsid." (".$r->type.")").'</td>';
+				echo '	<td style="text-align: center">'.($this->access_boc==true ? ($r->state=="ro_cit" ? '<button type="button" class="yellow" onclick="openEditBOC(\''.$r->ids.'\', \''.$r->no_boc.'\')" style="font-size: 10px">EDIT</button>' : "") : "").' '.($r->wsid=="" ? $r->no_boc : $r->wsid." (".$r->type.")").'</td>';
 				echo '	<td>'.$r->lokasi_client.'</td>';
 				echo '	<td>'.number_format($r->denom, 0, ',', '.').'</td>';
 				echo '	<td>'.number_format($r->totalss, 0, ',', '.').'</td>';
