@@ -84,7 +84,7 @@ class Master_seal extends REST_Controller {
 				if ( $total_rows == 0 ) { 
 					$data = array(
 						"kode" 	 => $kode,
-						"jenis"  => $jenis,
+						"jenis"  => "big",
 						"status" => "available"
 					);
 					$insert = $this->db->insert('master_seal', $data);
