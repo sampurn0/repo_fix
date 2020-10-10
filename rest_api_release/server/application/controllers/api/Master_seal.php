@@ -74,6 +74,25 @@ class Master_seal extends REST_Controller {
 					$insert = false;
 				}
 			}
+		} else if($jenis=="big2") {
+			for($i = $dari; $i<=$hingga; $i++) {
+				$kode = "A ".sprintf('%05d', $i);
+				$result = $this->db->query("SELECT SQL_CALC_FOUND_ROWS * FROM master_seal WHERE UPPER(kode) = BINARY(kode) AND kode='$kode'")->row();
+				$sql = "SELECT FOUND_ROWS() AS `found_rows`;";
+				$rows = $this->db->query($sql)->row_array();
+				$total_rows = $rows['found_rows'];
+				if ( $total_rows == 0 ) { 
+					$data = array(
+						"kode" 	 => $kode,
+						"jenis"  => $jenis,
+						"status" => "available"
+					);
+					$insert = $this->db->insert('master_seal', $data);
+					array_push($array, $data);
+				} else {
+					$insert = false;
+				}
+			}
 		} else if($jenis=="small") {
 			for($i = $dari; $i<=$hingga; $i++) {
 				
